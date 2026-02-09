@@ -1,0 +1,901 @@
+/* ---------- VARIABLES ---------- */
+:root {
+  --primary-blue: #003B73;
+  --accent-gold: #D4AF37;
+  --soft-gold: #F2D06B;
+  --deep-navy: #002850;
+  --bg-white: #FFFFFF;
+  --text-gray: #333333;
+}
+
+/* ---------- GLOBAL ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-white);
+  color: var(--text-gray);
+  line-height: 1.6;
+}
+
+/* ---------- NAVIGATION ---------- */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #eee;
+  z-index: 1000;
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+
+
+.nav-logo {
+  font-weight: 700;
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+.nav-logo:hover {
+  color: var(--accent-gold);
+}
+
+
+
+
+
+.hamburger {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.nav-links a {
+  margin-left: 1.5rem;
+  text-decoration: none;
+  color: var(--text-gray);
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: var(--accent-gold);
+}
+
+/* MOBILE NAV */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: none;
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-links a {
+    margin: 1rem 0;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+.lang-switch {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+
+  background: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  height: 100vh;
+  background: 
+    linear-gradient(rgba(0, 40, 80, 0.55), rgba(0, 40, 80, 0.55)),
+    url("https://res.cloudinary.com/djepsdrnv/image/upload/v1767675895/PHOTO-2025-12-14-22-06-04_yg5oqo.jpg") 
+    center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero h1 {
+  color: white;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+}
+
+.hero p {
+  color: #eee;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.deadline {
+  margin-top: 2rem;
+  color: var(--soft-gold);
+  font-weight: 600;
+}
+
+/* ---------- SECTIONS ---------- */
+section {
+  max-width: 1100px;
+  margin: auto;
+  padding: 5rem 1.5rem;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-blue);
+  margin-bottom: 1.5rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--deep-navy);  
+  position: relative;
+}
+
+.section-subtitle::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: #ddd;
+  margin: 0.6rem auto 0;
+}
+
+/* ---------- ANIMATIONS ---------- */
+.fade {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.8s ease;
+}
+
+.fade.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- ABOUT ---------- */
+.about {
+  text-align: center;
+  max-width: 850px;
+  margin: auto;
+  font-size: 1.15rem;
+}
+
+.learn-more {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 12px 32px;
+  border-radius: 50px;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  text-decoration: none;
+}
+
+.learn-more:hover {
+  background: var(--soft-gold);
+  color: var(--deep-navy);
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.image-grid img {
+  width: 100%;
+  border-radius: 14px;
+}
+
+/* ---------- COUNTDOWN ---------- */
+.countdown-section {
+  text-align: center;
+  padding: 5rem 1.5rem;
+  background: linear-gradient(180deg, rgba(0, 59, 115, 0.03), #fff);
+}
+
+.countdown-sub {
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.1rem;
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.time-box {
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem 1.2rem;
+  min-width: 90px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.time-box span {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+.time-box small {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-gray);
+}
+
+.countdown-note {
+  margin-top: 2rem;
+  font-weight: 500;
+  color: var(--deep-navy);
+}
+
+/* ---------- TIMELINE ---------- */
+.timeline-desc {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-gold);
+}
+
+.timeline-item {
+  text-align: center;
+  width: 25%;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+}
+
+/* ---------- MODERN TIMELINE ---------- */
+.timeline-modern {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.timeline-line-modern {
+  position: absolute;
+  top: 8px;
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--soft-gold));
+  border-radius: 4px;
+  z-index: 0;
+}
+
+.timeline-step {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.timeline-step .dot {
+  width: 18px;
+  height: 18px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  display: inline-block;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.15);
+}
+
+.timeline-step .card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-step .card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.12);
+}
+
+.timeline-step h3 {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.timeline-step strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+}
+
+.timeline-step p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* MOBILE TIMELINE */
+@media (max-width: 900px) {
+  .timeline-modern {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .timeline-line-modern {
+    display: none;
+  }
+
+  .timeline-step {
+    text-align: left;
+  }
+
+  .timeline-step .dot {
+    margin-left: 0;
+  }
+}
+
+
+
+/* ---------- FUNDING ROADMAP ---------- */
+.funding-roadmap {
+  max-width: 1100px;
+  margin: auto;
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+.funding-intro {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  font-size: 1.1rem;
+}
+
+.funding-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.funding-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem 1.8rem;
+  border: 1px solid #eee;
+}
+
+.funding-card h3 {
+  color: var(--primary-blue);
+  margin-bottom: 0.6rem;
+}
+
+.fund-amount {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 0.6rem;
+}
+
+.fund-desc {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.6rem;
+}
+
+.funding-card small {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* ---------- PROGRESS BREAKDOWN ---------- */
+.progress-breakdown {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.progress-breakdown li {
+  margin: 0.3rem 0;
+}
+
+
+
+
+
+
+
+
+/* ---------- PROGRESS ---------- */
+.progress-wrapper {
+  text-align: center;
+}
+
+.progress-bar {
+  background: #eee;
+  height: 24px;
+  border-radius: 50px;
+  overflow: hidden;
+  max-width: 600px;
+  margin: 1.5rem auto;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent-gold), var(--soft-gold));
+  transition: 1.5s ease;
+}
+
+.progress-statement {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--deep-navy);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* ---------- WAKAF ---------- */
+.wakaf {
+  background: #f9f9f9;
+  border-radius: 24px;
+  padding: 4rem 2rem;
+}
+
+.wakaf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.wakaf-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid #eee;
+}
+
+.wakaf-card h3 {
+  color: var(--accent-gold);
+}
+
+/* ---------- SLIDER ---------- */
+.slider {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.slider-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+.wakaf-card {
+  min-width: 260px;
+  scroll-snap-align: start;
+}
+
+/* ---------- SLIDER BUTTONS ---------- */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  z-index: 2;
+}
+
+.slider-btn.prev { left: -12px; }
+.slider-btn.next { right: -12px; }
+
+/* Mobile = swipe only */
+@media (max-width: 768px) {
+  .slider-btn {
+    display: none;
+  }
+}
+
+/* Bank note */
+.bank-note {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--deep-navy);
+}
+
+
+/* ---------- DONATION INSTRUCTIONS ---------- */
+.donation-instructions {
+  max-width: 1100px;
+  margin: 5rem auto;
+  padding: 4.5rem 2rem;
+  border-radius: 30px;
+  background: linear-gradient(
+    180deg,
+    rgba(0,59,115,0.05),
+    rgba(255,255,255,0.98)
+  );
+  text-align: center;
+}
+
+.donation-subtitle {
+  max-width: 680px;
+  margin: 0 auto 3.5rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.donation-time {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  font-weight: 500;
+}
+
+.donation-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6rem;
+}
+
+.donation-step {
+  position: relative;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  padding: 2.8rem 1.8rem 2.2rem;
+  border-radius: 22px;
+  box-shadow: 0 22px 45px rgba(0,0,0,0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.donation-step:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 65px rgba(0,0,0,0.12);
+}
+
+.step-number {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    135deg,
+    var(--accent-gold),
+    var(--soft-gold)
+  );
+  color: var(--deep-navy);
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.donation-step h3 {
+  margin-top: 1.6rem;
+  font-size: 1.05rem;
+  color: var(--primary-blue);
+  margin-bottom: 0.6rem;
+}
+
+.donation-step p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.donation-cta {
+  margin-top: 3.8rem;
+}
+
+.donation-btn {
+  display: inline-block;
+  padding: 14px 42px;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-gold),
+    var(--soft-gold)
+  );
+  color: var(--deep-navy);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 14px 35px rgba(212,175,55,0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.donation-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 50px rgba(212,175,55,0.45);
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 900px) {
+  .donation-steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .donation-step {
+    padding-top: 3.2rem;
+  }
+}
+
+
+/* ---------- DONATE ---------- */
+.donate-options {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.donate-card {
+  min-width: 280px;
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+}
+
+/* ---------- FLOATING CTA ---------- */
+.floating-donate {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--accent-gold);
+  color: var(--deep-navy);
+  padding: 14px 22px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 999;
+}
+
+/* ---------- LOCATION ---------- */
+.map iframe {
+  width: 100%;
+  height: 350px;
+  border: 0;
+  border-radius: 14px;
+}
+
+/* ---------- SOCIAL ---------- */
+.social a {
+  margin: 0 10px;
+  color: var(--accent-gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  background: var(--deep-navy);
+  color: #ddd;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+/* ---------- DONATION FORM ---------- */
+.donation-form {
+  max-width: 520px;
+  margin: 3rem auto 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  padding: 2.8rem 2.2rem;
+  border-radius: 26px;
+  box-shadow: 0 25px 55px rgba(0,0,0,0.08);
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 1.4rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--deep-navy);
+  margin-bottom: 0.4rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 4px rgba(212,175,55,0.15);
+}
+
+/* ---------- THANK YOU: WHAT'S NEXT ---------- */
+.thankyou-next {
+  max-width: 720px;
+  margin: 2rem auto 4rem;
+  padding: 2.5rem 2rem;
+  background: rgba(255,255,255,0.95);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.thankyou-next .section-subtitle {
+  font-size: 1.5rem;
+  color: var(--primary-blue);
+  margin-bottom: 1.5rem;
+}
+
+.next-steps {
+  text-align: left;
+  list-style: disc;
+  padding-left: 1.5rem;
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.8;
+}
+
+.next-steps li {
+  margin-bottom: 0.8rem;
+}
+
+
+
+/* ABOUT UMMI PAGE */
+.about-ummi {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-ummi .about-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-top: 1rem;
+}
+
+/* ACTIVITIES */
+.ummi-activities {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+.activity-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 3rem;
+  gap: 2rem;
+}
+
+.activity-item.reverse {
+  flex-direction: row-reverse;
+}
+
+.activity-img img {
+  width: 100%;
+  max-width: 250px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.activity-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Back to Home button */
+.back-home {
+  text-align: center;
+  margin-top: 2rem;
+}

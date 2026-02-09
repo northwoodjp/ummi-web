@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donate | UMMI Masjid</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ==================== NAVIGATION ==================== -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Masjid UMMI</a>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="nav">
+      <a href="index.html#about">Tentang</a>
+      <a href="index.html#support">Dukung</a>
+      <a href="index.html#location">Lokasi</a>
+      <a href="index.html#follow">Ikuti</a>
+      <a href="contact.html">Hubungi Kami</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ==================== FORM ==================== -->
+
+<section class="donation-instructions fade">
+  <h2 class="section-title">Iuran Bulanan Pengurus</h2>
+  <p class="donation-subtitle">
+    Silahkan pilih nama Anda, mata uang, nominal, dan iuran bulan yang dibayarkan.
+  </p>
+
+  <form class="donation-form" id="monthlyDonationForm">
+
+    <!-- Member Name with autocomplete -->
+    <div class="form-group">
+      <label>Nama Pengurus</label>
+      <input type="text" id="member_name" name="member_name" placeholder="Ketik nama anda" required list="member_list">
+<datalist id="member_list">
+  <option value="Adinda Merdiana Budiman">
+  <option value="Adi Putra">
+  <option value="Agus, Nia">
+  <option value="Adjie Jumyanto">
+  <option value="Andhika Bayu Setiawan">
+  <option value="Annisa Huri">
+  <option value="Asep Mulyana">
+  <option value="Catur Eny Rismawati">
+  <option value="Chandra Yulianshah Tobing">
+  <option value="Diah Widowati, Yasmin, Fakhri">
+  <option value="Fachri">
+  <option value="Heri">
+  <option value="Joko">
+  <option value="Jumiati Awalatuliyah">
+  <option value="Kasan, Lulu">
+  <option value="Mei">
+  <option value="Meilia Dinarsiami Wredo">
+  <option value="Moan Manurung">
+  <option value="Muhammad Haikal">
+  <option value="Muhammad Ilyas Permana">
+  <option value="Muharil Ikhsan">
+  <option value="Neng Rohilah">
+  <option value="Nurcahya">
+  <option value="Ofa Mustofa, Anis">
+  <option value="Ramdan Jaelani">
+  <option value="Rizki Anggraini Permana">
+  <option value="Rohilis Adi Lestari">
+  <option value="Rosi Haryati">
+  <option value="Saiful Siregar, Syahara">
+  <option value="Salma Rosna Tanani">
+  <option value="Selpia">
+  <option value="Shella Enjelita">
+  <option value="Sidratullah, Neli">
+  <option value="Wiwit Fuji Lestari">
+  <option value="Yuli, Hiroki">
+  <option value="Yuliyanto">
+  <option value="Yusup, Dewinta">
+</datalist>
+</div>
+
+    <!-- Currency -->
+    <div class="form-group">
+      <label>Mata Uang</label>
+      <div style="display:flex; gap:5rem; align-items:center;">
+        <label style="display:flex; align-items:center; gap:.0rem;">
+          <input type="radio" name="currency" value="JPY" required />
+          JPY
+        </label>
+        <label style="display:flex; align-items:center; gap:.0rem;">
+          <input type="radio" name="currency" value="IDR" />
+          IDR
+        </label>
+      </div>
+    </div>
+
+    <!-- Amount -->
+    <div class="form-group">
+      <label>Nominal</label>
+      <input type="number" name="amount" placeholder="mis. 5000" required />
+    </div>
+
+    <!-- Month/Year -->
+    <div class="form-group">
+      <label>Bulan Iuran</label>
+      <select name="month_year" multiple required size="6">
+        <option value="2025-12">December 2025</option>
+        <option value="2026-01">January 2026</option>
+        <option value="2026-02">February 2026</option>
+        <option value="2026-03">March 2026</option>
+        <option value="2026-04">April 2026</option>
+        <option value="2026-05">May 2026</option>
+        <option value="2026-06">June 2026</option>
+        <option value="2026-07">July 2026</option>
+        <option value="2026-08">August 2026</option>
+        <option value="2026-09">September 2026</option>
+        <option value="2026-10">October 2026</option>
+        <option value="2026-11">November 2026</option>
+        <option value="2026-12">December 2026</option>
+      </select>
+      <small style="color:#666;">
+         Pilih beberapa bulan jika membayar iuran sekaligus</small>
+    </div>
+
+    <!-- Upload file -->
+    <div class="form-group">
+      <label>Unggah Bukti Transfer</label>
+      <input type="file" name="transfer_proof" accept="image/*,application/pdf" required/>
+    </div>
+
+<!-- Note -->
+    <div class="form-group">
+      <label>Catatan (Opsional)</label>
+      <input type="textarea" name="notes" placeholder="Ketik disini.." />
+    </div>
+
+    <button type="submit" class="donation-btn">Kirim</button>
+  </form>
+</section>
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>
+    <br><br>
+    “Whoever builds a masjid for Allah,
+    Allah will build for him a house in Paradise.”
+    <br>— Prophet Muhammad ﷺ
+    <br><br>
+    © UMMI Masjid · ummi.jp · info@ummi.jp
+  </p>
+</footer>
+
+
+<script>
+const form = document.getElementById("monthlyDonationForm");
+
+async function uploadFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const data = e.target.result.split(",");
+      resolve({
+        fileName: file.name,
+        mimeType: data[0].match(/:(.*?);/)[1],
+        data: data[1]
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const btn = form.querySelector("button");
+  btn.disabled = true;
+  btn.textContent = "Mengirim...";
+
+  try {
+    const formData = new FormData(form);
+    const payload = {};
+
+    // normal fields
+    for (let [key, value] of formData.entries()) {
+      if (key === "month_year") {
+        if (!payload.month_year) payload.month_year = [];
+        payload.month_year.push(value);
+      } else {
+        payload[key] = value;
+      }
+    }
+
+// ---- DERIVED VALUES (IMPORTANT) ----
+const totalAmount = Number(payload.amount || 0);
+const months = payload.month_year || [];
+const monthCount = months.length;
+
+payload.total_amount = totalAmount;
+payload.month_count = monthCount;
+
+// Safe guard
+if (monthCount > 0) {
+  payload.amount_per_month = Math.floor(totalAmount / monthCount);
+  payload.amount_remainder = totalAmount % monthCount;
+} else {
+  payload.amount_per_month = totalAmount;
+  payload.amount_remainder = 0;
+}
+
+    // file
+    const fileInput = form.querySelector('input[type="file"]');
+    if (fileInput.files.length > 0) {
+      payload.fileData = await uploadFile(fileInput.files[0]);
+    }
+
+    const res = await fetch("https://script.google.com/macros/s/AKfycbxKGdQjS9y0RqlKSBDW5mz0rCcGDV03Pz9wbQ38yaTDa0SvnRIF8nEczVZEEknVOSdvWQ/exec", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      }
+    });
+
+    const result = await res.json();
+
+    if (result.status === "success") {
+	 
+	await fetch("https://ummi-iuranpengurus.northwoodjp.workers.dev/", {
+  	method: "POST",
+  	headers: {
+   "Content-Type": "application/json"
+  	},
+  body: JSON.stringify(payload)
+});
+
+      alert("Iuran berhasil dikirim. Terima kasih.");
+      form.reset();
+    } else {
+      throw new Error(result.message);
+    }
+
+  } catch (err) {
+    alert("Gagal mengirim: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Kirim";
+  }
+
+});
+</script>
+</body>
+</html>

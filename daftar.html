@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendaftaran Kehadiran | Masjid UMMI</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ==================== NAVIGATION ==================== -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Masjid UMMI</a>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="nav">
+      <a href="index.html#about">Tentang</a>
+      <a href="index.html#support">Dukung</a>
+      <a href="index.html#location">Lokasi</a>
+      <a href="index.html#follow">Ikuti</a>
+      <a href="contact.html">Hubungi Kami</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ==================== PAGE HEADER ==================== -->
+<section class="donation-instructions fade">
+  <h2 class="section-title">Form Pendaftaran Kehadiran</h2>
+  <p class="donation-subtitle">
+    Mohon isi data kehadiran untuk membantu panitia mempersiapkan acara.
+  </p>
+
+  <form class="donation-form" id="registrationForm">
+
+    <!-- Nama -->
+    <div class="form-group">
+      <label>Nama</label>
+      <input type="text" name="nama" placeholder="Nama lengkap" required />
+    </div>
+
+    <!-- Jumlah Hadir -->
+    <div class="form-group">
+      <label>Jumlah yang Hadir</label>
+      <div style="display:grid; grid-template-columns: 1fr; gap:1rem;">
+
+        <div>
+          <label style="font-weight:500; font-size:0.8rem;">Dewasa</label>
+          <select name="dewasa" required>
+            <option value="">Pilih</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-weight:500; font-size:0.8rem;">Anak (di bawah 12 tahun)</label>
+          <select name="anak" required>
+            <option value="">Pilih</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Catatan -->
+    <div class="form-group">
+      <label>Catatan (Opsional)</label>
+      <textarea name="catatan" rows="4" placeholder="Contoh: membawa tamu, kebutuhan khusus, dll"></textarea>
+    </div>
+
+    <button type="submit" class="donation-btn">
+      Kirim Pendaftaran
+    </button>
+
+  </form>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>
+    <br><br>
+    “Whoever builds a masjid for Allah,
+    Allah will build for him a house in Paradise.”
+    <br>— Prophet Muhammad ﷺ
+    <br><br>
+    © UMMI Masjid · www.ummi.jp · info@ummi.jp
+  </p>
+</footer>
+
+<!-- ==================== SCRIPT ==================== -->
+<script>
+const form = document.getElementById("registrationForm");
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const btn = form.querySelector("button");
+  btn.disabled = true;
+  btn.textContent = "Mengirim...";
+
+  try {
+    const formData = new FormData(form);
+    const payload = {};
+    for (let [k, v] of formData.entries()) payload[k] = v;
+    payload.timestamp = new Date().toISOString();
+
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbzyRAi99ksEHqJnhzjKNbd_YYm9AqdZam2ZqN0BJrJmtqi0AdkLa2Q-3iWbR0GN1PMf/exec",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      }
+    );
+
+    const result = await res.json();
+    if (result.status !== "success") throw new Error(result.message);
+
+    window.location.href = `terimakasih.html?ref=${Date.now()}`;
+
+  } catch (err) {
+    alert("Gagal mengirim: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Kirim Pendaftaran";
+  }
+});
+</script>
+
+</body>
+</html>

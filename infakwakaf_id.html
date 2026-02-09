@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infak & Wakaf | Masjid UMMI</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ==================== NAVIGATION ==================== -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Masjid UMMI</a>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="nav">
+      <a href="index.html#about">Tentang</a>
+      <a href="index.html#support">Dukung</a>
+      <a href="index.html#location">Lokasi</a>
+      <a href="index.html#follow">Ikuti</a>
+      <a href="contact.html">Hubungi Kami</a>
+	</div>
+  </div>
+</nav>
+
+<!-- ==================== PAGE HEADER ==================== -->
+<section class="donation-instructions fade">
+<a href="infakwakaf_en.html" class="lang-switch">🇬🇧 EN</a>
+  <h2 class="section-title">Salurkan Infak & Wakaf</h2>
+  <p class="donation-subtitle">
+    Infak dan wakaf anda membantu berdirinya Masjid UMMI.
+  </p>
+<form class="donation-form" id="donationForm">
+
+  <!-- Name -->
+  <div class="form-group">
+    <label>Nama Anda</label>
+    <input type="text" name="donor_name" placeholder="Nama lengkap" required />
+  </div>
+
+  <!-- Currency -->
+  <div class="form-group">
+    <label>Mata Uang</label>
+    <div style="display:flex; gap:5rem;">
+      <label><input type="radio" name="currency" value="JPY" required /> JPY</label>
+      <label><input type="radio" name="currency" value="IDR" /> IDR</label>
+    </div>
+  </div>
+
+
+  <!-- Donation Type -->
+  <div class="form-group">
+    <label>Jenis Donasi</label>
+    <select name="donation_type" id="donationType" required>
+      <option value="">Pilih</option>
+      <option value="Wakaf">Wakaf</option>
+      <option value="Infak">Infak</option>
+    </select>
+  </div>
+
+  <!-- Wakaf -->
+  <div class="form-group" id="wakafOptions" style="display:none;">
+    <label>Jenis Wakaf</label>
+
+    <select name="wakaf_package" id="wakafPackage">
+      <option value="">Jenis Wakaf</option>
+
+      <option value="Baqiyyatush Shalihat (untuk Alm)" data-jpy="10000" data-idr="1000000"></option>
+      <option value="Darussalam" data-jpy="10000" data-idr="1000000"></option>
+      <option value="Ma'wa" data-jpy="15000" data-idr="1500000"></option>
+      <option value="Na'im" data-jpy="20000" data-idr="2000000"></option>
+      <option value="Adn" data-jpy="25000" data-idr="2500000"></option>
+      <option value="Firdaus" data-jpy="30000" data-idr="3000000"></option>
+    </select>
+  </div>
+
+  <!-- Infak -->
+  <div class="form-group" id="infakAmount" style="display:none;">
+    <label>Nominal Infak</label>
+    <input type="number" name="infak_amount" min="1" placeholder="Masukkan angka" />
+  </div>
+
+<!-- Certificate Choice -->
+<div class="form-group">
+  <label>Sertifikat Donasi</label>
+  <div style="display:flex; gap:3rem;">
+    <label>
+      <input type="radio" name="certificate_required" value="Ya">
+      Ya
+    </label>
+    <label>
+      <input type="radio" name="certificate_required" value="Tidak">
+      Tidak
+    </label>
+  </div>
+</div>
+
+
+  <!-- Certificate Name -->
+<div class="form-group" id="certificateNameGroup" style="display:none;">
+  <label>Nama di Sertifikat</label>
+  <input
+    type="text"
+    name="certificate_name"
+    placeholder="Nama lengkap"
+  required/>
+</div>
+
+  <!-- Contact -->
+  <div class="form-group">
+    <label>Kontak</label>
+    <input type="text" name="contact" placeholder="Email atau WhatsApp" required />
+  </div>
+
+  <!-- Upload -->
+  <div class="form-group">
+    <label>Unggah Bukti Transfer</label>
+    <input type="file" id="transferProof" accept="image/*,application/pdf" required/>
+  </div>
+
+  <!-- Message -->
+  <div class="form-group">
+    <label>Catatan (Opsional)</label>
+    <textarea name="message" rows="4" placeholder="Ketik disini.."></textarea>
+  </div>
+
+  <button type="submit" class="donation-btn">
+    Kirim
+  </button>
+
+</form>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>
+    <br><br>
+    “Whoever builds a masjid for Allah,
+    Allah will build for him a house in Paradise.”
+    <br>— Prophet Muhammad ﷺ
+    <br><br>
+    © UMMI Masjid · ummi.jp · info@ummi.jp
+  </p>
+</footer>
+
+<!-- ==================== SCRIPT ==================== -->
+<script>
+/* Donation type toggle */
+const donationType = document.getElementById("donationType");
+const wakafOptions = document.getElementById("wakafOptions");
+const infakAmount = document.getElementById("infakAmount");
+
+donationType.addEventListener("change", () => {
+  wakafOptions.style.display = "none";
+  infakAmount.style.display = "none";
+
+  if (donationType.value === "Wakaf") wakafOptions.style.display = "block";
+  if (donationType.value === "Infak") infakAmount.style.display = "block";
+});
+
+/* Pattern A: Compact amount badge */
+const currencyRadios = document.querySelectorAll("input[name='currency']");
+const wakafPackage = document.getElementById("wakafPackage");
+
+function formatShort(amount, currency) {
+  return currency === "JPY"
+    ? `¥${Number(amount).toLocaleString()}`
+    : `Rp${Number(amount).toLocaleString("id-ID")}`;
+}
+
+function updateWakafOptions() {
+  const currency = document.querySelector("input[name='currency']:checked")?.value;
+  if (!currency) return;
+
+  [...wakafPackage.options].forEach(opt => {
+    if (!opt.dataset.jpy) return;
+
+    const amount = currency === "JPY" ? opt.dataset.jpy : opt.dataset.idr;
+    opt.textContent = `${opt.value}   ${formatShort(amount, currency)}`;
+  });
+}
+
+currencyRadios.forEach(r => r.addEventListener("change", updateWakafOptions));
+updateWakafOptions();
+
+
+/* Certificate toggle */
+const certRadios = document.querySelectorAll(
+  "input[name='certificate_required']"
+);
+const certNameGroup = document.getElementById("certificateNameGroup");
+const certNameInput = certNameGroup.querySelector("input");
+
+certRadios.forEach(radio => {
+  radio.addEventListener("change", () => {
+    if (radio.value === "Ya" && radio.checked) {
+      certNameGroup.style.display = "block";
+      certNameInput.required = true;
+    } else if (radio.value === "Tidak" && radio.checked) {
+      certNameGroup.style.display = "none";
+      certNameInput.required = false;
+      certNameInput.value = "";
+    }
+  });
+});
+
+
+/* Upload helper */
+async function uploadFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const data = e.target.result.split(",");
+      resolve({
+        fileName: file.name,
+        data: e.target.result.split(",")[1],
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* Submit */
+const form = document.getElementById("donationForm");
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const btn = form.querySelector("button");
+  btn.disabled = true;
+  btn.textContent = "Mengirim...";
+
+  try {
+    const formData = new FormData(form);
+    const payload = {};
+    for (let [k, v] of formData.entries()) payload[k] = v;
+    payload.timestamp = new Date().toISOString();
+
+    if (payload.donation_type === "Wakaf") {
+      const opt = wakafPackage.selectedOptions[0];
+      payload.amount =
+        payload.currency === "JPY" ? opt.dataset.jpy : opt.dataset.idr;
+      payload.wakaf_name = opt.value;
+    }
+
+    if (payload.donation_type === "Infak") {
+      payload.amount = payload.infak_amount;
+    }
+
+    const fileInput = document.getElementById("transferProof");
+    if (fileInput.files.length > 0) {
+      payload.fileData = await uploadFile(fileInput.files[0]);
+    }
+
+    // ---- Send to Google Sheets ----//
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbzyRAi99ksEHqJnhzjKNbd_YYm9AqdZam2ZqN0BJrJmtqi0AdkLa2Q-3iWbR0GN1PMf/exec",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+      }
+    );
+
+    const result = await res.json();
+    if (result.status !== "success") throw new Error(result.message);
+
+    // ---- Send WhatsApp notification via Cloudflare Worker ----//
+    try {
+      await fetch("https://ummi-donationform.northwoodjp.workers.dev/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (waErr) {
+      console.warn("WhatsApp notification failed:", waErr);
+    }
+
+    // ---- Success redirect ----//
+    window.location.href = `terimakasih.html?ref=${Date.now()}`;
+
+  } catch (err) {
+    alert("Submission failed: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Proceed to Donation";
+  }
+});
+</script>
+
+</body>
+</html>
