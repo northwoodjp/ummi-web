@@ -138,7 +138,7 @@ form.addEventListener("submit", async e => {
     const result = await res.json();
     if (result.status !== "success") throw new Error(result.message);
 
-    window.location.href = `terimakasih.html?ref=${Date.now()}`;
+    window.location.href = `terimakasih2.html?ref=${Date.now()}`;
 
   } catch (err) {
     alert("Gagal mengirim: " + err.message);
