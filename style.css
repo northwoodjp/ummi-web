@@ -899,3 +899,10 @@ footer {
   text-align: center;
   margin-top: 2rem;
 }
+
+/*Registration Form Usia Anak*/
+.usia-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
