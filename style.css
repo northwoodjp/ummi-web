@@ -901,8 +901,12 @@ footer {
 }
 
 /*Registration Form Usia Anak*/
-.usia-container {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
+.usia-anak {
+  display: block;
+  margin-bottom: 15px;
 }
+
+.usia-anak:last-child {
+  margin-bottom: 0;
+}
+
