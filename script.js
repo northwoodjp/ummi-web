@@ -26,7 +26,7 @@ faders.forEach((el) => observer.observe(el));
 
 
 /* ---------- COUNTDOWN TIMER ---------- */
-const targetDate = new Date("February 15, 2026 23:59:59").getTime();
+const targetDate = new Date("February 28, 2026 23:59:59").getTime();
 
 function updateCountdown() {
   const now = new Date().getTime();
