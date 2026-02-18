@@ -153,21 +153,23 @@ form.addEventListener("submit", async e => {
     btn.textContent = "Kirim Pendaftaran";
   }
 });
-// Tampilkan input usia anak sesuai jumlah anak
+
+
+// Ambil elemen
+const form = document.getElementById("form");
 const jumlahAnakSelect = document.getElementById("jumlahAnak");
 const usiaGroup = document.getElementById("usiaAnakGroup");
 const usiaInputs = document.querySelectorAll(".usia-anak");
+const usiaHidden = document.getElementById("usiaAnakGabungan");
 
-/* Show input sesuai jumlah */
+/* Tampilkan input sesuai jumlah anak */
 jumlahAnakSelect.addEventListener("change", () => {
   const jumlah = parseInt(jumlahAnakSelect.value) || 0;
 
-  if (jumlah > 0) {
-    usiaGroup.style.display = "block";
-  } else {
-    usiaGroup.style.display = "none";
-  }
+  // Tampilkan / sembunyikan group
+  usiaGroup.style.display = jumlah > 0 ? "block" : "none";
 
+  // Atur input
   usiaInputs.forEach((input, index) => {
     if (index < jumlah) {
       input.style.display = "block";
@@ -180,21 +182,43 @@ jumlahAnakSelect.addEventListener("change", () => {
   });
 });
 
-/* Gabungkan usia jadi 1 string */
+/* Gabungkan usia jadi string angka saja */
 function gabungUsiaAnak() {
+  const jumlah = parseInt(jumlahAnakSelect.value) || 0;
   let usiaList = [];
 
   usiaInputs.forEach((input, index) => {
-    if (input.value !== "") {
-      usiaList.push(`Anak ${index + 1}: ${input.value} th`);
+    if (index < jumlah && input.value !== "") {
+      usiaList.push(input.value.trim());
     }
   });
 
-  document.getElementById("usiaAnakGabungan").value = usiaList.join(", ");
+  // hasil: "1,2,5"
+  usiaHidden.value = usiaList.join(",");
 }
 
-/* Hook ke submit */
-form.addEventListener("submit", async e => {
+/* Validasi sebelum submit */
+form.addEventListener("submit", function (e) {
+  const jumlah = parseInt(jumlahAnakSelect.value) || 0;
+
+  if (jumlah > 0) {
+    let filled = 0;
+
+    usiaInputs.forEach((input, index) => {
+      if (index < jumlah && input.value !== "") {
+        filled++;
+      }
+    });
+
+    // jika belum semua terisi
+    if (filled < jumlah) {
+      e.preventDefault();
+      alert("Harap isi semua usia anak");
+      return;
+    }
+  }
+
+  // gabungkan sebelum kirim
   gabungUsiaAnak();
 });
 
