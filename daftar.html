@@ -164,7 +164,7 @@ const form = document.getElementById("registrationForm");
 const anakL = document.getElementById("anakL");
 const anakP = document.getElementById("anakP");
 const usiaGroup = document.getElementById("usiaAnakGroup");
-const usiaContainer = document.querySelector(".usia-container");
+const usiaContainer = document.getElementById("usiaContainer");
 const usiaHidden = document.getElementById("usiaAnakGabungan");
 
 /* Generate input usia */
@@ -192,8 +192,8 @@ function updateUsiaInputs() {
 }
 
 /* Trigger saat jumlah anak berubah */
-anakL.addEventListener("input", updateUsiaInputs);
-anakP.addEventListener("input", updateUsiaInputs);
+anakL.addEventListener("change", updateUsiaInputs);
+anakP.addEventListener("change", updateUsiaInputs);
 
 /* Submit */
 form.addEventListener("submit", async e => {
