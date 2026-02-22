@@ -27,9 +27,9 @@
 
 <!-- ==================== PAGE HEADER ==================== -->
 <section class="donation-instructions fade">
-  <h2 class="section-title">Mie Mengaji Spesial Ramadan</h2>
+  <h2 class="section-title">Kajian Bersama Ust. Handy Bonny</h2>
   <p class="donation-subtitle">
-    Mohon isi data kehadiran untuk membantu panitia mempersiapkan acara. <strong>Batas waktu pendaftaran hingga 20 Februari 2026</strong>
+    Mohon isi data kehadiran untuk membantu panitia mempersiapkan acara. <strong>Batas waktu pendaftaran hingga 7 Maret 2026 pukul 12:00 AM JST.</strong>
   </p>
 
   <form class="donation-form" id="registrationForm">
@@ -42,26 +42,72 @@
 
     <!-- Jumlah Hadir -->
     <div class="form-group">
-      <label>Jumlah yang Hadir</label>
-      <div style="display:grid; grid-template-columns: 1fr; gap:1rem;">
-        <div>
-          <label style="font-weight:500; font-size:0.8rem;">Dewasa</label>
-          <select name="dewasa" required>
-            <option value="">Pilih</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-        </div>
+      <div class="form-group">
+  <label>Jumlah yang Hadir</label>
 
+  <!-- Dewasa -->
+  <div style="margin-bottom:1rem;">
+    <label style="font-weight:500;">Dewasa</label>
+    <div style="display:flex; gap:1rem;">
+      
+      <div>
+        <label style="font-size:0.8rem;">L</label>
+        <select name="dewasa_l" required>
+          <option value="">-</option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:0.8rem;">P</label>
+        <select name="dewasa_p" required>
+          <option value="">-</option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Anak -->
+  <div>
+    <label style="font-weight:500;">Anak</label>
+    <div style="display:flex; gap:1rem;">
+      
+      <div>
+        <label style="font-size:0.8rem;">L</label>
+        <select name="anak_l">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:0.8rem;">P</label>
+        <select name="anak_p">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+</div>
     <!-- ==================== CHILDREN ==================== -->
 <div class="form-group">
   <label>Jumlah Anak</label>
@@ -87,7 +133,23 @@
       <!-- Hidden field untuk kirim ke GAS -->
       <input type="hidden" name="usia_anak" id="usiaAnakGabungan">
 </div>
-  
+
+<div class="form-group">
+  <label>Transportasi</label>
+
+  <div style="display:flex; gap:1rem;">
+    <label>
+      <input type="radio" name="transportasi" value="Umum" required>
+      Umum
+    </label>
+
+    <label>
+      <input type="radio" name="transportasi" value="Pribadi" required>
+      Pribadi
+    </label>
+  </div>
+</div>
+
     <!-- Catatan -->
     <div class="form-group">
       <label>Catatan (Opsional)</label>
