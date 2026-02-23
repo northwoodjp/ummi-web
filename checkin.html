@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in — UMMI Masjid</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: sans-serif; padding: 2rem; background: #f9f9f9; }
+  h2 { text-align: center; margin-bottom: 2rem; }
+  #infoPeserta { background: #fff; padding: 1.5rem; border-radius: 8px; max-width: 500px; margin: auto; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  #confirmBtn { display: block; margin: 1.5rem auto; padding: 0.8rem 2rem; font-size: 1rem; background: var(--accent-gold, #cfa22e); border: none; border-radius: 5px; cursor: pointer; color: #fff; }
+  #confirmBtn:disabled { background: #aaa; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<h2>Check-in Peserta</h2>
+<div id="infoPeserta">Memuat data...</div>
+<button id="confirmBtn">Konfirmasi Kehadiran</button>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const registrationId = params.get("id");
+const infoDiv = document.getElementById("infoPeserta");
+const confirmBtn = document.getElementById("confirmBtn");
+
+if(!registrationId){
+  infoDiv.textContent = "ID tidak ditemukan. Pastikan QR code valid.";
+  confirmBtn.disabled = true;
+}
+
+// ================== FETCH DATA DARI GOOGLE SHEET ==================
+// Ganti URL ini dengan Web App Google Apps Script kamu
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec";
+
+async function loadPeserta() {
+  try {
+    const res = await fetch(`${SHEET_API_URL}?action=get&id=${registrationId}`);
+    const data = await res.json();
+
+    if(data.status !== "success"){
+      infoDiv.textContent = "Data pendaftar tidak ditemukan.";
+      confirmBtn.disabled = true;
+      return;
+    }
+
+    const peserta = data.peserta;
+
+    infoDiv.innerHTML = `
+      <strong>Nama:</strong> ${peserta.nama}<br>
+      <strong>Total orang terdaftar:</strong> ${peserta.total}<br>
+      <strong>Catatan:</strong> ${peserta.catatan || "-"}<br>
+      <strong>Status:</strong> ${peserta.hadir ? "Sudah hadir ✅" : "Belum hadir"}
+    `;
+
+    if(peserta.hadir) confirmBtn.disabled = true;
+
+  } catch(err){
+    console.error(err);
+    infoDiv.textContent = "Gagal memuat data peserta.";
+    confirmBtn.disabled = true;
+  }
+}
+
+// ================== KONFIRMASI KEHADIRAN ==================
+confirmBtn.addEventListener("click", async () => {
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Mengupdate...";
+
+  try {
+    const res = await fetch(SHEET_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "checkin", id: registrationId })
+    });
+
+    const result = await res.json();
+    if(result.status !== "success") throw new Error(result.message);
+
+    alert("Kehadiran berhasil dikonfirmasi!");
+    loadPeserta(); // reload info untuk menampilkan status hadir
+
+  } catch(err){
+    alert("Gagal mengkonfirmasi kehadiran: " + err.message);
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "Konfirmasi Kehadiran";
+  }
+});
+
+loadPeserta();
+</script>
+
+</body>
+</html>
