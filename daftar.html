@@ -139,6 +139,8 @@
       <textarea name="catatan" rows="4" placeholder="Contoh: alergi, kebutuhan khusus, dll"></textarea>
     </div>
 
+    <input type="hidden" name="id" id="registrationId" />
+    <p id="totalOrang" style="margin-top:10px; font-weight:bold;"></p>
     <button type="submit" class="donation-btn">
       Kirim Pendaftaran
     </button>
@@ -167,7 +169,9 @@ const usiaGroup = document.getElementById("usiaAnakGroup");
 const usiaContainer = document.getElementById("usiaContainer");
 const usiaHidden = document.getElementById("usiaAnakGabungan");
 
-/* Generate input usia */
+/* =========================
+   GENERATE INPUT USIA ANAK
+========================= */
 function updateUsiaInputs() {
   const jumlah = (parseInt(anakL.value) || 0) + (parseInt(anakP.value) || 0);
 
@@ -189,16 +193,56 @@ function updateUsiaInputs() {
   } else {
     usiaGroup.style.display = "none";
   }
+
+  updateTotal();
 }
 
-/* Trigger saat jumlah anak berubah */
+/* =========================
+   HITUNG TOTAL ORANG
+========================= */
+function updateTotal() {
+  const total =
+    parseInt(anakL.value || "0") +
+    parseInt(anakP.value || "0") +
+    parseInt(document.querySelector('[name="dewasa_l"]').value || "0") +
+    parseInt(document.querySelector('[name="dewasa_p"]').value || "0");
+
+  document.getElementById("totalOrang").textContent =
+    total > 0 ? `Total hadir: ${total} orang` : "";
+}
+
+/* =========================
+   EVENT LISTENER
+========================= */
 anakL.addEventListener("change", updateUsiaInputs);
 anakP.addEventListener("change", updateUsiaInputs);
+document.querySelector('[name="dewasa_l"]').addEventListener("change", updateTotal);
+document.querySelector('[name="dewasa_p"]').addEventListener("change", updateTotal);
 
-/* Submit */
+/* =========================
+   SUBMIT FORM
+========================= */
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
+  const registrationId = Date.now().toString();
+  document.getElementById("registrationId").value = registrationId;
+
+  const dewasaL = parseInt(form.querySelector('[name="dewasa_l"]').value || "0");
+  const dewasaP = parseInt(form.querySelector('[name="dewasa_p"]').value || "0");
+  const total =
+    dewasaL +
+    dewasaP +
+    parseInt(anakL.value || "0") +
+    parseInt(anakP.value || "0");
+
+  // Validasi minimal 1 orang
+  if (total === 0) {
+    alert("Minimal 1 orang harus hadir");
+    return;
+  }
+
+  // Ambil usia anak
   const inputs = document.querySelectorAll(".usia-anak");
   let usiaList = [];
 
@@ -208,12 +252,21 @@ form.addEventListener("submit", async e => {
     }
   });
 
-  // validasi
+  // Validasi usia kosong
   if (inputs.length > 0 && usiaList.length < inputs.length) {
     alert("Harap isi semua usia anak");
     return;
   }
 
+  // Validasi angka usia
+  for (let usia of usiaList) {
+    if (isNaN(usia) || usia < 0) {
+      alert("Usia anak harus angka yang valid");
+      return;
+    }
+  }
+
+  // Gabungkan usia
   usiaHidden.value = usiaList.join(",");
 
   const btn = form.querySelector("button");
@@ -229,6 +282,7 @@ form.addEventListener("submit", async e => {
     }
 
     payload.timestamp = new Date().toISOString();
+    payload.total = total;
 
     const res = await fetch("https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec", {
       method: "POST",
@@ -239,7 +293,8 @@ form.addEventListener("submit", async e => {
     const result = await res.json();
     if (result.status !== "success") throw new Error(result.message);
 
-    window.location.href = `terimakasih2.html?ref=${Date.now()}`;
+    // Redirect ke halaman QR / thank you
+    window.location.href = `terimakasih2.html?id=${registrationId}`;
 
   } catch (err) {
     alert("Gagal mengirim: " + err.message);
@@ -248,6 +303,11 @@ form.addEventListener("submit", async e => {
     btn.textContent = "Kirim Pendaftaran";
   }
 });
+
+/* =========================
+   INIT
+========================= */
+updateTotal();
 </script>
 
 </body>

@@ -1,34 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You — UMMI Masjid</title>
+  <title>Terimakasih — UMMI Masjid</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-  <!-- JS -->
-  <script src="script.js" defer></script>
+  <style>
+    #qrcode {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    #qrcode img {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
 </head>
 <body>
 
-  
-<!-- ==================== HERO / CONFIRMATION ==================== -->
+  <!-- ==================== CONFIRMATION ==================== -->
   <section class="donation-confirmation fade">
-    <h2 class="section-title">Terimakasih atas konfirmasi kehadiran anda!</h2>
+    <h2 class="section-title">Terimakasih atas konfirmasi kehadiran Anda!</h2>
     <p class="fade" style="text-align:center; max-width:700px; margin:auto; margin-top:1rem;">
       <strong>Pendaftaran Anda telah berhasil kami terima.</strong><br>
-      Informasi ini sangat membantu panitia dalam mempersiapkan acara dengan lebih baik.<br>
-      Semoga Allah SWT membalas kebaikan dan niat baik Anda.</p>
-
- <p class="fade" style="margin-top:1.5rem; font-size:0.95rem; color:#555; text-align:center;">
-      Klik
-  <a href="index.html" style="color:var(--accent-gold);">disini</a> untuk kembali ke halaman awal.
+      Informasi ini sangat membantu panitia dalam mempersiapkan acara.<br>
+      Semoga Allah SWT membalas kebaikan dan niat baik Anda.
     </p>
 
+    <p class="fade" style="margin-top:1.5rem; font-size:0.95rem; color:#555; text-align:center;">
+      Klik <a href="index.html" style="color:var(--accent-gold);">disini</a> untuk kembali ke halaman awal.
+    </p>
 
+    <div id="qrcode"></div>
   </section>
 
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  const qrcodeContainer = document.getElementById("qrcode");
+
+  if (id) {
+    const url = `https://ummi.jp/checkin.html?id=${id}`;
+    qrcodeContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}" alt="QR Code">`;
+  } else {
+    qrcodeContainer.textContent = "QR Code tidak tersedia.";
+  }
+</script>
   
 </body>
 </html>
