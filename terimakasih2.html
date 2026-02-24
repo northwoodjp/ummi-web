@@ -19,7 +19,7 @@
   </style>
 </head>
 <body>
-
+<h1>TEST HALAMAN</h1>
   <!-- ==================== CONFIRMATION ==================== -->
   <section class="donation-confirmation fade">
     <h2 class="section-title">Terimakasih atas konfirmasi kehadiran Anda!</h2>
@@ -37,6 +37,10 @@
   </section>
 
 <script>
+
+  window.onerror = function(msg, url, line) {
+  document.body.innerHTML = "<h2>ERROR TERJADI</h2><p>" + msg + "</p><p>Line: " + line + "</p>";
+};
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
