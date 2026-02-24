@@ -1,94 +1,48 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check-in — UMMI Masjid</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  body { font-family: sans-serif; padding: 2rem; background: #f9f9f9; }
-  h2 { text-align: center; margin-bottom: 2rem; }
-  #infoPeserta { background: #fff; padding: 1.5rem; border-radius: 8px; max-width: 500px; margin: auto; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-  #confirmBtn { display: block; margin: 1.5rem auto; padding: 0.8rem 2rem; font-size: 1rem; background: var(--accent-gold, #cfa22e); border: none; border-radius: 5px; cursor: pointer; color: #fff; }
-  #confirmBtn:disabled { background: #aaa; cursor: not-allowed; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in Kehadiran | Masjid UMMI</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Check-in Peserta</h2>
-<div id="infoPeserta">Memuat data...</div>
-<button id="confirmBtn">Konfirmasi Kehadiran</button>
+<section class="checkin-section fade">
+  <h2 class="section-title">Check-in Kehadiran</h2>
+  <p id="status" style="text-align:center; margin-top:1rem;">Memproses...</p>
+</section>
 
 <script>
+// Ambil ID dari URL
 const params = new URLSearchParams(window.location.search);
 const registrationId = params.get("id");
-const infoDiv = document.getElementById("infoPeserta");
-const confirmBtn = document.getElementById("confirmBtn");
+const statusEl = document.getElementById("status");
 
 if(!registrationId){
-  infoDiv.textContent = "ID tidak ditemukan. Pastikan QR code valid.";
-  confirmBtn.disabled = true;
-}
+  statusEl.textContent = "ID tidak ditemukan. QR code invalid.";
+} else {
 
-// ================== FETCH DATA DARI GOOGLE SHEET ==================
-// Ganti URL ini dengan Web App Google Apps Script kamu
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec";
+  // Kirim ke Google Apps Script untuk update check-in
+  const payload = { id: registrationId, checkin: new Date().toISOString() };
 
-async function loadPeserta() {
-  try {
-    const res = await fetch(`${SHEET_API_URL}?action=get&id=${registrationId}`);
-    const data = await res.json();
-
-    if(data.status !== "success"){
-      infoDiv.textContent = "Data pendaftar tidak ditemukan.";
-      confirmBtn.disabled = true;
-      return;
+  fetch("https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec", {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "text/plain;charset=utf-8" }
+  })
+  .then(res => res.json())
+  .then(result => {
+    if(result.status==="success"){
+      statusEl.innerHTML = `<strong>Check-in berhasil!</strong><br>ID: ${registrationId}<br>Terimakasih atas kehadiran Anda.`;
+    } else {
+      statusEl.textContent = "Gagal check-in: " + result.message;
     }
-
-    const peserta = data.peserta;
-
-    infoDiv.innerHTML = `
-      <strong>Nama:</strong> ${peserta.nama}<br>
-      <strong>Total orang terdaftar:</strong> ${peserta.total}<br>
-      <strong>Catatan:</strong> ${peserta.catatan || "-"}<br>
-      <strong>Status:</strong> ${peserta.hadir ? "Sudah hadir ✅" : "Belum hadir"}
-    `;
-
-    if(peserta.hadir) confirmBtn.disabled = true;
-
-  } catch(err){
-    console.error(err);
-    infoDiv.textContent = "Gagal memuat data peserta.";
-    confirmBtn.disabled = true;
-  }
+  })
+  .catch(err => {
+    statusEl.textContent = "Terjadi error: " + err.message;
+  });
 }
-
-// ================== KONFIRMASI KEHADIRAN ==================
-confirmBtn.addEventListener("click", async () => {
-  confirmBtn.disabled = true;
-  confirmBtn.textContent = "Mengupdate...";
-
-  try {
-    const res = await fetch(SHEET_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "checkin", id: registrationId })
-    });
-
-    const result = await res.json();
-    if(result.status !== "success") throw new Error(result.message);
-
-    alert("Kehadiran berhasil dikonfirmasi!");
-    loadPeserta(); // reload info untuk menampilkan status hadir
-
-  } catch(err){
-    alert("Gagal mengkonfirmasi kehadiran: " + err.message);
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = "Konfirmasi Kehadiran";
-  }
-});
-
-loadPeserta();
 </script>
 
 </body>
