@@ -37,21 +37,32 @@
   </section>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
 
-  window.onerror = function(msg, url, line) {
-  document.body.innerHTML = "<h2>ERROR TERJADI</h2><p>" + msg + "</p><p>Line: " + line + "</p>";
-};
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+    const qrcodeContainer = document.getElementById("qrcode");
 
-  const qrcodeContainer = document.getElementById("qrcode");
+    if (!qrcodeContainer) {
+      console.error("Element #qrcode tidak ditemukan");
+      return;
+    }
 
-  if (id) {
-    const url = `https://ummi.jp/checkin.html?id=${id}`;
-    qrcodeContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}" alt="QR Code">`;
-  } else {
-    qrcodeContainer.textContent = "QR Code tidak tersedia.";
+    if (id) {
+      const url = `https://ummi.jp/checkin.html?id=${id}`;
+      qrcodeContainer.innerHTML =
+        `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}" alt="QR Code">`;
+    } else {
+      qrcodeContainer.textContent = "QR Code tidak tersedia.";
+    }
+
+  } catch (err) {
+    console.error("Error JS:", err);
+    document.body.innerHTML =
+      "<h2>Terjadi Error</h2><p>" + err.message + "</p>";
   }
+});
 </script>
   
 </body>
