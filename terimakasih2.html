@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terimakasih — UMMI Masjid</title>
@@ -38,6 +39,7 @@
   </section>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
   const debug = document.getElementById("debug");
@@ -48,25 +50,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   debug.textContent = "ID = " + id;
 
-  if (!qrcodeContainer) {
-    debug.textContent += " | qrcode tidak ditemukan";
+  if (!id) {
+    qrcodeContainer.textContent = "QR Code tidak tersedia.";
     return;
   }
 
-  if (id && id !== "") {
-    const url = "https://ummi.jp/checkin.html?id=" + encodeURIComponent(id);
+  const url = "https://ummi.jp/checkin.html?id=" + encodeURIComponent(id);
 
-    debug.textContent += " | URL QR dibuat";
+  debug.textContent += " | QR dibuat";
 
-    qrcodeContainer.innerHTML =
-      `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}">`;
+  // clear dulu
+  qrcodeContainer.innerHTML = "";
 
-  } else {
-    debug.textContent += " | ID kosong";
-    qrcodeContainer.textContent = "QR Code tidak tersedia.";
-  }
+  new QRCode(qrcodeContainer, {
+    text: url,
+    width: 200,
+    height: 200
+  });
 
 });
+
 </script>
   
 </body>
