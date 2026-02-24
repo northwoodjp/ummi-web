@@ -38,29 +38,26 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+  const debug = document.getElementById("debug");
+  const qrcodeContainer = document.getElementById("qrcode");
 
-    const qrcodeContainer = document.getElementById("qrcode");
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-    if (!qrcodeContainer) {
-      console.error("Element #qrcode tidak ditemukan");
-      return;
-    }
+  debug.textContent = "ID = " + id;
 
-    if (id) {
-      const url = `https://ummi.jp/checkin.html?id=${id}`;
-      qrcodeContainer.innerHTML =
-        `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}" alt="QR Code">`;
-    } else {
-      qrcodeContainer.textContent = "QR Code tidak tersedia.";
-    }
+  if (!qrcodeContainer) {
+    debug.textContent += " | qrcode element tidak ditemukan";
+    return;
+  }
 
-  } catch (err) {
-    console.error("Error JS:", err);
-    document.body.innerHTML =
-      "<h2>Terjadi Error</h2><p>" + err.message + "</p>";
+  if (id !== null && id !== "") {
+    const url = "https://ummi.jp/checkin.html?id=" + encodeURIComponent(id);
+
+    qrcodeContainer.innerHTML =
+      `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}">`;
+  } else {
+    qrcodeContainer.textContent = "QR Code tidak tersedia.";
   }
 });
 </script>
