@@ -19,6 +19,7 @@
   </style>
 </head>
 <body>
+  <p id="debug" style="color:red;text-align:center;"></p>
 <h1>TEST HALAMAN</h1>
   <!-- ==================== CONFIRMATION ==================== -->
   <section class="donation-confirmation fade">
@@ -38,6 +39,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
   const debug = document.getElementById("debug");
   const qrcodeContainer = document.getElementById("qrcode");
 
@@ -47,18 +49,23 @@ document.addEventListener("DOMContentLoaded", function () {
   debug.textContent = "ID = " + id;
 
   if (!qrcodeContainer) {
-    debug.textContent += " | qrcode element tidak ditemukan";
+    debug.textContent += " | qrcode tidak ditemukan";
     return;
   }
 
-  if (id !== null && id !== "") {
+  if (id && id !== "") {
     const url = "https://ummi.jp/checkin.html?id=" + encodeURIComponent(id);
+
+    debug.textContent += " | URL QR dibuat";
 
     qrcodeContainer.innerHTML =
       `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}">`;
+
   } else {
+    debug.textContent += " | ID kosong";
     qrcodeContainer.textContent = "QR Code tidak tersedia.";
   }
+
 });
 </script>
   
