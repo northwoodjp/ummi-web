@@ -3,46 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check-in Kehadiran | Masjid UMMI</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Check-in Kehadiran</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px;
+      width: 100%;
+      background: #0b7;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #999;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-<section class="checkin-section fade">
-  <h2 class="section-title">Check-in Kehadiran</h2>
-  <p id="status" style="text-align:center; margin-top:1rem;">Memproses...</p>
-</section>
+<div class="card">
+  <h2>Check-in Kehadiran</h2>
+
+  <p id="nama">Memuat...</p>
+  <p id="total"></p>
+
+  <input type="number" id="jumlah" placeholder="Jumlah hadir">
+
+  <button id="btn">Check-in</button>
+
+  <p id="status"></p>
+</div>
 
 <script>
-// Ambil ID dari URL
-const params = new URLSearchParams(window.location.search);
-const registrationId = params.get("id");
+const API_URL = "https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec";
+
+const namaEl = document.getElementById("nama");
+const totalEl = document.getElementById("total");
+const jumlahInput = document.getElementById("jumlah");
 const statusEl = document.getElementById("status");
+const btn = document.getElementById("btn");
 
-if(!registrationId){
-  statusEl.textContent = "ID tidak ditemukan. QR code invalid.";
-} else {
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-  // Kirim ke Google Apps Script untuk update check-in
-  const payload = { id: registrationId, checkin: new Date().toISOString() };
-
-  fetch("https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec", {
-    method: "POST",
-    body: JSON.stringify(payload),
-    headers: { "Content-Type": "text/plain;charset=utf-8" }
-  })
-  .then(res => res.json())
-  .then(result => {
-    if(result.status==="success"){
-      statusEl.innerHTML = `<strong>Check-in berhasil!</strong><br>ID: ${registrationId}<br>Terimakasih atas kehadiran Anda.`;
-    } else {
-      statusEl.textContent = "Gagal check-in: " + result.message;
-    }
-  })
-  .catch(err => {
-    statusEl.textContent = "Terjadi error: " + err.message;
-  });
+if (!id) {
+  namaEl.textContent = "ID tidak ditemukan";
 }
+
+/* =========================
+   LOAD DATA
+========================= */
+async function loadData() {
+  try {
+    const res = await fetch(API_URL + "?id=" + id);
+    const data = await res.json();
+
+    if (data.error) {
+      namaEl.textContent = "Data tidak ditemukan";
+      return;
+    }
+
+    namaEl.textContent = "Nama: " + data.nama;
+    totalEl.textContent = "Total daftar: " + data.total + " orang";
+
+    jumlahInput.value = data.total;
+
+  } catch (err) {
+    namaEl.textContent = "Gagal load data";
+  }
+}
+
+loadData();
+
+/* =========================
+   CHECK-IN
+========================= */
+btn.addEventListener("click", async () => {
+
+  const jumlah = jumlahInput.value;
+
+  if (!jumlah || jumlah <= 0) {
+    alert("Masukkan jumlah hadir");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Memproses...";
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        id: id,
+        jumlah: jumlah
+      }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+
+    const result = await res.json();
+
+    if (result.status === "success") {
+      statusEl.textContent = "✅ Check-in berhasil";
+      statusEl.style.color = "green";
+    } 
+    else if (result.status === "already") {
+      statusEl.textContent = "⚠️ Sudah check-in sebelumnya";
+      statusEl.style.color = "orange";
+    }
+    else {
+      statusEl.textContent = "❌ Gagal check-in";
+      statusEl.style.color = "red";
+    }
+
+  } catch (err) {
+    statusEl.textContent = "Error koneksi";
+    statusEl.style.color = "red";
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Check-in";
+});
 </script>
 
 </body>

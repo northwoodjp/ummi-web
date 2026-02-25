@@ -256,9 +256,9 @@ form.addEventListener("submit", async e => {
 
     // LINK QR / THANK YOU
     const qrLink = `https://ummi.jp/qrcode.html?id=${registrationId}`;
-    const message = `Assalamu'alaikum warahmatullahi wabarakatuh,
+    const message = `Assalamu'alaikum warahmatullahi wabarakatuh.
 
-Pendaftaran Kajian berhasil.
+Pendaftaran Kajian Bersama Ust. Handy Bonny berhasil!
 Nama: ${payload.nama}
 Total Hadir: ${total} orang
 
@@ -267,7 +267,8 @@ ${qrLink}
 
 Tunjukkan QR saat check-in.
 
-Jazakumullahu khairan.`;
+Jazakumullahu khairan.
+Masjid UMMI`;
 
     const waUrl = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
     window.location.href = waUrl;
