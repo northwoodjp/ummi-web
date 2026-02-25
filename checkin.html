@@ -84,7 +84,7 @@ const jumlahInput = document.getElementById("jumlah");
 const statusEl = document.getElementById("status");
 const btn = document.getElementById("btn");
 
-// ambil dari URL (QR)
+// ambil data dari URL QR
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const nama = params.get("nama");
@@ -130,6 +130,7 @@ btn.addEventListener("click", async () => {
       body: JSON.stringify({
         action: "checkin",
         id: id,
+        nama: nama,
         jumlah: jumlah
       }),
       headers: { "Content-Type": "text/plain;charset=utf-8" }
