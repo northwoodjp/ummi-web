@@ -39,6 +39,19 @@
       <label>Nama</label>
       <input type="text" name="nama" placeholder="Nama lengkap" required />
     </div>
+    <div class="form-group">
+      <label>Alamat</label>
+      <input type="text" name="alamat" placeholder="Alamat lengkap" required />
+    </div>
+
+    <div class="form-group">
+      <label>No WhatsApp</label>
+      <input type="tel" id="phone" name="phone" placeholder="contoh: 6281234567890" required>
+      <small style="display:block; color:#555; font-size:0.85em; margin-top:4px;">
+      ✔ Sertakan kode negara (misal: 62 untuk Indonesia, 81 untuk Jepang)<br>
+      ✔ Hanya angka, jangan pakai +, spasi, atau tanda strip (-)<br>
+      </small>
+      </div>
 
     <!-- ==================== JUMLAH HADIR ==================== -->
 <div class="form-group">
@@ -198,7 +211,7 @@ function updateUsiaInputs() {
 }
 
 /* =========================
-   HITUNG TOTAL ORANG
+   HITUNG TOTAL
 ========================= */
 function updateTotal() {
   const total =
@@ -212,7 +225,7 @@ function updateTotal() {
 }
 
 /* =========================
-   EVENT LISTENER
+   EVENT
 ========================= */
 anakL.addEventListener("change", updateUsiaInputs);
 anakP.addEventListener("change", updateUsiaInputs);
@@ -220,7 +233,7 @@ document.querySelector('[name="dewasa_l"]').addEventListener("change", updateTot
 document.querySelector('[name="dewasa_p"]').addEventListener("change", updateTotal);
 
 /* =========================
-   SUBMIT FORM
+   SUBMIT
 ========================= */
 form.addEventListener("submit", async e => {
   e.preventDefault();
@@ -236,13 +249,12 @@ form.addEventListener("submit", async e => {
     parseInt(anakL.value || "0") +
     parseInt(anakP.value || "0");
 
-  // Validasi minimal 1 orang
   if (total === 0) {
     alert("Minimal 1 orang harus hadir");
     return;
   }
 
-  // Ambil usia anak
+  // usia anak
   const inputs = document.querySelectorAll(".usia-anak");
   let usiaList = [];
 
@@ -252,21 +264,18 @@ form.addEventListener("submit", async e => {
     }
   });
 
-  // Validasi usia kosong
   if (inputs.length > 0 && usiaList.length < inputs.length) {
     alert("Harap isi semua usia anak");
     return;
   }
 
-  // Validasi angka usia
   for (let usia of usiaList) {
     if (isNaN(usia) || usia < 0) {
-      alert("Usia anak harus angka yang valid");
+      alert("Usia anak tidak valid");
       return;
     }
   }
 
-  // Gabungkan usia
   usiaHidden.value = usiaList.join(",");
 
   const btn = form.querySelector("button");
@@ -281,6 +290,7 @@ form.addEventListener("submit", async e => {
       payload[k] = v;
     }
 
+    payload.id = registrationId;
     payload.timestamp = new Date().toISOString();
     payload.total = total;
 
@@ -293,8 +303,38 @@ form.addEventListener("submit", async e => {
     const result = await res.json();
     if (result.status !== "success") throw new Error(result.message);
 
-    // Redirect ke halaman QR / thank you
-    window.location.href = `terimakasih2.html?id=${registrationId}`;
+    /* =========================
+       WHATSAPP
+    ========================= */
+    let wa = payload.wa;
+
+    // normalisasi nomor
+    wa = wa.replace(/[^0-9]/g, "");
+    if (wa.startsWith("08")) {
+      wa = "62" + wa.substring(1);
+    }
+
+    const qrLink = `https://ummi.jp/terimakasih2.html?id=${registrationId}`;
+
+    const message =
+`Assalamu'alaikum,
+
+Pendaftaran Kajian berhasil.
+
+Nama: ${payload.nama}
+Total Hadir: ${total} orang
+
+Silakan buka QR:
+${qrLink}
+
+Tunjukkan QR saat check-in.
+
+Jazakumullahu khairan.`;
+
+    const waUrl = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
+
+    // buka WhatsApp
+    window.location.href = waUrl;
 
   } catch (err) {
     alert("Gagal mengirim: " + err.message);
