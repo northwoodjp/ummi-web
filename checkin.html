@@ -2,51 +2,54 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Check-in Peserta</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in Kehadiran</title>
+
+  <link rel="stylesheet" href="style.css">
 
   <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-
-    h2 {
+    .checkin-container {
+      max-width: 500px;
+      margin: auto;
+      padding: 2rem;
       text-align: center;
     }
 
-    .card {
-      max-width: 400px;
-      margin: auto;
+    .info-box {
       background: #fff;
-      padding: 20px;
+      padding: 1.5rem;
       border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-top: 1.5rem;
     }
 
-    select, input, button {
+    input {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
       font-size: 16px;
+      margin-top: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
 
     button {
-      background: #28a745;
-      color: #fff;
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-gold);
+      color: white;
       border: none;
+      border-radius: 6px;
+      font-size: 16px;
       cursor: pointer;
-      border-radius: 5px;
     }
 
-    button:hover {
-      background: #218838;
+    button:disabled {
+      background: #999;
     }
 
-    .status {
-      margin-top: 15px;
-      text-align: center;
+    #status {
+      margin-top: 1rem;
       font-weight: bold;
     }
   </style>
@@ -54,114 +57,101 @@
 
 <body>
 
-<div class="card">
-  <h2>Check-in Peserta</h2>
+<section class="donation-confirmation">
+  <div class="checkin-container">
 
-  <label>Nama Peserta</label>
-  <select id="nama">
-    <option value="">-- Loading Data --</option>
-  </select>
+    <h2 class="section-title">Check-in Kehadiran</h2>
 
-  <label>Jumlah Orang</label>
-  <input type="number" id="jumlah" readonly>
+    <div class="info-box">
+      <p id="nama">Memuat...</p>
+      <p id="total"></p>
 
-  <button onclick="checkin()">Check-in</button>
+      <input type="number" id="jumlah" placeholder="Jumlah hadir">
 
-  <div class="status" id="status"></div>
-</div>
+      <button id="btn">Check-in</button>
+
+      <p id="status"></p>
+    </div>
+  </div>
+</section>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbzRNRBrBrrRxyGRWlzpLoQ3HbbXkKJ0sQNtBOMABTFgq-GsOLoLL3AClKjpSmB_jpwaxg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec";
 
-let dataPeserta = [];
+const namaEl = document.getElementById("nama");
+const totalEl = document.getElementById("total");
+const jumlahInput = document.getElementById("jumlah");
+const statusEl = document.getElementById("status");
+const btn = document.getElementById("btn");
 
-// ========================
-// LOAD DATA
-// ========================
-async function loadData() {
-  try {
-    document.getElementById("status").innerText = "Loading data...";
+// ambil dari URL (QR)
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+const nama = params.get("nama");
+const total = params.get("total");
 
-    const response = await fetch(scriptURL);
-    const data = await response.json();
-
-    console.log("DATA:", data);
-
-    dataPeserta = data;
-
-    const select = document.getElementById("nama");
-    select.innerHTML = '<option value="">-- Pilih Nama --</option>';
-
-    dataPeserta.forEach((item, index) => {
-      const opt = document.createElement("option");
-      opt.value = index;
-      opt.textContent = item.nama;
-      select.appendChild(opt);
-    });
-
-    document.getElementById("status").innerText = "Data berhasil dimuat";
-  } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText = "Gagal Load Data";
-  }
+// tampilkan data langsung
+if (nama) {
+  namaEl.textContent = "Nama: " + decodeURIComponent(nama);
+} else {
+  namaEl.textContent = "Nama tidak tersedia";
 }
 
-// ========================
-// AUTO ISI JUMLAH
-// ========================
-document.getElementById("nama").addEventListener("change", function() {
-  const index = this.value;
+if (total) {
+  totalEl.textContent = "Total daftar: " + total + " orang";
+  jumlahInput.value = total;
+} else {
+  jumlahInput.value = 1;
+}
 
-  if (index === "") {
-    document.getElementById("jumlah").value = "";
+/* =========================
+   CHECK-IN
+========================= */
+btn.addEventListener("click", async () => {
+
+  const jumlah = jumlahInput.value;
+
+  if (!jumlah || jumlah <= 0) {
+    alert("Masukkan jumlah hadir");
     return;
   }
 
-  const peserta = dataPeserta[index];
-  document.getElementById("jumlah").value = peserta.jumlah;
-});
-
-// ========================
-// CHECKIN
-// ========================
-async function checkin() {
-  const index = document.getElementById("nama").value;
-
-  if (index === "") {
-    alert("Pilih nama dulu!");
-    return;
-  }
-
-  const peserta = dataPeserta[index];
-
-  const data = {
-    action: "checkin",
-    nama: peserta.nama
-  };
+  btn.disabled = true;
+  btn.textContent = "Memproses...";
 
   try {
-    document.getElementById("status").innerText = "Mengirim...";
-
-    const res = await fetch(scriptURL, {
+    const res = await fetch(API_URL, {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        id: id,
+        jumlah: jumlah
+      }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
     });
 
     const result = await res.json();
 
-    document.getElementById("status").innerText = result.message;
+    if (result.status === "success") {
+      statusEl.textContent = "✅ Check-in berhasil";
+      statusEl.style.color = "green";
+    } 
+    else if (result.status === "already") {
+      statusEl.textContent = "⚠️ Sudah check-in";
+      statusEl.style.color = "orange";
+    }
+    else {
+      statusEl.textContent = "❌ Gagal check-in";
+      statusEl.style.color = "red";
+    }
 
   } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText = "Gagal Check-in";
+    statusEl.textContent = "❌ Error koneksi";
+    statusEl.style.color = "red";
   }
-}
 
-// ========================
-// INIT
-// ========================
-loadData();
-
+  btn.disabled = false;
+  btn.textContent = "Check-in";
+});
 </script>
 
 </body>

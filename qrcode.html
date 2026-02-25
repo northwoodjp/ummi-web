@@ -2,48 +2,69 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>QR Kehadiran</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Kehadiran</title>
 
   <style>
     body {
-      font-family: Arial;
+      font-family: sans-serif;
+      background: #f5f5f5;
       text-align: center;
-      padding: 30px;
+      padding: 20px;
     }
 
-    #qrcode img {
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    img {
       margin-top: 20px;
-      width: 200px;
-      height: 200px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .info {
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
-<h2>Pendaftaran Berhasil</h2>
-<p>Tunjukkan QR ini saat check-in</p>
+<div class="card">
+  <h2>QR Code Kehadiran</h2>
 
-<div id="qrcode"></div>
-<p id="info"></p>
+  <p id="nama"></p>
+  <p id="total"></p>
+
+  <img id="qr" src="">
+
+  <div class="info">
+    <p>📌 Tunjukkan QR ini saat check-in</p>
+  </div>
+</div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
+
 const id = params.get("id");
+const nama = params.get("nama");
+const total = params.get("total");
 
-const container = document.getElementById("qrcode");
-const info = document.getElementById("info");
+document.getElementById("nama").textContent = "Nama: " + nama;
+document.getElementById("total").textContent = "Total: " + total + " orang";
 
-if (id) {
-  const url = `https://ummi.jp/checkin.html?id=${id}`;
+// LINK CHECKIN
+const checkinUrl = `https://ummi.jp/checkin.html?id=${id}&nama=${encodeURIComponent(nama)}&total=${total}`;
 
-  container.innerHTML =
-    `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}">`;
+// GENERATE QR (pakai API gratis)
+const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(checkinUrl);
 
-  info.textContent = "ID: " + id;
-} else {
-  info.textContent = "QR tidak tersedia";
-}
+document.getElementById("qr").src = qrUrl;
 </script>
 
 </body>
