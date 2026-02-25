@@ -255,11 +255,10 @@ form.addEventListener("submit", async e => {
     if (wa.startsWith("08")) { wa = "62" + wa.substring(1); }
 
     // LINK QR / THANK YOU
-    const qrLink = `https://ummi.jp/terimakasih2.html?id=${registrationId}`;
-    const message = `Assalamu'alaikum,
+    const qrLink = `https://ummi.jp/qrcode.html?id=${registrationId}`;
+    const message = `Assalamu'alaikum warahmatullahi wabarakatuh,
 
 Pendaftaran Kajian berhasil.
-
 Nama: ${payload.nama}
 Total Hadir: ${total} orang
 

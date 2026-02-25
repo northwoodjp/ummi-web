@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Kehadiran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 30px;
+    }
+
+    #qrcode img {
+      margin-top: 20px;
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Pendaftaran Berhasil</h2>
+<p>Tunjukkan QR ini saat check-in</p>
+
+<div id="qrcode"></div>
+<p id="info"></p>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const container = document.getElementById("qrcode");
+const info = document.getElementById("info");
+
+if (id) {
+  const url = `https://ummi.jp/checkin.html?id=${id}`;
+
+  container.innerHTML =
+    `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}">`;
+
+  info.textContent = "ID: " + id;
+} else {
+  info.textContent = "QR tidak tersedia";
+}
+</script>
+
+</body>
+</html>
