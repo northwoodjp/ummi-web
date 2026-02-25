@@ -109,7 +109,12 @@ if (total) {
 ========================= */
 btn.addEventListener("click", async () => {
 
-  const jumlah = jumlahInput.value;
+  const jumlah = Number(jumlahInput.value);
+
+  if (!id) {
+    alert("QR tidak valid (ID kosong)");
+    return;
+  }
 
   if (!jumlah || jumlah <= 0) {
     alert("Masukkan jumlah hadir");
@@ -123,6 +128,7 @@ btn.addEventListener("click", async () => {
     const res = await fetch(API_URL, {
       method: "POST",
       body: JSON.stringify({
+        action: "checkin",
         id: id,
         jumlah: jumlah
       }),
