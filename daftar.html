@@ -238,6 +238,7 @@ form.addEventListener("submit", async e => {
     payload.id = registrationId;
     payload.timestamp = new Date().toISOString();
     payload.total = total;
+    payload.action="register";
 
     // KIRIM KE GOOGLE SHEET
     const res = await fetch(
