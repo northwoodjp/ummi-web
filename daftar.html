@@ -50,9 +50,9 @@
     <!-- No WhatsApp -->
     <div class="form-group">
       <label>No WhatsApp</label>
-      <input type="tel" id="wa" name="phone" placeholder="contoh: 6281234567890" required>
+      <input type="tel" id="wa" name="phone" placeholder="contoh: 818012345678" required>
       <small style="display:block; color:#555; font-size:0.85em; margin-top:4px;">
-        ✔ Sertakan kode negara (misal: 62 untuk Indonesia)<br>
+        ✔ Sertakan kode negara (misal: 81 untuk Jepang, 62 untuk Indonesia)<br>
         ✔ Hanya angka, jangan pakai +, spasi, atau tanda strip (-)
       </small>
     </div>
@@ -210,6 +210,7 @@ document.querySelector('[name="dewasa_p"]').addEventListener("change", updateTot
 /* SUBMIT FORM */
 form.addEventListener("submit", async e => {
   e.preventDefault();
+
   const registrationId = Date.now().toString();
   document.getElementById("registrationId").value = registrationId;
 
@@ -223,8 +224,19 @@ form.addEventListener("submit", async e => {
   const inputs = document.querySelectorAll(".usia-anak");
   let usiaList = [];
   inputs.forEach(input => { if(input.value !== "") usiaList.push(input.value.trim()); });
-  if (inputs.length > 0 && usiaList.length < inputs.length) { alert("Harap isi semua usia anak"); return; }
-  for (let usia of usiaList) { if (isNaN(usia) || usia < 0) { alert("Usia anak tidak valid"); return; } }
+
+  if (inputs.length > 0 && usiaList.length < inputs.length) {
+    alert("Harap isi semua usia anak");
+    return;
+  }
+
+  for (let usia of usiaList) {
+    if (isNaN(usia) || usia < 0) {
+      alert("Usia anak tidak valid");
+      return;
+    }
+  }
+
   usiaHidden.value = usiaList.join(",");
 
   const btn = form.querySelector("button");
@@ -234,29 +246,47 @@ form.addEventListener("submit", async e => {
   try {
     const formData = new FormData(form);
     const payload = {};
-    for (let [k, v] of formData.entries()) { payload[k] = v; }
+
+    for (let [k, v] of formData.entries()) {
+      payload[k] = v;
+    }
+
     payload.id = registrationId;
-    payload.timestamp = new Date().toISOString();
     payload.total = total;
-    payload.action="register";
+    payload.action = "register";   // WAJIB
+    // ❌ HAPUS timestamp — server yang buat
+    // payload.timestamp = new Date().toISOString();
 
     // KIRIM KE GOOGLE SHEET
     const res = await fetch(
       "https://script.google.com/macros/s/AKfycbxhCYJi1IMcHoPF25mpAqKIfRXFPwtceDrc2DShO6oEan9km2dcXpv-HfN34Ls-d52utg/exec",
-      { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "text/plain;charset=utf-8" } }
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+      }
     );
+
     const result = await res.json();
     if(result.status !== "success") throw new Error(result.message);
 
     // NOMOR WA
     let wa = payload.phone;
-    if (!wa) { alert("Harap isi nomor WhatsApp"); btn.disabled = false; btn.textContent = "Kirim Pendaftaran"; return; }
+    if (!wa) {
+      alert("Harap isi nomor WhatsApp");
+      btn.disabled = false;
+      btn.textContent = "Kirim Pendaftaran";
+      return;
+    }
 
     wa = wa.replace(/[^0-9]/g,"");
-    if (wa.startsWith("08")) { wa = "62" + wa.substring(1); }
+    if (wa.startsWith("08")) {
+      wa = "62" + wa.substring(1);
+    }
 
     // LINK QR / THANK YOU
     const qrLink = `https://ummi.jp/qrcode.html?id=${registrationId}&nama=${encodeURIComponent(payload.nama)}&total=${total}`;
+
     const message = `Assalamu'alaikum warahmatullahi wabarakatuh.
 
 Pendaftaran Kajian Bersama Ust. Handy Bonny berhasil!
@@ -284,6 +314,7 @@ Masjid UMMI`;
 
 /* INIT */
 updateTotal();
+
 </script>
 
 </body>
