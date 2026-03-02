@@ -146,6 +146,29 @@
   </div>
 </div>
 
+<!-- ==================== STATUS PEKERJAAN ==================== -->
+<div class="form-group">
+  <label>Status Pekerjaan</label>
+
+  <div style="display:flex; gap:1rem;">
+    <label>
+      <input type="radio" name="status_pekerjaan" value="Bekerja" required>
+      Bekerja
+    </label>
+
+    <label>
+      <input type="radio" name="status_pekerjaan" value="Tidak Bekerja" required>
+      Tidak Bekerja
+    </label>
+  </div>
+</div>
+
+<!-- ==================== JUMLAH ORANG INDONESIA DI TEMPAT KERJA ==================== -->
+<div class="form-group" id="jumlahIndonesiaGroup" style="display:none;">
+  <label>Jumlah Orang Indonesia di Tempat Kerja</label>
+  <input type="number" name="jumlah_indonesia" min="0" placeholder="Masukkan jumlah" />
+</div>
+
     <!-- Catatan -->
     <div class="form-group">
       <label>Catatan (Opsional)</label>
@@ -179,6 +202,10 @@ const anakP = document.getElementById("anakP");
 const usiaGroup = document.getElementById("usiaAnakGroup");
 const usiaContainer = document.getElementById("usiaContainer");
 const usiaHidden = document.getElementById("usiaAnakGabungan");
+const statusPekerjaan = document.getElementsByName("status_pekerjaan");
+const jumlahIndonesiaGroup = document.getElementById("jumlahIndonesiaGroup");
+const jumlahIndonesiaInput = jumlahIndonesiaGroup.querySelector("input");
+
 
 /* Generate input usia */
 function updateUsiaInputs() {
@@ -208,6 +235,28 @@ function updateUsiaInputs() {
 anakL.addEventListener("change", updateUsiaInputs);
 anakP.addEventListener("change", updateUsiaInputs);
 
+/* Trigger status pekerjaan */
+statusPekerjaan.forEach(radio => {
+  radio.addEventListener("change", updateStatusPekerjaan);
+});
+
+/* Tampilkan input jumlah orang Indonesia jika status pekerjaan "Bekerja" */
+function updateStatusPekerjaan() {
+  let selected = "";
+
+  statusPekerjaan.forEach(radio => {
+    if (radio.checked) selected = radio.value;
+  });
+
+  if (selected === "Bekerja") {
+    jumlahIndonesiaGroup.style.display = "block";
+    jumlahIndonesiaInput.required = true;
+  } else {
+    jumlahIndonesiaGroup.style.display = "none";
+    jumlahIndonesiaInput.required = false;
+    jumlahIndonesiaInput.value = "";
+  }
+}
 /* Submit */
 form.addEventListener("submit", async e => {
   e.preventDefault();
@@ -230,6 +279,12 @@ form.addEventListener("submit", async e => {
   usiaHidden.value = usiaList.join(",");
 
   const btn = form.querySelector("button");
+
+  // validasi jumlah Indonesia
+  if (jumlahIndonesiaGroup.style.display === "block" && jumlahIndonesiaInput.value === "") {
+    alert("Harap isi jumlah orang Indonesia di tempat kerja");
+    return;
+  }
   btn.disabled = true;
   btn.textContent = "Mengirim...";
 
