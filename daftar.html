@@ -46,10 +46,11 @@
       <input type="text" name="alamat" placeholder="Alamat lengkap"  />
     </div>
 
-  <!--No. Telp/Email -->
+  <!--No. WhatsApp -->
     <div class="form-group">
-      <label>No. Telp/Email</label>
-      <input type="text" name="kontak" placeholder="81802345678 atau email@example.com" required/>
+      <label>No. WhatsApp</label>
+      <input type="text" name="kontak" placeholder="08012345678" required/>
+      <small style="color:#555;">(Untuk konfirmasi pendaftaran)</small>
     </div>
     
 
@@ -185,6 +186,7 @@
       Kirim Pendaftaran
     </button>
 
+    <input type="hidden" name="id" id="registrationId">
   </form>
 </section>
 
@@ -291,33 +293,36 @@ anakP.addEventListener("change", updateTotal);
 // run awal
 updateTotal();
 
-/* Submit */
+/* SUBMIT */
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
-/* VALIDASI MINIMAL 1 ORANG */
-const dewasaL = parseInt(document.querySelector('[name="dewasa_l"]').value) || 0;
-const dewasaP = parseInt(document.querySelector('[name="dewasa_p"]').value) || 0;
-const anakLVal = parseInt(anakL.value) || 0;
-const anakPVal = parseInt(anakP.value) || 0;
+  // ===== GENERATE ID =====
+  const registrationId = Date.now().toString();
+  document.getElementById("registrationId").value = registrationId;
 
-const total = dewasaL + dewasaP + anakLVal + anakPVal;
+  // ===== HITUNG TOTAL =====
+  const dewasaL = parseInt(document.querySelector('[name="dewasa_l"]').value) || 0;
+  const dewasaP = parseInt(document.querySelector('[name="dewasa_p"]').value) || 0;
+  const anakLVal = parseInt(anakL.value) || 0;
+  const anakPVal = parseInt(anakP.value) || 0;
 
-if (total === 0) {
-  alert("Minimal 1 orang harus hadir");
-  return;
-}
+  const total = dewasaL + dewasaP + anakLVal + anakPVal;
 
+  // ===== VALIDASI TOTAL =====
+  if (total === 0) {
+    alert("Minimal 1 orang harus hadir");
+    return;
+  }
+
+  // ===== VALIDASI USIA =====
   const inputs = document.querySelectorAll(".usia-anak");
   let usiaList = [];
 
   inputs.forEach(input => {
-    if (input.value !== "") {
-      usiaList.push(input.value.trim());
-    }
+    if (input.value !== "") usiaList.push(input.value.trim());
   });
 
-  // validasi
   if (inputs.length > 0 && usiaList.length < inputs.length) {
     alert("Harap isi semua usia anak");
     return;
@@ -325,13 +330,14 @@ if (total === 0) {
 
   usiaHidden.value = usiaList.join(",");
 
-  const btn = form.querySelector("button");
-
-  // validasi jumlah Indonesia
+  // ===== VALIDASI PEKERJAAN =====
   if (jumlahIndonesiaGroup.style.display === "block" && jumlahIndonesiaInput.value === "") {
     alert("Harap isi jumlah orang Indonesia di tempat kerja");
     return;
   }
+
+  // ===== PREPARE BUTTON =====
+  const btn = form.querySelector("button");
   btn.disabled = true;
   btn.textContent = "Mengirim...";
 
@@ -343,18 +349,77 @@ if (total === 0) {
       payload[k] = v;
     }
 
-    payload.timestamp = new Date().toISOString();
+    payload.id = registrationId;
+    payload.total_hadir = total;
+    payload.action = "register";
 
+    // ===== KIRIM KE GOOGLE SHEET =====
     const res = await fetch("https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec", {
       method: "POST",
       body: JSON.stringify(payload),
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
     });
 
     const result = await res.json();
     if (result.status !== "success") throw new Error(result.message);
 
-    window.location.href = `terimakasih2.html?ref=${Date.now()}`;
+    // ===== FORMAT NOMOR WA =====
+    let wa = payload.kontak;
+
+    if (!wa) {
+      alert("Harap isi nomor WhatsApp");
+      return;
+    }
+
+    wa = wa.replace(/[^0-9]/g, "");
+   
+    // ===== JEPANG =====
+    if (
+      wa.startsWith("070") ||
+      wa.startsWith("080") ||
+      wa.startsWith("090")
+    ) {
+      wa = "81" + wa.substring(1);
+    }
+    
+    // ===== INDONESIA =====
+    else if (wa.startsWith("08")) {
+      wa = "62" + wa.substring(1);
+    }
+    
+    // ===== SUDAH PAKAI KODE NEGARA =====
+    else if (wa.startsWith("62") || wa.startsWith("81")) {
+      // biarkan saja
+    }
+
+    // ===== FORMAT LAIN (fallback) =====
+    else {
+      // optional: bisa kasih warning
+      console.log("Format nomor tidak dikenali:", wa);
+    }
+
+    // ===== BUAT LINK QR =====
+    const qrLink = `https://ummi.jp/qrcode.html?id=${registrationId}&nama=${encodeURIComponent(payload.nama)}&total=${total}`;
+
+    // ===== PESAN WHATSAPP =====
+    const message = `Assalamu'alaikum warahmatullahi wabarakatuh.
+
+Pendaftaran Kajian Masjid UMMI berhasil!
+
+Nama: ${payload.nama}
+Total Hadir: ${total} orang
+
+Silakan buka QR:
+${qrLink}
+
+Tunjukkan QR saat check-in.
+
+Jazakumullahu khairan.`;
+
+    const waUrl = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
+
+    // ===== REDIRECT KE WA =====
+    window.location.href = waUrl;
 
   } catch (err) {
     alert("Gagal mengirim: " + err.message);

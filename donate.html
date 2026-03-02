@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Infak & Wakaf | Masjid UMMI</title>
+  <title>Infak & Wakaf | UMMI Masjid</title>
 
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
@@ -13,36 +13,37 @@
 <!-- ==================== NAVIGATION ==================== -->
 <nav>
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Masjid UMMI</a>
+    <a href="index.html" class="nav-logo">UMMI Masjid</a>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
     <div class="nav-links" id="nav">
-      <a href="index.html#about">Tentang</a>
-      <a href="index.html#support">Dukung</a>
-      <a href="index.html#location">Lokasi</a>
-      <a href="index.html#follow">Ikuti</a>
-      <a href="contact.html">Hubungi Kami</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#support">Support</a>
+      <a href="index.html#location">Location</a>
+      <a href="index.html#follow">Follow</a>
+      <a href="contact.html">Contact Us</a>
 	</div>
   </div>
 </nav>
 
 <!-- ==================== PAGE HEADER ==================== -->
 <section class="donation-instructions fade">
-<a href="infakwakaf_en.html" class="lang-switch">🇬🇧 EN</a>
-  <h2 class="section-title">Salurkan Infak & Wakaf</h2>
+<a href="donasi.html" class="lang-switch">🇮🇩 ID</a>
+  <h2 class="section-title">Make a Donation</h2>
   <p class="donation-subtitle">
-    Infak dan wakaf anda membantu berdirinya Masjid UMMI.
+    Your contribution supports the establishment and sustainability of UMMI Masjid.
   </p>
+
 <form class="donation-form" id="donationForm">
 
   <!-- Name -->
   <div class="form-group">
-    <label>Nama Anda</label>
-    <input type="text" name="donor_name" placeholder="Nama lengkap" required />
+    <label>Your Name</label>
+    <input type="text" name="donor_name" placeholder="Full name" required />
   </div>
 
   <!-- Currency -->
   <div class="form-group">
-    <label>Mata Uang</label>
+    <label>Currency</label>
     <div style="display:flex; gap:5rem;">
       <label><input type="radio" name="currency" value="JPY" required /> JPY</label>
       <label><input type="radio" name="currency" value="IDR" /> IDR</label>
@@ -52,22 +53,22 @@
 
   <!-- Donation Type -->
   <div class="form-group">
-    <label>Jenis Donasi</label>
+    <label>Donation Type</label>
     <select name="donation_type" id="donationType" required>
-      <option value="">Pilih</option>
+      <option value="">Select</option>
       <option value="Wakaf">Wakaf</option>
-      <option value="Infak">Infak</option>
+      <option value="Infak">Infak (General Donation)</option>
     </select>
   </div>
 
   <!-- Wakaf -->
   <div class="form-group" id="wakafOptions" style="display:none;">
-    <label>Jenis Wakaf</label>
+    <label>Wakaf Type</label>
 
     <select name="wakaf_package" id="wakafPackage">
-      <option value="">Jenis Wakaf</option>
+      <option value="">Select Wakaf</option>
 
-      <option value="Baqiyyatush Shalihat (untuk Alm)" data-jpy="10000" data-idr="1000000"></option>
+      <option value="Baqiyyatush Shalihat (for the Deceased)" data-jpy="10000" data-idr="1000000"></option>
       <option value="Darussalam" data-jpy="10000" data-idr="1000000"></option>
       <option value="Ma'wa" data-jpy="15000" data-idr="1500000"></option>
       <option value="Na'im" data-jpy="20000" data-idr="2000000"></option>
@@ -78,56 +79,55 @@
 
   <!-- Infak -->
   <div class="form-group" id="infakAmount" style="display:none;">
-    <label>Nominal Infak</label>
-    <input type="number" name="infak_amount" min="1" placeholder="Masukkan angka" />
+    <label>Infak Amount</label>
+    <input type="number" name="infak_amount" min="1" placeholder="Enter amount" />
   </div>
 
-<!-- Certificate Choice -->
+ <!-- Certificate Choice -->
 <div class="form-group">
-  <label>Sertifikat Donasi</label>
+  <label>Donation Certificate</label>
   <div style="display:flex; gap:3rem;">
     <label>
       <input type="radio" name="certificate_required" value="Ya">
-      Ya
+      Yes
     </label>
     <label>
       <input type="radio" name="certificate_required" value="Tidak">
-      Tidak
+      No
     </label>
   </div>
 </div>
 
-
-  <!-- Certificate Name -->
+<!-- Certificate Name -->
 <div class="form-group" id="certificateNameGroup" style="display:none;">
-  <label>Nama di Sertifikat</label>
+  <label>Name on Certificate</label>
   <input
     type="text"
     name="certificate_name"
-    placeholder="Nama lengkap"
+    placeholder="Full name for certificate"
   required/>
 </div>
 
   <!-- Contact -->
   <div class="form-group">
-    <label>Kontak</label>
-    <input type="text" name="contact" placeholder="Email atau WhatsApp" required />
+    <label>Contact Person</label>
+    <input type="text" name="contact" placeholder="Email or WhatsApp" required />
   </div>
 
   <!-- Upload -->
   <div class="form-group">
-    <label>Unggah Bukti Transfer</label>
+    <label>Upload Transfer Proof</label>
     <input type="file" id="transferProof" accept="image/*,application/pdf" required/>
   </div>
 
   <!-- Message -->
   <div class="form-group">
-    <label>Catatan (Opsional)</label>
-    <textarea name="message" rows="4" placeholder="Ketik disini.."></textarea>
+    <label>Message (Optional)</label>
+    <textarea name="message" rows="4" placeholder="Type here..""></textarea>
   </div>
 
   <button type="submit" class="donation-btn">
-    Kirim
+    Proceed to Donation
   </button>
 
 </form>
@@ -231,7 +231,7 @@ form.addEventListener("submit", async e => {
 
   const btn = form.querySelector("button");
   btn.disabled = true;
-  btn.textContent = "Mengirim...";
+  btn.textContent = "Submitting...";
 
   try {
     const formData = new FormData(form);
@@ -280,7 +280,7 @@ form.addEventListener("submit", async e => {
     }
 
     // ---- Success redirect ----//
-    window.location.href = `terimakasih.html?ref=${Date.now()}`;
+    window.location.href = `thankyou.html?ref=${Date.now()}`;
 
   } catch (err) {
     alert("Submission failed: " + err.message);
