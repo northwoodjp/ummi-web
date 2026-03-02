@@ -175,6 +175,12 @@
       <textarea name="catatan" rows="4" placeholder="Contoh: alergi, kebutuhan khusus, dll"></textarea>
     </div>
 
+    <!-- TOTAL HADIR -->
+    <div class="form-group" style="margin-top:10px;">
+      <div id="totalOrang" style="font-weight:600;"></div>
+      <input type="hidden" name="total_hadir" id="totalHidden">
+    </div>
+
     <button type="submit" class="donation-btn">
       Kirim Pendaftaran
     </button>
@@ -257,9 +263,50 @@ function updateStatusPekerjaan() {
     jumlahIndonesiaInput.value = "";
   }
 }
+
+/* HITUNG TOTAL HADIR */
+function updateTotal() {
+  const dewasaL = parseInt(document.querySelector('[name="dewasa_l"]').value) || 0;
+  const dewasaP = parseInt(document.querySelector('[name="dewasa_p"]').value) || 0;
+  const anakLVal = parseInt(anakL.value) || 0;
+  const anakPVal = parseInt(anakP.value) || 0;
+
+  const total = dewasaL + dewasaP + anakLVal + anakPVal;
+
+  document.getElementById("totalOrang").textContent =
+    total > 0 ? `Total hadir: ${total} orang` : "";
+
+  // kirim ke Google Sheet
+  document.getElementById("totalHidden").value = total;
+}
+
+const dewasaLSelect = document.querySelector('[name="dewasa_l"]');
+const dewasaPSelect = document.querySelector('[name="dewasa_p"]');
+
+dewasaLSelect.addEventListener("change", updateTotal);
+dewasaPSelect.addEventListener("change", updateTotal);
+anakL.addEventListener("change", updateTotal);
+anakP.addEventListener("change", updateTotal);
+
+// run awal
+updateTotal();
+
 /* Submit */
 form.addEventListener("submit", async e => {
   e.preventDefault();
+
+/* VALIDASI MINIMAL 1 ORANG */
+const dewasaL = parseInt(document.querySelector('[name="dewasa_l"]').value) || 0;
+const dewasaP = parseInt(document.querySelector('[name="dewasa_p"]').value) || 0;
+const anakLVal = parseInt(anakL.value) || 0;
+const anakPVal = parseInt(anakP.value) || 0;
+
+const total = dewasaL + dewasaP + anakLVal + anakPVal;
+
+if (total === 0) {
+  alert("Minimal 1 orang harus hadir");
+  return;
+}
 
   const inputs = document.querySelectorAll(".usia-anak");
   let usiaList = [];
@@ -298,7 +345,7 @@ form.addEventListener("submit", async e => {
 
     payload.timestamp = new Date().toISOString();
 
-    const res = await fetch("https://script.google.com/macros/s/AKfycbwSqprQxi5nE9qd9tZxBNNHzSg0S0KzA_Kw8AbEWjuKMJrkGsvtSQ2HNjkbjTViul9lLg/exec", {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "text/plain;charset=utf-8" },
