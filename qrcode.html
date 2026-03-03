@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>QR Check-in</title>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
@@ -20,16 +20,22 @@
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;
-    height: 100%;
+
+    height: 100vh;
+    overflow: hidden;                 /* 🔒 disable scroll */
+    overscroll-behavior: none;        /* 🔒 disable bounce */
+    touch-action: manipulation;       /* 🔒 prevent gestures */
   }
 
   .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center;          /* center vertically */
     align-items: center;
-    height: 100vh;
+
+    height: 100vh;                    /* exact viewport height */
     padding: 20px;
+    box-sizing: border-box;
   }
 
   h1 {
@@ -49,6 +55,7 @@
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(198,168,91,0.4);
+    max-width: 90vw;   /* prevent overflow */
   }
 
   .note {
@@ -88,7 +95,7 @@ async function setBrightnessMax() {
       await window.screen.brightness.set(1.0);
     }
   } catch (e) {
-    // tidak semua browser support, jadi silent fail
+    // silent fail
   }
 }
 setBrightnessMax();
@@ -96,7 +103,6 @@ setBrightnessMax();
 /* =========================
    GENERATE QR LINK
 ========================= */
-
 const CHECKIN_URL = "https://ummi.jp/checkin.html?id=" + id;
 
 QRCode.toCanvas(
