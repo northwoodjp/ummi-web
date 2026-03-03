@@ -88,9 +88,24 @@ const btn = document.getElementById("btn");
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-if (!id) {
+// Cek waktu buka check-in
+const OPEN_TIME = new Date("2026-03-08T15:00:00+09:00"); // 15.00 JST
+const now = new Date();
+
+if (now < OPEN_TIME) {
+  const diff = OPEN_TIME - now;
+  const hours = Math.floor(diff / 1000 / 60 / 60);
+  const minutes = Math.floor((diff / 1000 / 60) % 60);
+
+  idText.textContent = "⏳ Check-in belum dibuka";
+  infoText.textContent = `Dibuka 8 Maret 2026 pukul 15:00 JST (${hours} jam ${minutes} menit lagi)`;
+  btn.disabled = true;
+  jumlahInput.disabled = true;
+
+} else if (!id) {
   idText.textContent = "QR tidak valid (ID tidak ditemukan)";
   btn.disabled = true;
+
 } else {
   idText.textContent = "ID Registrasi: " + id;
   infoText.textContent = "Silakan isi jumlah hadir aktual";
