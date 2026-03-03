@@ -1,84 +1,115 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>QR Kehadiran</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>QR Check-in</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      background: #f8f9fa;
-    }
+<style>
+  :root {
+    --gold: #C6A85B;
+    --dark: #111111;
+  }
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--dark);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    height: 100%;
+  }
 
-    h2 {
-      margin-bottom: 10px;
-    }
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+  }
 
-    .info {
-      margin: 10px 0;
-      font-size: 16px;
-    }
+  h1 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: var(--gold);
+  }
 
-    canvas {
-      margin-top: 20px;
-    }
+  #idText {
+    margin-bottom: 20px;
+    font-size: 16px;
+    opacity: 0.8;
+  }
 
-    .note {
-      font-size: 13px;
-      color: gray;
-      margin-top: 15px;
-    }
-  </style>
+  canvas {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(198,168,91,0.4);
+  }
+
+  .note {
+    margin-top: 25px;
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+</style>
 </head>
 <body>
 
-<div class="card">
-  <h2>QR Kehadiran</h2>
-
-  <div class="info" id="infoNama"></div>
-  <div class="info" id="infoTotal"></div>
-
+<div class="container">
+  <h1>QR Check-in UMMI</h1>
+  <div id="idText"></div>
   <canvas id="qr"></canvas>
-
-  <div class="note">
-    Tunjukkan QR ini saat check-in
-  </div>
+  <div class="note">Tunjukkan layar ini ke panitia</div>
 </div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-  if (!id) {
-    document.body.innerHTML = "<h3>ID tidak ditemukan</h3>";
+if (!id) {
+  document.body.innerHTML = "<h2 style='color:red;text-align:center;margin-top:40vh'>ID tidak ditemukan</h2>";
+  throw new Error("ID tidak ada");
+}
+
+document.getElementById("idText").innerText = "ID Registrasi: " + id;
+
+/* =========================
+   AUTO BRIGHTNESS MAX
+========================= */
+async function setBrightnessMax() {
+  try {
+    if ("screen" in window && "brightness" in window.screen) {
+      await window.screen.brightness.set(1.0);
+    }
+  } catch (e) {
+    // tidak semua browser support, jadi silent fail
   }
+}
+setBrightnessMax();
 
-  // tampilkan ID saja
-  document.getElementById("infoNama").innerText = "ID Registrasi:";
-  document.getElementById("infoTotal").innerText = id;
+/* =========================
+   GENERATE QR LINK
+========================= */
 
-  // QR berisi link check-in
-  const checkinUrl = `https://ummi.jp/checkin.html?id=${id}`;
+const CHECKIN_URL = "https://ummi.jp/checkin.html?id=" + id;
 
-  QRCode.toCanvas(
-    document.getElementById("qr"),
-    checkinUrl,
-    { width: 250 }
-  );
+QRCode.toCanvas(
+  document.getElementById("qr"),
+  CHECKIN_URL,
+  {
+    width: Math.min(window.innerWidth * 0.8, 350),
+    color: {
+      dark: "#111111",
+      light: "#FFFFFF"
+    }
+  }
+);
 </script>
 
 </body>
