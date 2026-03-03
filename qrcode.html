@@ -71,10 +71,12 @@
   document.getElementById("infoNama").innerText = "ID Registrasi:";
   document.getElementById("infoTotal").innerText = id;
 
-  // QR hanya berisi ID
+  // QR berisi link check-in
+  const checkinUrl = `https://ummi.jp/checkin.html?id=${id}`;
+
   QRCode.toCanvas(
     document.getElementById("qr"),
-    id,
+    checkinUrl,
     { width: 250 }
   );
 </script>
