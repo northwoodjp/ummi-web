@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Kehadiran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .info {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    canvas {
+      margin-top: 20px;
+    }
+
+    .note {
+      font-size: 13px;
+      color: gray;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>QR Kehadiran</h2>
+
+  <div class="info" id="infoNama"></div>
+  <div class="info" id="infoTotal"></div>
+
+  <canvas id="qr"></canvas>
+
+  <div class="note">
+    Tunjukkan QR ini saat check-in
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  const id = params.get("id") || "";
+  const nama = params.get("nama") || "Peserta";
+  const total = params.get("total") || "0";
+
+  // tampilkan info
+  document.getElementById("infoNama").innerText = "Nama: " + nama;
+  document.getElementById("infoTotal").innerText = "Total Hadir: " + total + " orang";
+
+  // data yang disimpan di QR
+  const qrData = JSON.stringify({
+    id: id,
+    nama: nama,
+    total: total
+  });
+
+  // generate QR
+  QRCode.toCanvas(
+    document.getElementById("qr"),
+    qrData,
+    { width: 250 }
+  );
+</script>
+
+</body>
+</html>
