@@ -1,170 +1,117 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Check-in Peserta</title>
+  <meta charset="UTF-8">
+  <title>Check-In Kehadiran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  padding: 20px;
-}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
 
-.card {
-  background: white;
-  max-width: 420px;
-  margin: auto;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
 
-h2 {
-  margin-bottom: 15px;
-  text-align: center;
-}
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+    }
 
-.info {
-  margin: 10px 0;
-  font-size: 15px;
-}
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  font-size: 16px;
-}
+    button:hover {
+      background: #218838;
+    }
 
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  font-size: 16px;
-  background: #2d7ef7;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:disabled {
-  background: gray;
-}
-
-.success {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.error {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
-}
-</style>
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="card">
-  <h2>Check-in Peserta</h2>
+  <h2>Check-In Kehadiran</h2>
 
-  <div class="info"><strong>Nama:</strong> <span id="nama">Loading...</span></div>
-  <div class="info"><strong>Total Daftar:</strong> <span id="totalDaftar">-</span></div>
-  <div class="info"><strong>Status:</strong> <span id="status">-</span></div>
+  <p><strong>ID Registrasi:</strong></p>
+  <p id="idDisplay"></p>
 
-  <label>Jumlah Hadir Aktual</label>
-  <input type="number" id="jumlahHadir" min="1">
+  <input type="number" id="jumlahHadir" placeholder="Jumlah hadir aktual" min="1">
 
-  <button id="btnCheckin" onclick="konfirmasi()">Konfirmasi Hadir</button>
+  <button onclick="submitCheckin()">Konfirmasi Hadir</button>
 
-  <div id="message"></div>
+  <div class="message" id="message"></div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec"; // GANTI INI
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+  if (!id) {
+    document.body.innerHTML = "<h3>ID tidak ditemukan</h3>";
+  }
 
-if (!id) {
-  document.body.innerHTML = "<h3>ID tidak ditemukan</h3>";
-}
+  document.getElementById("idDisplay").innerText = id;
 
-// ===== GET DATA PESERTA =====
-fetch(SCRIPT_URL + "?action=get&id=" + id)
-  .then(res => res.json())
-  .then(data => {
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec";
 
-    if (data.status !== "success") {
-      document.getElementById("message").innerHTML =
-        "<div class='error'>Data tidak ditemukan</div>";
+  function submitCheckin() {
+    const jumlah = document.getElementById("jumlahHadir").value;
+
+    if (!jumlah || jumlah <= 0) {
+      alert("Masukkan jumlah hadir yang valid");
       return;
     }
 
-    document.getElementById("nama").innerText = data.nama;
-    document.getElementById("totalDaftar").innerText = data.total_daftar;
-    document.getElementById("status").innerText = data.status_checkin;
-
-    if (data.status_checkin === "HADIR") {
-      document.getElementById("message").innerHTML =
-        "<div class='success'>Peserta sudah check-in</div>";
-      document.getElementById("btnCheckin").disabled = true;
-    } else {
-      document.getElementById("jumlahHadir").value = data.total_daftar;
-    }
-
-  })
-  .catch(() => {
-    document.getElementById("message").innerHTML =
-      "<div class='error'>Gagal mengambil data</div>";
-  });
-
-
-// ===== KONFIRMASI CHECK-IN =====
-function konfirmasi() {
-
-  const jumlah = document.getElementById("jumlahHadir").value;
-
-  if (!jumlah || jumlah <= 0) {
-    alert("Masukkan jumlah hadir yang valid");
-    return;
-  }
-
-  const btn = document.getElementById("btnCheckin");
-  btn.disabled = true;
-  btn.innerText = "Memproses...";
-
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      action: "checkin",
-      id: id,
-      total_hadir: jumlah
+    fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        type: "checkin",
+        id: id,
+        jumlah_hadir_aktual: jumlah
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
     })
-  })
-  .then(res => res.json())
-  .then(result => {
-
-    if (result.status === "success") {
-      document.getElementById("status").innerText = "HADIR";
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        document.getElementById("message").innerHTML =
+          "✅ Check-in berhasil!";
+      } else {
+        document.getElementById("message").innerHTML =
+          "❌ Gagal: " + data.message;
+      }
+    })
+    .catch(err => {
       document.getElementById("message").innerHTML =
-        "<div class='success'>Check-in berhasil</div>";
-    } else {
-      throw new Error(result.message);
-    }
-
-  })
-  .catch(err => {
-    document.getElementById("message").innerHTML =
-      "<div class='error'>Gagal: " + err.message + "</div>";
-    btn.disabled = false;
-    btn.innerText = "Konfirmasi Hadir";
-  });
-}
+        "❌ Terjadi kesalahan";
+    });
+  }
 </script>
 
 </body>
