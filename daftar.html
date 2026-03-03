@@ -50,7 +50,7 @@
     <div class="form-group">
       <label>No. WhatsApp</label>
       <input type="text" name="kontak" placeholder="08012345678" required/>
-      <small style="color:#555;">(Untuk konfirmasi pendaftaran)</small>
+      <small style="display:block; color:#555; font-size: 0.8em;margin-top: 4px;">Isi untuk konfirmasi pendaftaran</small>
     </div>
     
 
@@ -354,7 +354,7 @@ form.addEventListener("submit", async e => {
     payload.action = "register";
 
     // ===== KIRIM KE GOOGLE SHEET =====
-    const res = await fetch("https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec", {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbyYdonEp0_uyQetmesoYfg79Vmtcko5TxW8crl-FXLAb57T3cBfGRvMmlDf_nB6n01f5g/exec", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "text/plain;charset=utf-8" }
@@ -404,14 +404,12 @@ form.addEventListener("submit", async e => {
     // ===== PESAN WHATSAPP =====
     const message = `Assalamu'alaikum warahmatullahi wabarakatuh.
 
-Pendaftaran Kajian Masjid UMMI berhasil!
-
+Pendaftaran Mie Mengaji Jilid II Masjid UMMI berhasil!
 Nama: ${payload.nama}
 Total Hadir: ${total} orang
 
 Silakan buka QR:
 ${qrLink}
-
 Tunjukkan QR saat check-in.
 
 Jazakumullahu khairan.`;
