@@ -2,116 +2,155 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Check-In Kehadiran</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in Kehadiran</title>
+
+  <link rel="stylesheet" href="style.css">
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      padding: 20px;
+    .checkin-container {
+      max-width: 500px;
+      margin: auto;
+      padding: 2rem;
       text-align: center;
     }
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    .info-box {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-top: 1.5rem;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 15px;
+      padding: 12px;
       font-size: 16px;
+      margin-top: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
 
     button {
-      margin-top: 20px;
-      padding: 12px;
+      margin-top: 1.5rem;
       width: 100%;
-      font-size: 16px;
-      background: #28a745;
+      padding: 12px;
+      background: var(--accent-gold);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #218838;
+    button:disabled {
+      background: #999;
     }
 
-    .message {
-      margin-top: 15px;
-      font-size: 14px;
+    #status {
+      margin-top: 1rem;
+      font-weight: bold;
     }
   </style>
 </head>
+
 <body>
 
-<div class="card">
-  <h2>Check-In Kehadiran</h2>
+<section class="donation-confirmation">
+  <div class="checkin-container">
 
-  <p><strong>ID Registrasi:</strong></p>
-  <p id="idDisplay"></p>
+    <h2 class="section-title">Check-in Kehadiran</h2>
 
-  <input type="number" id="jumlahHadir" placeholder="Jumlah hadir aktual" min="1">
+    <div class="info-box">
+      <p id="idText">Memuat...</p>
+      <p id="infoText"></p>
 
-  <button onclick="submitCheckin()">Konfirmasi Hadir</button>
+      <input type="number" id="jumlah" placeholder="Jumlah hadir aktual">
 
-  <div class="message" id="message"></div>
-</div>
+      <button id="btn">Konfirmasi Hadir</button>
+
+      <p id="status"></p>
+    </div>
+  </div>
+</section>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+const API_URL = "https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec";
+
+const idText = document.getElementById("idText");
+const infoText = document.getElementById("infoText");
+const jumlahInput = document.getElementById("jumlah");
+const statusEl = document.getElementById("status");
+const btn = document.getElementById("btn");
+
+// Ambil ID dari URL (QR hanya berisi ID)
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if (!id) {
+  idText.textContent = "QR tidak valid (ID tidak ditemukan)";
+  btn.disabled = true;
+} else {
+  idText.textContent = "ID Registrasi: " + id;
+  infoText.textContent = "Silakan isi jumlah hadir aktual";
+  jumlahInput.value = 1;
+}
+
+/* =========================
+   CHECK-IN
+========================= */
+btn.addEventListener("click", async () => {
+
+  const jumlah = Number(jumlahInput.value);
 
   if (!id) {
-    document.body.innerHTML = "<h3>ID tidak ditemukan</h3>";
+    alert("QR tidak valid");
+    return;
   }
 
-  document.getElementById("idDisplay").innerText = id;
+  if (!jumlah || jumlah <= 0) {
+    alert("Masukkan jumlah hadir yang valid");
+    return;
+  }
 
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbygtioAq97tGmA8iMyUlbQC6_avtfW-iV5YtTA2KmICfb3Aed-_RHingSA3r1RJKD8QxQ/exec";
+  btn.disabled = true;
+  btn.textContent = "Memproses...";
 
-  function submitCheckin() {
-    const jumlah = document.getElementById("jumlahHadir").value;
-
-    if (!jumlah || jumlah <= 0) {
-      alert("Masukkan jumlah hadir yang valid");
-      return;
-    }
-
-    fetch(GAS_URL, {
+  try {
+    const res = await fetch(API_URL, {
       method: "POST",
       body: JSON.stringify({
         type: "checkin",
         id: id,
         jumlah_hadir_aktual: jumlah
       }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "success") {
-        document.getElementById("message").innerHTML =
-          "✅ Check-in berhasil!";
-      } else {
-        document.getElementById("message").innerHTML =
-          "❌ Gagal: " + data.message;
-      }
-    })
-    .catch(err => {
-      document.getElementById("message").innerHTML =
-        "❌ Terjadi kesalahan";
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
     });
+
+    const result = await res.json();
+
+    if (result.status === "success") {
+      statusEl.textContent = "✅ Check-in berhasil";
+      statusEl.style.color = "green";
+    } 
+    else if (result.status === "already") {
+      statusEl.textContent = "⚠️ Sudah check-in";
+      statusEl.style.color = "orange";
+    }
+    else {
+      statusEl.textContent = "❌ Gagal check-in";
+      statusEl.style.color = "red";
+    }
+
+  } catch (err) {
+    statusEl.textContent = "❌ Error koneksi";
+    statusEl.style.color = "red";
   }
+
+  btn.disabled = false;
+  btn.textContent = "Konfirmasi Hadir";
+});
 </script>
 
 </body>
