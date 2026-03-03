@@ -354,7 +354,7 @@ form.addEventListener("submit", async e => {
     payload.action = "register";
 
     // ===== KIRIM KE GOOGLE SHEET =====
-    const res = await fetch("https://script.google.com/macros/s/AKfycbyYdonEp0_uyQetmesoYfg79Vmtcko5TxW8crl-FXLAb57T3cBfGRvMmlDf_nB6n01f5g/exec", {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbz1Vu2Oo_-uTZyuDLmGOZ4nFKOcpBFhGtpPiCkaD6YUpVxeP7xsmO_ytcTooldigKC6xw/exec", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "text/plain;charset=utf-8" }
