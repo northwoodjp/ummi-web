@@ -6,167 +6,335 @@
   <title>Check-in Kehadiran</title>
 
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    .checkin-container {
-      max-width: 500px;
-      margin: auto;
-      padding: 2rem;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem 1.5rem 2rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
       text-align: center;
     }
 
-    .info-box {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-top: 1.5rem;
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.3px;
     }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+    #idText {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 1.5rem;
+      min-height: 1.2rem;
     }
 
-    button {
-      margin-top: 1.5rem;
+    #infoText {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 1rem;
+      min-height: 1rem;
+    }
+
+    /* ── Number Display ── */
+    .number-display {
+      background: #f7f8fa;
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 2px solid #e8eaf0;
+      transition: border-color 0.2s;
+    }
+
+    .number-display.active {
+      border-color: var(--accent-gold, #c9a84c);
+    }
+
+    .number-label {
+      font-size: 0.8rem;
+      color: #999;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    .number-value {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      line-height: 1;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* ── Numpad ── */
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .numpad-btn {
+      background: #f7f8fa;
+      border: none;
+      border-radius: 14px;
+      padding: 0;
+      height: 64px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .numpad-btn:active {
+      background: #e4e6ee;
+      transform: scale(0.94);
+    }
+
+    .numpad-btn.del {
+      font-size: 1.2rem;
+      color: #888;
+    }
+
+    .numpad-btn.zero {
+      grid-column: span 2;
+    }
+
+    /* ── Confirm Button ── */
+    #btn {
       width: 100%;
-      padding: 12px;
-      background: var(--accent-gold);
+      padding: 18px;
+      background: var(--accent-gold, #c9a84c);
       color: white;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
       cursor: pointer;
+      letter-spacing: 0.2px;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
-    button:disabled {
-      background: #999;
+    #btn:active {
+      transform: scale(0.97);
     }
 
+    #btn:disabled {
+      background: #c8cdd8;
+      cursor: default;
+      transform: none;
+    }
+
+    /* ── Status ── */
     #status {
       margin-top: 1rem;
-      font-weight: bold;
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 1.5rem;
+    }
+
+    /* ── Locked State ── */
+    .locked-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .locked-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+
+    .locked-subtitle {
+      font-size: 0.85rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .locked-countdown {
+      margin-top: 1rem;
+      background: #f7f8fa;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-gold, #c9a84c);
+      letter-spacing: 1px;
     }
   </style>
 </head>
 
 <body>
-
-<section class="donation-confirmation">
-  <div class="checkin-container">
-
-    <h2 class="section-title">Check-in Kehadiran</h2>
-
-    <div class="info-box">
-      <p id="idText">Memuat...</p>
-      <p id="infoText"></p>
-
-      <input type="number" id="jumlah" placeholder="Jumlah hadir aktual">
-
-      <button id="btn">Konfirmasi Hadir</button>
-
-      <p id="status"></p>
-    </div>
-  </div>
-</section>
+<div class="card" id="mainCard">
+  <!-- content injected by JS -->
+</div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbz1Vu2Oo_-uTZyuDLmGOZ4nFKOcpBFhGtpPiCkaD6YUpVxeP7xsmO_ytcTooldigKC6xw/exec";
 
-const idText = document.getElementById("idText");
-const infoText = document.getElementById("infoText");
-const jumlahInput = document.getElementById("jumlah");
-const statusEl = document.getElementById("status");
-const btn = document.getElementById("btn");
-
-// Ambil ID dari URL (QR hanya berisi ID)
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-// Cek waktu buka check-in
-const OPEN_TIME = new Date("2026-03-08T15:00:00+09:00"); // 15.00 JST
+const OPEN_TIME = new Date("2026-03-02T15:00:00+09:00");
 const now = new Date();
+const card = document.getElementById("mainCard");
 
+/* ── LOCKED ── */
 if (now < OPEN_TIME) {
   const diff = OPEN_TIME - now;
   const hours = Math.floor(diff / 1000 / 60 / 60);
   const minutes = Math.floor((diff / 1000 / 60) % 60);
 
-  idText.textContent = "⏳ Check-in belum dibuka";
-  infoText.textContent = `Dibuka 8 Maret 2026 pukul 15:00 JST (${hours} jam ${minutes} menit lagi)`;
-  btn.disabled = true;
-  jumlahInput.disabled = true;
+  card.innerHTML = `
+    <div class="locked-icon">🔒</div>
+    <div class="locked-title">Check-in Belum Dibuka</div>
+    <div class="locked-subtitle">Dibuka pada<br><strong>8 Maret 2026 · 15:00 JST</strong></div>
+    <div class="locked-countdown">${hours} jam ${minutes} menit lagi</div>
+  `;
 
+/* ── INVALID QR ── */
 } else if (!id) {
-  idText.textContent = "QR tidak valid (ID tidak ditemukan)";
-  btn.disabled = true;
+  card.innerHTML = `
+    <div class="locked-icon">❌</div>
+    <div class="locked-title">QR Tidak Valid</div>
+    <div class="locked-subtitle">ID tidak ditemukan.<br>Gunakan QR dari WhatsApp konfirmasi.</div>
+  `;
 
+/* ── CHECK-IN FORM ── */
 } else {
-  idText.textContent = "ID Registrasi: " + id;
-  infoText.textContent = "Silakan isi jumlah hadir aktual";
-  jumlahInput.value = 1;
-}
+  let jumlah = 1;
 
-/* =========================
-   CHECK-IN
-========================= */
-btn.addEventListener("click", async () => {
+  card.innerHTML = `
+    <div class="card-title">Check-in Kehadiran</div>
+    <div id="idText">ID: ${id}</div>
+    <div id="infoText">Berapa orang yang hadir?</div>
 
-  const jumlah = Number(jumlahInput.value);
+    <div class="number-display" id="display">
+      <div class="number-label">Jumlah<br>hadir</div>
+      <div class="number-value" id="numVal">1</div>
+    </div>
 
-  if (!id) {
-    alert("QR tidak valid");
-    return;
+    <div class="numpad">
+      <button class="numpad-btn" data-val="1">1</button>
+      <button class="numpad-btn" data-val="2">2</button>
+      <button class="numpad-btn" data-val="3">3</button>
+      <button class="numpad-btn" data-val="4">4</button>
+      <button class="numpad-btn" data-val="5">5</button>
+      <button class="numpad-btn" data-val="6">6</button>
+      <button class="numpad-btn" data-val="7">7</button>
+      <button class="numpad-btn" data-val="8">8</button>
+      <button class="numpad-btn" data-val="9">9</button>
+      <button class="numpad-btn zero" data-val="0">0</button>
+      <button class="numpad-btn del" data-val="del">⌫</button>
+    </div>
+
+    <button id="btn">Konfirmasi Hadir</button>
+    <div id="status"></div>
+  `;
+
+  const numVal = document.getElementById("numVal");
+  const display = document.getElementById("display");
+  const btn = document.getElementById("btn");
+  const statusEl = document.getElementById("status");
+  let input = "1";
+
+  function updateDisplay() {
+    input = input === "" ? "" : String(parseInt(input) || "");
+    if (input === "" || input === "0") {
+      numVal.textContent = "0";
+      btn.disabled = true;
+    } else {
+      numVal.textContent = input;
+      btn.disabled = false;
+    }
+    display.classList.toggle("active", input !== "" && input !== "0");
   }
 
-  if (!jumlah || jumlah <= 0) {
-    alert("Masukkan jumlah hadir yang valid");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Memproses...";
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "checkin",
-        id: id,
-        jumlah_hadir_aktual: jumlah
-      }),
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
+  document.querySelectorAll(".numpad-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      const val = b.dataset.val;
+      if (val === "del") {
+        input = input.slice(0, -1);
+      } else {
+        if (input === "0" || input === "") input = val;
+        else if (input.length < 2) input += val; // max 2 digits
+      }
+      updateDisplay();
     });
+  });
 
-    const result = await res.json();
+  updateDisplay();
 
-    if (result.status === "success") {
-      statusEl.textContent = "✅ Check-in berhasil";
-      statusEl.style.color = "green";
-    } 
-    else if (result.status === "already") {
-      statusEl.textContent = "⚠️ Sudah check-in";
-      statusEl.style.color = "orange";
-    }
-    else {
-      statusEl.textContent = "❌ Gagal check-in";
+  btn.addEventListener("click", async () => {
+    const jumlah = parseInt(input);
+    if (!jumlah || jumlah <= 0) return;
+
+    btn.disabled = true;
+    btn.textContent = "Memproses...";
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "checkin", id, jumlah_hadir_aktual: jumlah }),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+      });
+
+      const result = await res.json();
+
+      if (result.status === "success") {
+        statusEl.textContent = "✅ Check-in berhasil!";
+        statusEl.style.color = "green";
+        btn.textContent = "Selesai";
+      } else if (result.status === "already") {
+        statusEl.textContent = "⚠️ Sudah check-in sebelumnya";
+        statusEl.style.color = "orange";
+        btn.disabled = false;
+        btn.textContent = "Konfirmasi Hadir";
+      } else {
+        statusEl.textContent = "❌ Gagal check-in";
+        statusEl.style.color = "red";
+        btn.disabled = false;
+        btn.textContent = "Konfirmasi Hadir";
+      }
+    } catch (err) {
+      statusEl.textContent = "❌ Error koneksi";
       statusEl.style.color = "red";
+      btn.disabled = false;
+      btn.textContent = "Konfirmasi Hadir";
     }
-
-  } catch (err) {
-    statusEl.textContent = "❌ Error koneksi";
-    statusEl.style.color = "red";
-  }
-
-  btn.disabled = false;
-  btn.textContent = "Konfirmasi Hadir";
-});
+  });
+}
 </script>
-
 </body>
 </html>
