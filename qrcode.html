@@ -61,26 +61,20 @@
 
 <script>
   const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-  const id = params.get("id") || "";
-  const nama = params.get("nama") || "Peserta";
-  const total = params.get("total") || "0";
+  if (!id) {
+    document.body.innerHTML = "<h3>ID tidak ditemukan</h3>";
+  }
 
-  // tampilkan info
-  document.getElementById("infoNama").innerText = "Nama: " + nama;
-  document.getElementById("infoTotal").innerText = "Total Hadir: " + total + " orang";
+  // tampilkan ID saja
+  document.getElementById("infoNama").innerText = "ID Registrasi:";
+  document.getElementById("infoTotal").innerText = id;
 
-  // data yang disimpan di QR
-  const qrData = JSON.stringify({
-    id: id,
-    nama: nama,
-    total: total
-  });
-
-  // generate QR
+  // QR hanya berisi ID
   QRCode.toCanvas(
     document.getElementById("qr"),
-    qrData,
+    id,
     { width: 250 }
   );
 </script>
