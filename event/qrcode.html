@@ -111,7 +111,7 @@ async function setBrightnessMax() {
 setBrightnessMax();
 
 const payload = btoa(JSON.stringify({ id, jumlah }));
-const CHECKIN_URL = "https://ummi.jp/qrcode.html?d=" + payload;
+const CHECKIN_URL = "https://ummi.jp/event/qrcode.html?d=" + payload;
 
 QRCode.toCanvas(
   document.getElementById("qr"),

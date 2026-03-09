@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pendaftaran Kehadiran | Masjid UMMI</title>
 
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../script.js" defer></script>
 </head>
 <body>
 
@@ -399,7 +399,7 @@ form.addEventListener("submit", async e => {
     }
 
     // ===== BUAT LINK QR =====
-    const qrLink = `https://ummi.jp/qrcode.html?d=${btoa(JSON.stringify({ id: registrationId, jumlah: total }))}`;
+    const qrLink = `https://ummi.jp/event/qrcode.html?d=${btoa(JSON.stringify({ id: registrationId, jumlah: total }))}`;
 
     // ===== PESAN WHATSAPP =====
     const message = `Assalamu'alaikum warahmatullahi wabarakatuh.

@@ -43,6 +43,129 @@
       pointer-events: none;
     }
 
+    /* ── PIN GATE ── */
+    #pinGate {
+      position: fixed; inset: 0;
+      background: var(--dark);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 200; padding: 2rem;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    #pinGate.hide {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+    #pinGate::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .pin-logo {
+      font-size: 2.6rem; margin-bottom: 0.6rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .pin-eyebrow {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.3rem;
+    }
+    .pin-title {
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -0.5px; margin-bottom: 0.4rem;
+    }
+    .pin-sub {
+      font-size: 0.82rem; color: var(--muted);
+      margin-bottom: 2rem; text-align: center;
+    }
+
+    /* PIN dots display */
+    .pin-dots {
+      display: flex; gap: 14px; margin-bottom: 1.8rem;
+    }
+    .pin-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--dark3);
+      background: transparent;
+      transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .pin-dot.filled {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(201,168,76,0.6);
+      transform: scale(1.15);
+    }
+    .pin-dot.error {
+      background: var(--error);
+      border-color: var(--error);
+      box-shadow: 0 0 10px rgba(255,91,91,0.5);
+    }
+
+    /* Numpad */
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 260px;
+    }
+    .num-btn {
+      background: var(--dark2);
+      border: 1px solid var(--dark3);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      width: 100%; aspect-ratio: 1;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .num-btn:hover { background: var(--dark3); border-color: rgba(201,168,76,0.3); }
+    .num-btn:active {
+      transform: scale(0.93);
+      background: rgba(201,168,76,0.12);
+      border-color: var(--gold);
+    }
+    .num-btn.del {
+      font-size: 1rem; color: var(--muted);
+    }
+    .num-btn.del:hover { color: var(--error); border-color: rgba(255,91,91,0.3); }
+    .num-btn.empty { visibility: hidden; cursor: default; }
+
+    .pin-error-msg {
+      margin-top: 1.4rem;
+      font-size: 0.8rem; color: var(--error);
+      height: 1rem;
+      transition: opacity 0.2s;
+      opacity: 0;
+    }
+    .pin-error-msg.show { opacity: 1; }
+
+    /* shake animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+
+    /* ── SCANNER (same as original) ── */
     .header { text-align: center; margin-bottom: 1.8rem; z-index: 1; }
     .eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
     .header h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.5px; }
@@ -127,6 +250,39 @@
 </head>
 <body>
 
+  <!-- ── PIN GATE ── -->
+  <div id="pinGate">
+    <div class="pin-logo">🔐</div>
+    <div class="pin-eyebrow">Staff Access</div>
+    <div class="pin-title">Masukkan PIN</div>
+    <div class="pin-sub">Halaman ini hanya untuk staff &amp; admin</div>
+
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+
+    <div class="numpad">
+      <button class="num-btn" onclick="pressNum('1')">1</button>
+      <button class="num-btn" onclick="pressNum('2')">2</button>
+      <button class="num-btn" onclick="pressNum('3')">3</button>
+      <button class="num-btn" onclick="pressNum('4')">4</button>
+      <button class="num-btn" onclick="pressNum('5')">5</button>
+      <button class="num-btn" onclick="pressNum('6')">6</button>
+      <button class="num-btn" onclick="pressNum('7')">7</button>
+      <button class="num-btn" onclick="pressNum('8')">8</button>
+      <button class="num-btn" onclick="pressNum('9')">9</button>
+      <button class="num-btn empty"></button>
+      <button class="num-btn" onclick="pressNum('0')">0</button>
+      <button class="num-btn del" onclick="pressDelete()">⌫</button>
+    </div>
+
+    <div class="pin-error-msg" id="pinError">PIN salah. Coba lagi.</div>
+  </div>
+
+  <!-- ── SCANNER ── -->
   <div class="header">
     <div class="eyebrow">Event Check-in</div>
     <h1>Scan QR Code</h1>
@@ -164,6 +320,72 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <script>
+
+    // ── GANTI PIN DI SINI ──
+    const CORRECT_PIN = "1234";
+    // ─────────────────────
+
+    let pinInput = "";
+    const pinGate = document.getElementById("pinGate");
+    const pinError = document.getElementById("pinError");
+    const dots = [
+      document.getElementById("d0"),
+      document.getElementById("d1"),
+      document.getElementById("d2"),
+      document.getElementById("d3"),
+    ];
+
+    function updateDots() {
+      dots.forEach((d, i) => {
+        d.classList.toggle("filled", i < pinInput.length);
+        d.classList.remove("error");
+      });
+    }
+
+    function pressNum(n) {
+      if (pinInput.length >= CORRECT_PIN.length) return;
+      pinInput += n;
+      updateDots();
+      if (pinInput.length === CORRECT_PIN.length) {
+        setTimeout(checkPin, 120);
+      }
+    }
+
+    function pressDelete() {
+      if (!pinInput.length) return;
+      pinInput = pinInput.slice(0, -1);
+      updateDots();
+      pinError.classList.remove("show");
+    }
+
+    function checkPin() {
+      if (pinInput === CORRECT_PIN) {
+        // Correct — hide gate and start scanner
+        pinGate.classList.add("hide");
+        setTimeout(() => { pinGate.style.display = "none"; }, 420);
+        init(); // start scanner
+      } else {
+        // Wrong — shake and reset
+        dots.forEach(d => { d.classList.remove("filled"); d.classList.add("error"); });
+        document.getElementById("pinDots").classList.add("shake");
+        pinError.classList.add("show");
+        setTimeout(() => {
+          document.getElementById("pinDots").classList.remove("shake");
+          dots.forEach(d => d.classList.remove("error"));
+          pinInput = "";
+          updateDots();
+        }, 700);
+      }
+    }
+
+    // keyboard support
+    document.addEventListener("keydown", e => {
+      if (pinGate.style.display === "none") return;
+      if (e.key >= "0" && e.key <= "9") pressNum(e.key);
+      if (e.key === "Backspace") pressDelete();
+    });
+
+    // ── SCANNER ──
     const statusPill  = document.getElementById("statusPill");
     const statusText  = document.getElementById("statusText");
     const scanline    = document.getElementById("scanline");
@@ -210,26 +432,20 @@
         const parsed = new URL(decodedText);
         const d = parsed.searchParams.get("d");
         if (d) {
-          // Base64 payload: { id, jumlah }
           const obj    = JSON.parse(atob(d));
           const id     = obj.id;
           const jumlah = obj.jumlah || 1;
           displayId = id;
           targetUrl = "checkin.html?id=" + encodeURIComponent(id) + "&jumlah=" + jumlah;
         } else {
-          // Fallback: plain ?id= param
           const id     = parsed.searchParams.get("id");
           const jumlah = parsed.searchParams.get("jumlah") || "1";
           if (id) {
             displayId = id;
             targetUrl = "checkin.html?id=" + encodeURIComponent(id) + "&jumlah=" + jumlah;
-          } else {
-            return; // QR tidak dikenal, abaikan
-          }
+          } else { return; }
         }
-      } catch {
-        return; // bukan URL valid, abaikan
-      }
+      } catch { return; }
       if (scanner) scanner.stop().catch(() => {});
       doRedirect(targetUrl, displayId);
     }
@@ -270,7 +486,7 @@
       await startScanner(cameras[camIndex].id);
     });
 
-    init();
+    // Scanner tidak diinisialisasi sampai PIN benar
   </script>
 </body>
 </html>
