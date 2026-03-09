@@ -22,18 +22,18 @@
     text-align: center;
 
     height: 100vh;
-    overflow: hidden;                 /* 🔒 disable scroll */
-    overscroll-behavior: none;        /* 🔒 disable bounce */
-    touch-action: manipulation;       /* 🔒 prevent gestures */
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: manipulation;
   }
 
   .container {
     display: flex;
     flex-direction: column;
-    justify-content: top;          /* center vertically */
+    justify-content: top;
     align-items: center;
 
-    height: 100vh;                    /* exact viewport height */
+    height: 100vh;
     padding: 20px;
     box-sizing: border-box;
   }
@@ -55,7 +55,7 @@
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(198,168,91,0.4);
-    max-width: 90vw;   /* prevent overflow */
+    max-width: 90vw;
   }
 
   .note {
@@ -63,7 +63,6 @@
     font-size: 13px;
     opacity: 0.6;
   }
-
 </style>
 </head>
 <body>
@@ -77,7 +76,23 @@
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+
+let id, jumlah;
+
+const d = params.get("d");
+if (d) {
+  try {
+    const obj = JSON.parse(atob(d));
+    id = obj.id;
+    jumlah = obj.jumlah || 1;
+  } catch (e) {
+    document.body.innerHTML = "<h2 style='color:red;text-align:center;margin-top:40vh'>Data QR tidak valid</h2>";
+    throw new Error("Decode gagal");
+  }
+} else {
+  id = params.get("id");
+  jumlah = parseInt(params.get("jumlah")) || 1;
+}
 
 if (!id) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center;margin-top:40vh'>ID tidak ditemukan</h2>";
@@ -86,24 +101,17 @@ if (!id) {
 
 document.getElementById("idText").innerText = "ID Registrasi: " + id;
 
-/* =========================
-   AUTO BRIGHTNESS MAX
-========================= */
 async function setBrightnessMax() {
   try {
     if ("screen" in window && "brightness" in window.screen) {
       await window.screen.brightness.set(1.0);
     }
-  } catch (e) {
-    // silent fail
-  }
+  } catch (e) {}
 }
 setBrightnessMax();
 
-/* =========================
-   GENERATE QR LINK
-========================= */
-const CHECKIN_URL = "https://ummi.jp/checkin.html?id=" + id;
+const payload = btoa(JSON.stringify({ id, jumlah }));
+const CHECKIN_URL = "https://ummi.jp/qrcode.html?d=" + payload;
 
 QRCode.toCanvas(
   document.getElementById("qr"),

@@ -4,280 +4,360 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Check-in Kehadiran</title>
-
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a84c; --gold2: #e8c96d;
+      --bg: #f0f2f5;
+      --white: #fff;
+      --dark: #1a1a2e;
+      --muted: #888;
+      --border: #e8eaf0;
+      --surface: #f7f8fa;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #f57f17; --orange-bg: #fff8e1;
+      --red: #c62828; --red-bg: #ffebee;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: #f0f2f5;
+      background: var(--bg);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: 1.5rem 1rem;
     }
 
     .card {
-      background: #fff;
+      background: var(--white);
       border-radius: 24px;
-      padding: 2rem 1.5rem 2rem;
+      padding: 2rem 1.5rem;
       width: 100%;
       max-width: 400px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══ PIN SCREEN ══ */
+    #pinScreen { animation: fadeUp .3s ease forwards; }
+
+    .pin-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem; letter-spacing: 3px;
+      color: var(--gold); text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+    .pin-title { font-size: 1.4rem; font-weight: 700; color: var(--dark); letter-spacing: -.3px; margin-bottom: .2rem; }
+    .pin-sub   { font-size: .85rem; color: var(--muted); margin-bottom: 1.8rem; }
+
+    .pin-dots { display: flex; gap: 12px; margin-bottom: 1.8rem; }
+    .pin-dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      border: 2px solid #ddd; background: transparent; transition: all .15s;
+    }
+    .pin-dot.filled { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 7px rgba(201,168,76,.4); }
+    .pin-dot.error  { background: #ff4757; border-color: #ff4757; animation: shake .3s ease; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-5px); }
+      75%      { transform: translateX(5px); }
+    }
+
+    .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .nk {
+      height: 68px; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 1.35rem; font-weight: 600; color: var(--dark);
+      cursor: pointer; transition: background .1s, transform .1s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nk:active { background: #eceef2; transform: scale(.93); }
+    .nk.del    { font-size: 1.1rem; color: var(--muted); }
+    .nk.empty  { pointer-events: none; background: transparent; border-color: transparent; }
+
+    .pin-err {
+      margin-top: 1rem; font-size: .78rem; color: #ff4757;
+      min-height: 1rem; font-family: 'IBM Plex Mono', monospace;
       text-align: center;
     }
 
-    .card-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #1a1a2e;
-      margin-bottom: 0.3rem;
-      letter-spacing: -0.3px;
-    }
+    /* ══ FORM SCREEN ══ */
+    #formScreen { display: none; animation: fadeUp .3s ease forwards; }
 
-    #idText {
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 1.5rem;
-      min-height: 1.2rem;
+    .form-eyebrow {
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: .3rem;
     }
+    .form-title { font-size: 1.3rem; font-weight: 700; color: var(--dark); letter-spacing: -.3px; margin-bottom: 1.2rem; }
 
-    #infoText {
-      font-size: 0.9rem;
-      color: #555;
-      margin-bottom: 1rem;
-      min-height: 1rem;
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 13px; background: var(--surface);
+      border-radius: 10px; margin-bottom: .5rem;
     }
+    .info-label { font-size: .75rem; color: var(--muted); font-weight: 500; }
+    .info-value { font-size: .86rem; font-weight: 700; color: var(--dark); font-family: 'IBM Plex Mono', monospace; }
 
-    /* ── Input Fields ── */
-    .field-group {
-      text-align: left;
-      margin-bottom: 1.2rem;
-    }
+    .divider { height: 1px; background: #f0f0f0; margin: 1rem 0; }
 
+    .field-group { margin-bottom: 1.1rem; }
     .field-label {
-      font-size: 0.8rem;
-      color: #999;
-      margin-bottom: 0.4rem;
-      display: block;
+      display: block; font-size: .75rem; font-weight: 600;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
     }
-
     .field-input {
-      width: 100%;
-      padding: 14px 16px;
-      background: #f7f8fa;
-      border: 2px solid #e8eaf0;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #1a1a2e;
+      width: 100%; padding: 12px 15px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 1rem;
+      font-family: 'DM Sans', sans-serif; color: var(--dark);
+      outline: none; transition: border-color .2s, background .2s; resize: none;
+    }
+    .field-input:focus { border-color: var(--gold); background: #fff; }
+    input.field-input  { font-size: 1.4rem; font-weight: 700; text-align: center; }
+    textarea.field-input { min-height: 72px; line-height: 1.5; font-size: .93rem; }
+    .field-hint { font-size: .7rem; color: #aaa; margin-top: 4px; }
+
+    .btn {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #fff; border: none; border-radius: 13px;
+      font-size: .98rem; font-weight: 700;
       font-family: 'DM Sans', sans-serif;
-      outline: none;
-      transition: border-color 0.2s;
-      -webkit-appearance: none;
+      cursor: pointer; margin-top: .3rem;
+      transition: opacity .2s, transform .1s;
     }
+    .btn:active   { transform: scale(.97); }
+    .btn:disabled { background: linear-gradient(135deg, #ccc, #ddd); cursor: not-allowed; transform: none; }
 
-    .field-input:focus {
-      border-color: var(--accent-gold, #c9a84c);
-    }
-
-    .field-input.catatan {
-      font-size: 0.95rem;
-      font-weight: 400;
-      resize: none;
-      min-height: 80px;
-    }
-
-    /* ── Confirm Button ── */
-    #btn {
-      width: 100%;
-      padding: 18px;
-      background: var(--accent-gold, #c9a84c);
-      color: white;
-      border: none;
-      border-radius: 16px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.2px;
-      transition: opacity 0.2s, transform 0.1s;
-      font-family: 'DM Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-
-    #btn:active { transform: scale(0.97); }
-
-    #btn:disabled {
-      background: #c8cdd8;
-      cursor: default;
-      transform: none;
-    }
-
-    /* ── Status ── */
     #status {
-      margin-top: 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      min-height: 1.5rem;
+      margin-top: .9rem; padding: 12px 15px;
+      border-radius: 11px; font-size: .88rem;
+      font-weight: 600; text-align: center; display: none;
     }
+    #status.ok  { background: var(--green-bg);  color: var(--green);  display: block; }
+    #status.dup { background: var(--orange-bg); color: var(--orange); display: block; }
+    #status.err { background: var(--red-bg);    color: var(--red);    display: block; }
 
-    /* ── Locked State ── */
-    .locked-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-
-    .locked-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #1a1a2e;
-      margin-bottom: 0.4rem;
-    }
-
-    .locked-subtitle {
-      font-size: 0.85rem;
-      color: #888;
-      line-height: 1.5;
-    }
-
-    .locked-countdown {
-      margin-top: 1rem;
-      background: #f7f8fa;
-      border-radius: 12px;
-      padding: 0.8rem 1rem;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--accent-gold, #c9a84c);
-      letter-spacing: 1px;
-    }
+    /* Invalid */
+    .invalid-wrap { text-align: center; padding: 1rem 0; }
+    .invalid-icon  { font-size: 2.8rem; margin-bottom: .8rem; }
+    .invalid-title { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: .4rem; }
+    .invalid-sub   { font-size: .85rem; color: var(--muted); line-height: 1.5; }
   </style>
 </head>
-
 <body>
-<div class="card" id="mainCard">
-  <!-- content injected by JS -->
+<div class="card" id="card">
+  <div style="text-align:center;padding:1.5rem 0;color:#bbb;font-size:.9rem">Memuat...</div>
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwVmN-dzBacypDOXWGYJfoSpcv8zVo2r9xX0K1MUiOf2qYXtDzEtecOBBqhFpRMlcNC/exec";
+/* ── CONFIG ── */
+const CORRECT_PIN = "1234"; // ← ganti PIN
+const API_URL     = "https://script.google.com/macros/s/AKfycbz1Vu2Oo_-uTZyuDLmGOZ4nFKOcpBFhGtpPiCkaD6YUpVxeP7xsmO_ytcTooldigKC6xw/exec";
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+/* ── URL PARAMS ── */
+const params   = new URLSearchParams(window.location.search);
+const id       = params.get("id");
+const jumlahQR = parseInt(params.get("jumlah")) || 1;
+const card     = document.getElementById("card");
 
-const OPEN_TIME = new Date("2026-03-08T14:00:00+09:00");
-const now = new Date();
-const card = document.getElementById("mainCard");
-
-/* ── LOCKED ── */
-if (now < OPEN_TIME) {
-  const diff = OPEN_TIME - now;
-  const hours = Math.floor(diff / 1000 / 60 / 60);
-  const minutes = Math.floor((diff / 1000 / 60) % 60);
-
+/* ── Validate ID ── */
+if (!id) {
   card.innerHTML = `
-    <div class="locked-icon">🔒</div>
-    <div class="locked-title">Check-in Belum Dibuka</div>
-    <div class="locked-subtitle">Dibuka pada<br><strong>8 Maret 2026 · 15:00 JST</strong></div>
-    <div class="locked-countdown">${hours} jam ${minutes} menit lagi</div>
-  `;
-
-/* ── INVALID QR ── */
-} else if (!id) {
-  card.innerHTML = `
-    <div class="locked-icon">❌</div>
-    <div class="locked-title">QR Tidak Valid</div>
-    <div class="locked-subtitle">ID tidak ditemukan.<br>Gunakan QR dari WhatsApp konfirmasi.</div>
-  `;
-
-/* ── CHECK-IN FORM ── */
+    <div class="invalid-wrap">
+      <div class="invalid-icon">⚠️</div>
+      <div class="invalid-title">QR Tidak Valid</div>
+      <div class="invalid-sub">Buka halaman ini melalui<br>scan QR Code peserta.</div>
+    </div>`;
+} else if (sessionStorage.getItem("pin_ok") === "1") {
+  // PIN sudah pernah diisi di sesi ini — langsung form
+  renderForm();
 } else {
+  renderPIN();
+}
+
+/* ══════════════════
+   PIN SCREEN
+══════════════════ */
+function renderPIN() {
   card.innerHTML = `
-    <div class="card-title">Check-in Kehadiran</div>
-    <div id="idText">ID: ${id}</div>
-    <div id="infoText">Isi data kehadiran Anda</div>
+    <div id="pinScreen">
+      <div class="pin-eyebrow">Check-in Petugas</div>
+      <div class="pin-title">Masukkan PIN</div>
+      <div class="pin-sub">Verifikasi sebelum check-in</div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="pd0"></div>
+        <div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div>
+        <div class="pin-dot" id="pd3"></div>
+      </div>
+      <div class="numpad">
+        <button class="nk" data-v="1">1</button>
+        <button class="nk" data-v="2">2</button>
+        <button class="nk" data-v="3">3</button>
+        <button class="nk" data-v="4">4</button>
+        <button class="nk" data-v="5">5</button>
+        <button class="nk" data-v="6">6</button>
+        <button class="nk" data-v="7">7</button>
+        <button class="nk" data-v="8">8</button>
+        <button class="nk" data-v="9">9</button>
+        <button class="nk empty"></button>
+        <button class="nk" data-v="0">0</button>
+        <button class="nk del" id="delBtn">⌫</button>
+      </div>
+      <div class="pin-err" id="pinErr"></div>
+    </div>
+    <div id="formScreen"></div>
+  `;
+
+  let pinInput = "";
+
+  function updateDots() {
+    for (let i = 0; i < 4; i++)
+      document.getElementById("pd" + i).className =
+        "pin-dot" + (i < pinInput.length ? " filled" : "");
+  }
+
+  function showPinError() {
+    document.getElementById("pinErr").textContent = "PIN salah. Coba lagi.";
+    for (let i = 0; i < 4; i++)
+      document.getElementById("pd" + i).className = "pin-dot error";
+    pinInput = "";
+    setTimeout(() => {
+      document.getElementById("pinErr").textContent = "";
+      updateDots();
+    }, 900);
+  }
+
+  document.querySelectorAll(".nk[data-v]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (pinInput.length >= 4) return;
+      pinInput += btn.dataset.v;
+      updateDots();
+      if (pinInput.length === 4) {
+        setTimeout(() => {
+          if (pinInput === CORRECT_PIN) {
+            sessionStorage.setItem("pin_ok", "1"); // ingat PIN untuk sesi ini
+            document.getElementById("pinScreen").style.display = "none";
+            renderForm();
+          } else {
+            showPinError();
+          }
+        }, 150);
+      }
+    });
+  });
+
+  document.getElementById("delBtn").addEventListener("click", () => {
+    pinInput = pinInput.slice(0, -1);
+    document.getElementById("pinErr").textContent = "";
+    updateDots();
+  });
+}
+
+/* ══════════════════
+   FORM SCREEN
+══════════════════ */
+function renderForm() {
+  const formScreen = document.getElementById("formScreen");
+  formScreen.style.display = "block";
+  formScreen.innerHTML = `
+    <div class="form-eyebrow">Event Check-in</div>
+    <div class="form-title">Konfirmasi Kehadiran</div>
+
+    <div class="info-row">
+      <span class="info-label">ID Registrasi</span>
+      <span class="info-value">${id}</span>
+    </div>
+
+    <div class="divider"></div>
 
     <div class="field-group">
-      <label class="field-label" for="inputJumlah">Jumlah hadir</label>
-      <input
-        id="inputJumlah"
-        class="field-input"
-        type="number"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        min="1"
-        max="99"
-        value="1"
-        placeholder="Jumlah orang"
-      />
+      <label class="field-label" for="jumlah">Jumlah hadir aktual</label>
+      <input class="field-input" type="number" id="jumlah"
+        value="${jumlahQR}" min="1" max="99" inputmode="numeric">
+      <div class="field-hint">Default dari QR: ${jumlahQR} orang</div>
     </div>
 
     <div class="field-group">
-      <label class="field-label" for="inputCatatan">Catatan (opsional)</label>
-      <textarea
-        id="inputCatatan"
-        class="field-input catatan"
-        placeholder="Tulis catatan jika ada..."
-      ></textarea>
+      <label class="field-label" for="catatan">
+        Catatan <span style="font-weight:400;text-transform:none">(opsional)</span>
+      </label>
+      <textarea class="field-input" id="catatan"
+        placeholder="Misal: terlambat, VIP, kursi roda…"
+        maxlength="200"></textarea>
     </div>
 
-    <button id="btn">Konfirmasi Hadir</button>
+    <button class="btn" id="btn">Konfirmasi Hadir</button>
     <div id="status"></div>
   `;
 
-  const inputJumlah = document.getElementById("inputJumlah");
-  const inputCatatan = document.getElementById("inputCatatan");
-  const btn = document.getElementById("btn");
+  document.getElementById("btn").addEventListener("click", doCheckin);
+}
+
+/* ══════════════════
+   CHECKIN API
+══════════════════ */
+async function doCheckin() {
+  const jumlah   = parseInt(document.getElementById("jumlah").value);
+  const catatan  = document.getElementById("catatan").value.trim();
+  const btn      = document.getElementById("btn");
   const statusEl = document.getElementById("status");
 
-  function validateInput() {
-    const val = parseInt(inputJumlah.value);
-    btn.disabled = !(val && val > 0);
+  if (!jumlah || jumlah < 1) {
+    const inp = document.getElementById("jumlah");
+    inp.style.borderColor = "#ff4757";
+    inp.focus();
+    setTimeout(() => inp.style.borderColor = "", 1200);
+    return;
   }
 
-  inputJumlah.addEventListener("input", validateInput);
-  validateInput();
+  btn.disabled    = true;
+  btn.textContent = "Memproses...";
+  statusEl.className = "";
+  statusEl.style.display = "none";
 
-  btn.addEventListener("click", async () => {
-    const jumlah = parseInt(inputJumlah.value);
-    const catatan = inputCatatan.value.trim();
-    if (!jumlah || jumlah <= 0) return;
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "checkin", id, jumlah_hadir_aktual: jumlah, catatan }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    const result = await res.json();
 
-    btn.disabled = true;
-    btn.textContent = "Memproses...";
+    if (result.status === "success") {
+      statusEl.textContent = "✅ Check-in berhasil!" +
+        (result.nama ? " Selamat datang, " + result.nama + "!" : "");
+      statusEl.className = "ok";
+      btn.textContent = "✅ Selesai";
 
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "checkin", id, jumlah_hadir_aktual: jumlah, catatan }),
-        headers: { "Content-Type": "text/plain;charset=utf-8" }
-      });
+    } else if (result.status === "already") {
+      statusEl.textContent = "⚠️ Peserta ini sudah check-in sebelumnya.";
+      statusEl.className = "dup";
+      btn.disabled = false;
+      btn.textContent = "Konfirmasi Hadir";
 
-      const result = await res.json();
-
-      if (result.status === "success") {
-        statusEl.textContent = "✅ Check-in berhasil!";
-        statusEl.style.color = "green";
-        btn.textContent = "Selesai";
-      } else if (result.status === "already") {
-        statusEl.textContent = "⚠️ Sudah check-in sebelumnya";
-        statusEl.style.color = "orange";
-        btn.disabled = false;
-        btn.textContent = "Konfirmasi Hadir";
-      } else {
-        statusEl.textContent = "❌ Gagal check-in";
-        statusEl.style.color = "red";
-        btn.disabled = false;
-        btn.textContent = "Konfirmasi Hadir";
-      }
-    } catch (err) {
-      statusEl.textContent = "❌ Error koneksi";
-      statusEl.style.color = "red";
+    } else {
+      statusEl.textContent = "❌ " + (result.message || "Gagal. Coba lagi.");
+      statusEl.className = "err";
       btn.disabled = false;
       btn.textContent = "Konfirmasi Hadir";
     }
-  });
+  } catch {
+    statusEl.textContent = "❌ Koneksi gagal. Periksa internet.";
+    statusEl.className = "err";
+    btn.disabled = false;
+    btn.textContent = "Konfirmasi Hadir";
+  }
 }
 </script>
 </body>
