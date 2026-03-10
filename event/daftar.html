@@ -229,14 +229,14 @@
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Masjid UMMI</a>
+    <a href="../index.html" class="nav-logo">Masjid UMMI</a>
     <div class="hamburger" onclick="toggleMenu()">☰</div>
     <div class="nav-links" id="nav">
-      <a href="index.html#about">Tentang</a>
-      <a href="index.html#support">Dukung</a>
-      <a href="index.html#location">Lokasi</a>
-      <a href="index.html#follow">Ikuti</a>
-      <a href="contact.html">Hubungi Kami</a>
+      <a href="../index.html#about">Tentang</a>
+      <a href="../index.html#support">Dukung</a>
+      <a href="../index.html#location">Lokasi</a>
+      <a href="../index.html#follow">Ikuti</a>
+      <a href="../contact.html">Hubungi Kami</a>
     </div>
   </div>
 </nav>
@@ -577,6 +577,12 @@ document.getElementById('regForm').addEventListener('submit', async e => {
     btn.textContent = 'Kirim Pendaftaran';
   }
 });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.fade').forEach(el => el.classList.add('show'));
+  });
+
+
 </script>
 </body>
 </html>
