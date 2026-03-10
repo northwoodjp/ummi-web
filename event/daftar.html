@@ -539,7 +539,7 @@ document.getElementById('regForm').addEventListener('submit', async e => {
   btn.disabled = true;
   btn.textContent = '⏳ Mengirim...';
 
-  const registrationId ="UMMI01" + Date.now().toString();
+  const registrationId ="UMMI01-" + Date.now().toString();
   document.getElementById('h-id').value = registrationId;
 
   const payload = {
