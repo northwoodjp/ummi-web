@@ -8,6 +8,12 @@
   <style>
     body { padding-top: 70px; }
 
+    /* ── PAGE LAYOUT ── */
+    .donation-instructions { 
+      margin-top: 10px !important; 
+      padding-top: 3rem !important; 
+    }
+
     /* ── DEADLINE BANNER ── */
     .deadline-banner {
       max-width: 600px;
@@ -236,8 +242,9 @@
 </nav>
 
 <!-- ── HEADER ── -->
-<section class="donation-instructions fade">
-  <h2 class="section-title">Mie Mengaji Jilid III<br>Masjid Simbol Persatuan di Tanah Perantauan</h2>
+<section class="donation-instructions fade page-section">
+  <h2 class="section-title">Mie Mengaji Jilid III</h2>
+  <h3 class="section-subtitle">Masjid Simbol Persatuan di Tanah Perantauan</h3>
   <p class="donation-subtitle">Mohon isi data kehadiran untuk membantu panitia mempersiapkan acara.</p>
 
   <div class="deadline-banner">
@@ -532,7 +539,7 @@ document.getElementById('regForm').addEventListener('submit', async e => {
   btn.disabled = true;
   btn.textContent = '⏳ Mengirim...';
 
-  const registrationId = Date.now().toString();
+  const registrationId ="UMMI01" + Date.now().toString();
   document.getElementById('h-id').value = registrationId;
 
   const payload = {
