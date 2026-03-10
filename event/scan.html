@@ -28,7 +28,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: top;
       padding: 1rem;
       overflow: hidden;
     }
@@ -322,8 +322,14 @@
   <script>
 
     // ── GANTI PIN DI SINI ──
-    const CORRECT_PIN = "1234";
+    const CORRECT_PIN = "0315";
     // ─────────────────────
+
+    // Cek apakah sudah pernah input PIN di sesi ini
+    if (sessionStorage.getItem("pin_ok") === "yes") {
+      pinGate.style.display = "none";
+      init();
+    }
 
     let pinInput = "";
     const pinGate = document.getElementById("pinGate");
@@ -360,7 +366,7 @@
 
     function checkPin() {
       if (pinInput === CORRECT_PIN) {
-        // Correct — hide gate and start scanner
+        sessionStorage.setItem("pin_ok", "yes"); // simpan status
         pinGate.classList.add("hide");
         setTimeout(() => { pinGate.style.display = "none"; }, 420);
         init(); // start scanner
