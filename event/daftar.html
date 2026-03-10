@@ -4,13 +4,223 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pendaftaran Kehadiran | Masjid UMMI</title>
-
   <link rel="stylesheet" href="../style.css" />
-  <script src="../script.js" defer></script>
+  <style>
+    body { padding-top: 70px; }
+
+    /* ── DEADLINE BANNER ── */
+    .deadline-banner {
+      max-width: 600px;
+      margin: 1.5rem auto 0;
+      background: rgba(212,175,55,0.12);
+      border-left: 4px solid var(--accent-gold);
+      border-radius: 0 10px 10px 0;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+    .deadline-banner strong { color: var(--accent-gold); }
+
+    /* ── FORM OVERRIDES ── */
+    .donation-form {
+      max-width: 600px;
+    }
+
+    .card-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .form-divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 1.4rem 0;
+    }
+
+    /* ── INPUTS ── */
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.15);
+    }
+    .form-group input.error {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 4px rgba(192,57,43,0.1);
+    }
+    .field-hint {
+      font-size: 0.78rem;
+      color: #777;
+      margin-top: 4px;
+    }
+    .error-msg {
+      font-size: 0.78rem;
+      color: #c0392b;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* ── STEPPER ── */
+    .stepper-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .stepper-group {
+      background: #f8f9fb;
+      border-radius: 14px;
+      padding: 1.1rem;
+      border: 1px solid #eee;
+    }
+    .stepper-group .stepper-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+    }
+    .stepper-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .stepper-sub:last-child { margin-bottom: 0; }
+    .stepper-sub .gender { font-size: 0.82rem; color: #555; font-weight: 500; }
+    .stepper-ctrl { display: flex; align-items: center; gap: 10px; }
+    .stepper-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      background: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      color: var(--primary-blue);
+      transition: all 0.15s;
+      user-select: none;
+      line-height: 1;
+    }
+    .stepper-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+    .stepper-btn:active { transform: scale(0.9); }
+    .stepper-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .stepper-val { font-size: 1rem; font-weight: 700; min-width: 20px; text-align: center; color: var(--primary-blue); }
+
+    /* ── TOTAL BADGE ── */
+    .total-badge {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,59,115,0.05);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+    }
+    .total-badge .t-label { color: #555; }
+    .total-badge .t-count { font-weight: 700; font-size: 1.05rem; color: var(--primary-blue); }
+    .total-badge.warn { background: rgba(192,57,43,0.06); }
+    .total-badge.warn .t-count { color: #c0392b; }
+
+    /* ── AGE INPUTS ── */
+    .age-inputs { display: flex; flex-direction: column; gap: 8px; }
+    .age-input-wrap { display: flex; align-items: center; gap: 12px; }
+    .age-input-wrap .age-label { font-size: 0.82rem; color: #555; width: 75px; flex-shrink: 0; font-weight: 500; }
+    .age-input-wrap input { flex: 1; margin: 0; }
+
+    /* ── RADIO CARDS ── */
+    .radio-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .radio-card { position: relative; cursor: pointer; }
+    .radio-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .radio-card-inner {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      color: var(--text-gray);
+    }
+    .radio-card input:checked ~ .radio-card-inner {
+      border-color: var(--accent-gold);
+      background: rgba(212,175,55,0.08);
+      color: var(--deep-navy);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.18);
+    }
+    .radio-dot {
+      width: 15px; height: 15px; border-radius: 50%;
+      border: 2px solid #ccc; flex-shrink: 0; transition: all 0.2s;
+    }
+    .radio-card input:checked ~ .radio-card-inner .radio-dot {
+      border-color: var(--accent-gold);
+      background: var(--accent-gold);
+      box-shadow: inset 0 0 0 3px white;
+    }
+
+    /* ── SUBMIT BUTTON ── */
+    .donation-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent-gold), var(--soft-gold));
+      color: var(--deep-navy);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(212,175,55,0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 0.5rem;
+    }
+    .donation-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(212,175,55,0.45);
+    }
+    .donation-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--deep-navy);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1100;
+      white-space: nowrap;
+      max-width: 90vw;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.err  { background: #c0392b; }
+
+    @media (max-width: 600px) {
+      .stepper-row { grid-template-columns: 1fr; }
+      .radio-cards { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ==================== NAVIGATION ==================== -->
+<!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Masjid UMMI</a>
@@ -25,408 +235,341 @@
   </div>
 </nav>
 
-<!-- ==================== PAGE HEADER ==================== -->
+<!-- ── HEADER ── -->
 <section class="donation-instructions fade">
-  <h2 class="section-title">Mie Mengaji Jilid II Bersama Ust. Handy Bonny</h2>
-  <p class="donation-subtitle">
-    Mohon isi data kehadiran untuk membantu panitia mempersiapkan acara. <strong>Batas waktu pendaftaran hingga 7 Maret 2026 pukul 12:00 AM JST.</strong>
-  </p>
+  <h2 class="section-title">Mie Mengaji Jilid III<br>Masjid Simbol Persatuan di Tanah Perantauan</h2>
+  <p class="donation-subtitle">Mohon isi data kehadiran untuk membantu panitia mempersiapkan acara.</p>
 
-  <form class="donation-form" id="registrationForm">
+  <div class="deadline-banner">
+    <span>⏰</span>
+    <span>Pendaftaran ditutup <strong>7 Maret 2026, pukul 12.00 JST</strong></span>
+  </div>
 
-    <!-- Nama -->
+  <!-- ── FORM ── -->
+  <form class="donation-form" id="regForm" novalidate>
+
+    <!-- 1. DATA DIRI -->
+    <span class="card-label">Data Diri</span>
+
     <div class="form-group">
-      <label>Nama</label>
-      <input type="text" name="nama" placeholder="Nama lengkap" required />
+      <label>Nama Lengkap *</label>
+      <input type="text" id="nama" name="nama" placeholder="Contoh: Ahmad Fauzi" autocomplete="name" />
+      <div class="error-msg" id="err-nama">Mohon isi nama lengkap</div>
     </div>
 
-    <!-- Alamat -->
     <div class="form-group">
       <label>Alamat</label>
-      <input type="text" name="alamat" placeholder="Alamat lengkap"  />
+      <input type="text" id="alamat" name="alamat" placeholder="Contoh: 3-chōme-3-28 Sanjo, Suzuka, Mie 513-0806" />
     </div>
 
-  <!--No. WhatsApp -->
     <div class="form-group">
-      <label>No. WhatsApp</label>
-      <input type="text" name="kontak" placeholder="08012345678" required/>
-      <small style="display:block; color:#555; font-size: 0.8em;margin-top: 4px;">Isi untuk konfirmasi pendaftaran</small>
+      <label>No. WhatsApp *</label>
+      <input type="text" id="kontak" name="kontak" placeholder="080-1234-5678 atau 08123456789" autocomplete="tel" inputmode="tel" />
+      <div class="field-hint">Untuk konfirmasi &amp; pengiriman QR code</div>
+      <div class="error-msg" id="err-kontak">Mohon isi nomor WhatsApp</div>
     </div>
-    
 
-    <!-- ==================== JUMLAH HADIR ==================== -->
-<div class="form-group">
-  <label>Jumlah yang Hadir</label>
+    <hr class="form-divider">
 
-  <!-- Dewasa -->
-  <div style="margin-bottom:1rem;">
-    <label style="font-weight:500;">Dewasa</label>
-    <div style="display:flex; gap:1rem;">
-      
-      <div>
-        <label style="font-size:0.8rem;">L</label>
-        <select name="dewasa_l" required>
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
+    <!-- 2. JUMLAH HADIR -->
+    <span class="card-label">Jumlah yang Hadir</span>
+
+    <div class="stepper-row">
+      <div class="stepper-group">
+        <div class="stepper-title">🧑 Dewasa</div>
+        <div class="stepper-sub">
+          <span class="gender">Laki-laki</span>
+          <div class="stepper-ctrl">
+            <button type="button" class="stepper-btn" onclick="step('dL',-1)" id="dL-minus" disabled>−</button>
+            <span class="stepper-val" id="dL-val">0</span>
+            <button type="button" class="stepper-btn" onclick="step('dL',1)">+</button>
+          </div>
+        </div>
+        <div class="stepper-sub">
+          <span class="gender">Perempuan</span>
+          <div class="stepper-ctrl">
+            <button type="button" class="stepper-btn" onclick="step('dP',-1)" id="dP-minus" disabled>−</button>
+            <span class="stepper-val" id="dP-val">0</span>
+            <button type="button" class="stepper-btn" onclick="step('dP',1)">+</button>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label style="font-size:0.8rem;">P</label>
-        <select name="dewasa_p" required>
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
+      <div class="stepper-group">
+        <div class="stepper-title">👦 Anak</div>
+        <div class="stepper-sub">
+          <span class="gender">Laki-laki</span>
+          <div class="stepper-ctrl">
+            <button type="button" class="stepper-btn" onclick="step('aL',-1)" id="aL-minus" disabled>−</button>
+            <span class="stepper-val" id="aL-val">0</span>
+            <button type="button" class="stepper-btn" onclick="step('aL',1)">+</button>
+          </div>
+        </div>
+        <div class="stepper-sub">
+          <span class="gender">Perempuan</span>
+          <div class="stepper-ctrl">
+            <button type="button" class="stepper-btn" onclick="step('aP',-1)" id="aP-minus" disabled>−</button>
+            <span class="stepper-val" id="aP-val">0</span>
+            <button type="button" class="stepper-btn" onclick="step('aP',1)">+</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Anak -->
-  <div>
-    <label style="font-weight:500;">Anak</label>
-    <div style="display:flex; gap:1rem;">
-      
-      <div>
-        <label style="font-size:0.8rem;">L</label>
-        <select id="anakL" name="anak_l">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-      </div>
-
-      <div>
-        <label style="font-size:0.8rem;">P</label>
-        <select id="anakP" name="anak_p">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-      </div>
-
+    <div class="total-badge warn" id="totalBadge">
+      <span class="t-label">Total hadir</span>
+      <span class="t-count" id="totalCount">0 orang</span>
     </div>
-  </div>
-</div>
+    <div class="error-msg" id="err-total" style="margin-top:6px;">Minimal 1 orang harus hadir</div>
 
-<!-- ==================== USIA ANAK ==================== -->
-<div class="form-group" id="usiaAnakGroup" style="display:none;">
-  <label>Usia Anak</label>
+    <!-- Usia anak — muncul otomatis -->
+    <div id="ageSection" style="display:none; margin-top:1.2rem;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Usia Anak</label>
+        <div class="age-inputs" id="ageInputs" style="margin-top:0.5rem;"></div>
+      </div>
+    </div>
 
-  <div id="usiaContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
+    <hr class="form-divider">
 
-  <input type="hidden" name="usia_anak" id="usiaAnakGabungan">
-</div>
+    <!-- 3. TRANSPORTASI -->
+    <div class="form-group">
+      <span class="card-label">Transportasi</span>
+      <div class="radio-cards">
+        <label class="radio-card">
+          <input type="radio" name="transportasi" value="Umum">
+          <div class="radio-card-inner"><span class="radio-dot"></span>🚃 Umum</div>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="transportasi" value="Pribadi">
+          <div class="radio-card-inner"><span class="radio-dot"></span>🚗 Pribadi</div>
+        </label>
+      </div>
+      <div class="error-msg" id="err-transport" style="margin-top:6px;">Mohon pilih transportasi</div>
+    </div>
 
-<div class="form-group">
-  <label>Transportasi</label>
+    <!-- 4. STATUS PEKERJAAN -->
+    <div class="form-group">
+      <span class="card-label">Status Pekerjaan</span>
+      <div class="radio-cards">
+        <label class="radio-card">
+          <input type="radio" name="status_pekerjaan" value="Bekerja" id="radioBekerja" onchange="updatePekerjaanUI()">
+          <div class="radio-card-inner"><span class="radio-dot"></span>💼 Bekerja</div>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="status_pekerjaan" value="Tidak Bekerja" onchange="updatePekerjaanUI()">
+          <div class="radio-card-inner"><span class="radio-dot"></span>🏠 Tidak Bekerja</div>
+        </label>
+      </div>
+      <div class="error-msg" id="err-pekerjaan" style="margin-top:6px;">Mohon pilih status pekerjaan</div>
+    </div>
 
-  <div style="display:flex; gap:1rem;">
-    <label>
-      <input type="radio" name="transportasi" value="Umum" required>
-      Umum
-    </label>
+    <div id="indonesiaWrap" style="display:none;">
+      <div class="form-group">
+        <label>Berapa orang Indonesia di tempat kerja? *</label>
+        <input type="number" id="jumlah_indonesia" name="jumlah_indonesia" min="0" placeholder="0" inputmode="numeric" />
+        <div class="error-msg" id="err-indonesia">Mohon isi jumlah</div>
+      </div>
+    </div>
 
-    <label>
-      <input type="radio" name="transportasi" value="Pribadi" required>
-      Pribadi
-    </label>
-  </div>
-</div>
+    <hr class="form-divider">
 
-<!-- ==================== STATUS PEKERJAAN ==================== -->
-<div class="form-group">
-  <label>Status Pekerjaan</label>
-
-  <div style="display:flex; gap:1rem;">
-    <label>
-      <input type="radio" name="status_pekerjaan" value="Bekerja" required>
-      Bekerja
-    </label>
-
-    <label>
-      <input type="radio" name="status_pekerjaan" value="Tidak Bekerja" required>
-      Tidak Bekerja
-    </label>
-  </div>
-</div>
-
-<!-- ==================== JUMLAH ORANG INDONESIA DI TEMPAT KERJA ==================== -->
-<div class="form-group" id="jumlahIndonesiaGroup" style="display:none;">
-  <label>Jumlah Orang Indonesia di Tempat Kerja</label>
-  <input type="number" name="jumlah_indonesia" min="0" placeholder="Masukkan jumlah" />
-</div>
-
-    <!-- Catatan -->
+    <!-- 5. CATATAN -->
     <div class="form-group">
       <label>Catatan (Opsional)</label>
-      <textarea name="catatan" rows="4" placeholder="Contoh: alergi, kebutuhan khusus, dll"></textarea>
+      <textarea name="catatan" id="catatan" rows="3" placeholder="Contoh: alergi makanan, kebutuhan khusus, dll"></textarea>
     </div>
 
-    <!-- TOTAL HADIR -->
-    <div class="form-group" style="margin-top:10px;">
-      <div id="totalOrang" style="font-weight:600;"></div>
-      <input type="hidden" name="total_hadir" id="totalHidden">
-    </div>
+    <!-- HIDDEN -->
+    <input type="hidden" name="dewasa_l"    id="h-dL"    value="0">
+    <input type="hidden" name="dewasa_p"    id="h-dP"    value="0">
+    <input type="hidden" name="anak_l"      id="h-aL"    value="0">
+    <input type="hidden" name="anak_p"      id="h-aP"    value="0">
+    <input type="hidden" name="usia_anak"   id="h-usia">
+    <input type="hidden" name="total_hadir" id="h-total" value="0">
+    <input type="hidden" name="id"          id="h-id">
 
-    <button type="submit" class="donation-btn">
-      Kirim Pendaftaran
-    </button>
+    <button type="submit" class="donation-btn" id="submitBtn">Kirim Pendaftaran</button>
 
-    <input type="hidden" name="id" id="registrationId">
   </form>
 </section>
 
-<!-- ==================== FOOTER ==================== -->
+<div class="toast" id="toast"></div>
+
+<!-- ── FOOTER ── -->
 <footer>
   <p>
-    <br><br>
-    “Whoever builds a masjid for Allah,
-    Allah will build for him a house in Paradise.”
+    <br>
+    "Whoever builds a masjid for Allah,
+    Allah will build for him a house in Paradise."
     <br>— Prophet Muhammad ﷺ
     <br><br>
     © UMMI Masjid · ummi.jp · info@ummi.jp
   </p>
 </footer>
 
-<!-- ==================== SCRIPT ==================== -->
+<script src="../script.js" defer></script>
 <script>
-const form = document.getElementById("registrationForm");
-const anakL = document.getElementById("anakL");
-const anakP = document.getElementById("anakP");
-const usiaGroup = document.getElementById("usiaAnakGroup");
-const usiaContainer = document.getElementById("usiaContainer");
-const usiaHidden = document.getElementById("usiaAnakGabungan");
-const statusPekerjaan = document.getElementsByName("status_pekerjaan");
-const jumlahIndonesiaGroup = document.getElementById("jumlahIndonesiaGroup");
-const jumlahIndonesiaInput = jumlahIndonesiaGroup.querySelector("input");
+const counts = { dL:0, dP:0, aL:0, aP:0 };
 
-
-/* Generate input usia */
-function updateUsiaInputs() {
-  const jumlah = (parseInt(anakL.value) || 0) + (parseInt(anakP.value) || 0);
-
-  usiaContainer.innerHTML = "";
-
-  if (jumlah > 0) {
-    usiaGroup.style.display = "block";
-
-    for (let i = 0; i < jumlah; i++) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = "0";
-      input.placeholder = `Usia Anak ${i + 1}`;
-      input.classList.add("usia-anak");
-      input.required = true;
-
-      usiaContainer.appendChild(input);
-    }
-  } else {
-    usiaGroup.style.display = "none";
-  }
+/* ── STEPPER ── */
+function step(key, delta) {
+  const next = counts[key] + delta;
+  if (next < 0 || next > 10) return;
+  counts[key] = next;
+  document.getElementById(key+'-val').textContent = next;
+  document.getElementById(key+'-minus').disabled = next === 0;
+  document.getElementById('h-'+key).value = next;
+  updateTotal();
+  updateAgeInputs();
 }
 
-/* Trigger saat jumlah anak berubah */
-anakL.addEventListener("change", updateUsiaInputs);
-anakP.addEventListener("change", updateUsiaInputs);
-
-/* Trigger status pekerjaan */
-statusPekerjaan.forEach(radio => {
-  radio.addEventListener("change", updateStatusPekerjaan);
-});
-
-/* Tampilkan input jumlah orang Indonesia jika status pekerjaan "Bekerja" */
-function updateStatusPekerjaan() {
-  let selected = "";
-
-  statusPekerjaan.forEach(radio => {
-    if (radio.checked) selected = radio.value;
-  });
-
-  if (selected === "Bekerja") {
-    jumlahIndonesiaGroup.style.display = "block";
-    jumlahIndonesiaInput.required = true;
-  } else {
-    jumlahIndonesiaGroup.style.display = "none";
-    jumlahIndonesiaInput.required = false;
-    jumlahIndonesiaInput.value = "";
-  }
-}
-
-/* HITUNG TOTAL HADIR */
 function updateTotal() {
-  const dewasaL = parseInt(document.querySelector('[name="dewasa_l"]').value) || 0;
-  const dewasaP = parseInt(document.querySelector('[name="dewasa_p"]').value) || 0;
-  const anakLVal = parseInt(anakL.value) || 0;
-  const anakPVal = parseInt(anakP.value) || 0;
-
-  const total = dewasaL + dewasaP + anakLVal + anakPVal;
-
-  document.getElementById("totalOrang").textContent =
-    total > 0 ? `Total hadir: ${total} orang` : "";
-
-  // kirim ke Google Sheet
-  document.getElementById("totalHidden").value = total;
+  const t = counts.dL + counts.dP + counts.aL + counts.aP;
+  document.getElementById('totalCount').textContent = t + ' orang';
+  document.getElementById('h-total').value = t;
+  document.getElementById('totalBadge').className = 'total-badge' + (t === 0 ? ' warn' : '');
 }
 
-const dewasaLSelect = document.querySelector('[name="dewasa_l"]');
-const dewasaPSelect = document.querySelector('[name="dewasa_p"]');
+function updateAgeInputs() {
+  const n = counts.aL + counts.aP;
+  const section = document.getElementById('ageSection');
+  const container = document.getElementById('ageInputs');
+  if (n === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  const existing = [...container.querySelectorAll('input')].map(i => i.value);
+  container.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'age-input-wrap';
+    wrap.innerHTML = `<span class="age-label">Anak ke-${i+1}</span>
+      <input type="number" min="0" max="17" placeholder="Usia (tahun)" class="usia-anak" value="${existing[i]||''}" inputmode="numeric">`;
+    container.appendChild(wrap);
+  }
+}
 
-dewasaLSelect.addEventListener("change", updateTotal);
-dewasaPSelect.addEventListener("change", updateTotal);
-anakL.addEventListener("change", updateTotal);
-anakP.addEventListener("change", updateTotal);
+/* ── PEKERJAAN ── */
+function updatePekerjaanUI() {
+  const bekerja = document.getElementById('radioBekerja').checked;
+  document.getElementById('indonesiaWrap').style.display = bekerja ? 'block' : 'none';
+  const inp = document.getElementById('jumlah_indonesia');
+  inp.required = bekerja;
+  if (!bekerja) inp.value = '';
+}
 
-// run awal
-updateTotal();
+/* ── TOAST ── */
+function showToast(msg, isErr = true) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(() => t.className = 'toast', 3200);
+}
 
-/* SUBMIT */
-form.addEventListener("submit", async e => {
+function markErr(id, show) {
+  const el = document.getElementById('err-'+id);
+  const inp = document.getElementById(id);
+  if (el)  el.classList.toggle('show', show);
+  if (inp) inp.classList.toggle('error', show);
+}
+
+/* ── SUBMIT ── */
+document.getElementById('regForm').addEventListener('submit', async e => {
   e.preventDefault();
 
-  // ===== GENERATE ID =====
-  const registrationId = Date.now().toString();
-  document.getElementById("registrationId").value = registrationId;
+  // validate
+  const nama   = document.getElementById('nama').value.trim();
+  const kontak = document.getElementById('kontak').value.trim();
+  const total  = counts.dL + counts.dP + counts.aL + counts.aP;
+  const transport = document.querySelector('[name="transportasi"]:checked');
+  const pekerjaan = document.querySelector('[name="status_pekerjaan"]:checked');
+  const ji = document.getElementById('jumlah_indonesia');
 
-  // ===== HITUNG TOTAL =====
-  const dewasaL = parseInt(document.querySelector('[name="dewasa_l"]').value) || 0;
-  const dewasaP = parseInt(document.querySelector('[name="dewasa_p"]').value) || 0;
-  const anakLVal = parseInt(anakL.value) || 0;
-  const anakPVal = parseInt(anakP.value) || 0;
+  let ok = true;
 
-  const total = dewasaL + dewasaP + anakLVal + anakPVal;
+  if (!nama)      { markErr('nama', true);   ok = false; } else markErr('nama', false);
+  if (!kontak)    { markErr('kontak', true); ok = false; } else markErr('kontak', false);
 
-  // ===== VALIDASI TOTAL =====
   if (total === 0) {
-    alert("Minimal 1 orang harus hadir");
-    return;
+    document.getElementById('err-total').classList.add('show'); ok = false;
+  } else {
+    document.getElementById('err-total').classList.remove('show');
   }
 
-  // ===== VALIDASI USIA =====
-  const inputs = document.querySelectorAll(".usia-anak");
-  let usiaList = [];
-
-  inputs.forEach(input => {
-    if (input.value !== "") usiaList.push(input.value.trim());
-  });
-
-  if (inputs.length > 0 && usiaList.length < inputs.length) {
-    alert("Harap isi semua usia anak");
-    return;
-  }
-
-  usiaHidden.value = usiaList.join(",");
-
-  // ===== VALIDASI PEKERJAAN =====
-  if (jumlahIndonesiaGroup.style.display === "block" && jumlahIndonesiaInput.value === "") {
-    alert("Harap isi jumlah orang Indonesia di tempat kerja");
-    return;
-  }
-
-  // ===== PREPARE BUTTON =====
-  const btn = form.querySelector("button");
-  btn.disabled = true;
-  btn.textContent = "Mengirim...";
-
-  try {
-    const formData = new FormData(form);
-    const payload = {};
-
-    for (let [k, v] of formData.entries()) {
-      payload[k] = v;
-    }
-
-    payload.id = registrationId;
-    payload.total_hadir = total;
-    payload.action = "register";
-
-    // ===== KIRIM KE GOOGLE SHEET =====
-    const res = await fetch("https://script.google.com/macros/s/AKfycbwVmN-dzBacypDOXWGYJfoSpcv8zVo2r9xX0K1MUiOf2qYXtDzEtecOBBqhFpRMlcNC/exec", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
-
-    const result = await res.json();
-    if (result.status !== "success") throw new Error(result.message);
-
-    // ===== FORMAT NOMOR WA =====
-    let wa = payload.kontak;
-
-    if (!wa) {
-      alert("Harap isi nomor WhatsApp");
+  const ages = [...document.querySelectorAll('.usia-anak')];
+  for (let i = 0; i < ages.length; i++) {
+    if (!ages[i].value) {
+      showToast(`Isi usia anak ke-${i+1}`);
+      ages[i].focus();
       return;
     }
+  }
 
-    wa = wa.replace(/[^0-9]/g, "");
-   
-    // ===== JEPANG =====
-    if (
-      wa.startsWith("070") ||
-      wa.startsWith("080") ||
-      wa.startsWith("090")
-    ) {
-      wa = "81" + wa.substring(1);
-    }
-    
-    // ===== INDONESIA =====
-    else if (wa.startsWith("08")) {
-      wa = "62" + wa.substring(1);
-    }
-    
-    // ===== SUDAH PAKAI KODE NEGARA =====
-    else if (wa.startsWith("62") || wa.startsWith("81")) {
-      // biarkan saja
-    }
+  if (!transport) {
+    document.getElementById('err-transport').classList.add('show'); ok = false;
+  } else {
+    document.getElementById('err-transport').classList.remove('show');
+  }
 
-    // ===== FORMAT LAIN (fallback) =====
-    else {
-      // optional: bisa kasih warning
-      console.log("Format nomor tidak dikenali:", wa);
-    }
+  if (!pekerjaan) {
+    document.getElementById('err-pekerjaan').classList.add('show'); ok = false;
+  } else {
+    document.getElementById('err-pekerjaan').classList.remove('show');
+  }
 
-    // ===== BUAT LINK QR =====
+  if (pekerjaan?.value === 'Bekerja' && ji.value === '') {
+    document.getElementById('err-indonesia').classList.add('show'); ok = false;
+  } else {
+    document.getElementById('err-indonesia').classList.remove('show');
+  }
+
+  if (!ok) { showToast('Mohon lengkapi semua data yang wajib diisi'); return; }
+
+  // collect ages
+  document.getElementById('h-usia').value = ages.map(a => a.value.trim()).join(',');
+
+  // send
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Mengirim...';
+
+  const registrationId = Date.now().toString();
+  document.getElementById('h-id').value = registrationId;
+
+  const payload = {
+    action: 'register', id: registrationId,
+    nama, alamat: document.getElementById('alamat').value.trim(), kontak,
+    dewasa_l: counts.dL, dewasa_p: counts.dP,
+    anak_l: counts.aL,   anak_p: counts.aP,
+    usia_anak: document.getElementById('h-usia').value,
+    transportasi: transport.value,
+    status_pekerjaan: pekerjaan.value,
+    jumlah_indonesia: pekerjaan.value === 'Bekerja' ? ji.value : '',
+    catatan: document.getElementById('catatan').value.trim(),
+    total_hadir: total,
+  };
+
+  try {
+    const res = await fetch(
+      'https://script.google.com/macros/s/AKfycbx0St3qRqvduUR-9z73ZWyasnID598UfvPNlj-iil-NaGwiNxoUUWq4k6yTrk3lFGp_Nw/exec',
+      { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }
+    );
+    const result = await res.json();
+    if (result.status !== 'success') throw new Error(result.message);
+
+    let wa = kontak.replace(/[^0-9]/g, '');
+    if (wa.startsWith('070')||wa.startsWith('080')||wa.startsWith('090')) wa = '81' + wa.substring(1);
+    else if (wa.startsWith('08')) wa = '62' + wa.substring(1);
+
     const qrLink = `https://ummi.jp/event/qrcode.html?d=${btoa(JSON.stringify({ id: registrationId, jumlah: total }))}`;
+    const message = `Assalamu'alaikum warahmatullahi wabarakatuh.\n\nPendaftaran Mie Mengaji Jilid III Masjid UMMI berhasil!\nNama: ${nama}\nTotal Hadir: ${total} orang\n\nSilakan buka QR:\n${qrLink}\nTunjukkan QR saat check-in.\n\nJazakumullahu khairan.`;
 
-    // ===== PESAN WHATSAPP =====
-    const message = `Assalamu'alaikum warahmatullahi wabarakatuh.
-
-Pendaftaran Mie Mengaji Jilid II Masjid UMMI berhasil!
-Nama: ${payload.nama}
-Total Hadir: ${total} orang
-
-Silakan buka QR:
-${qrLink}
-Tunjukkan QR saat check-in.
-
-Jazakumullahu khairan.`;
-
-    const waUrl = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
-
-    // ===== REDIRECT KE WA =====
-    window.location.href = waUrl;
-
+    window.location.href = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
   } catch (err) {
-    alert("Gagal mengirim: " + err.message);
-  } finally {
+    showToast('Gagal mengirim: ' + err.message);
     btn.disabled = false;
-    btn.textContent = "Kirim Pendaftaran";
+    btn.textContent = 'Kirim Pendaftaran';
   }
 });
 </script>
-
 </body>
 </html>

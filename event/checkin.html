@@ -21,14 +21,20 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
+    html {
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
-      min-height: 100vh;
+      height: 100%;         
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1.5rem 1rem;
+      overflow: hidden;
     }
 
     .card {
@@ -38,7 +44,9 @@
       width: 100%;
       max-width: 400px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-    }
+      overflow-y: auto;
+      max-height: calc(100vh - 3rem);
+    } 
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(12px); }
@@ -112,7 +120,7 @@
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwVmN-dzBacypDOXWGYJfoSpcv8zVo2r9xX0K1MUiOf2qYXtDzEtecOBBqhFpRMlcNC/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx0St3qRqvduUR-9z73ZWyasnID598UfvPNlj-iil-NaGwiNxoUUWq4k6yTrk3lFGp_Nw/exec";
 
 const params   = new URLSearchParams(window.location.search);
 const id       = params.get("id");
