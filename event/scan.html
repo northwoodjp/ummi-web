@@ -43,7 +43,6 @@
       pointer-events: none;
     }
 
-    /* ── PIN GATE ── */
     #pinGate {
       position: fixed; inset: 0;
       background: var(--dark);
@@ -90,7 +89,6 @@
       margin-bottom: 2rem; text-align: center;
     }
 
-    /* PIN dots display */
     .pin-dots {
       display: flex; gap: 14px; margin-bottom: 1.8rem;
     }
@@ -112,7 +110,6 @@
       box-shadow: 0 0 10px rgba(255,91,91,0.5);
     }
 
-    /* Numpad */
     .numpad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -140,9 +137,7 @@
       background: rgba(201,168,76,0.12);
       border-color: var(--gold);
     }
-    .num-btn.del {
-      font-size: 1rem; color: var(--muted);
-    }
+    .num-btn.del { font-size: 1rem; color: var(--muted); }
     .num-btn.del:hover { color: var(--error); border-color: rgba(255,91,91,0.3); }
     .num-btn.empty { visibility: hidden; cursor: default; }
 
@@ -155,7 +150,6 @@
     }
     .pin-error-msg.show { opacity: 1; }
 
-    /* shake animation */
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-8px); }
@@ -165,7 +159,6 @@
     }
     .shake { animation: shake 0.4s ease; }
 
-    /* ── SCANNER (same as original) ── */
     .header { text-align: center; margin-bottom: 1.8rem; z-index: 1; }
     .eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
     .header h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.5px; }
@@ -325,14 +318,8 @@
     const CORRECT_PIN = "0980";
     // ─────────────────────
 
-    // Cek apakah sudah pernah input PIN
-    if (localStorage.getItem("pin_ok") === "yes") {
-      pinGate.style.display = "none";
-      init();
-    }
-
-    let pinInput = "";
-    const pinGate = document.getElementById("pinGate");
+    // Deklarasi dulu, baru cek localStorage
+    const pinGate  = document.getElementById("pinGate");
     const pinError = document.getElementById("pinError");
     const dots = [
       document.getElementById("d0"),
@@ -340,6 +327,14 @@
       document.getElementById("d2"),
       document.getElementById("d3"),
     ];
+
+    // Cek apakah sudah pernah input PIN
+    if (localStorage.getItem("pin_ok") === "yes") {
+      pinGate.style.display = "none";
+      init();
+    }
+
+    let pinInput = "";
 
     function updateDots() {
       dots.forEach((d, i) => {
@@ -366,12 +361,11 @@
 
     function checkPin() {
       if (pinInput === CORRECT_PIN) {
-        localStorage.setItem("pin_ok", "yes"); // simpan status
+        localStorage.setItem("pin_ok", "yes");
         pinGate.classList.add("hide");
         setTimeout(() => { pinGate.style.display = "none"; }, 420);
-        init(); // start scanner
+        init();
       } else {
-        // Wrong — shake and reset
         dots.forEach(d => { d.classList.remove("filled"); d.classList.add("error"); });
         document.getElementById("pinDots").classList.add("shake");
         pinError.classList.add("show");
@@ -384,7 +378,6 @@
       }
     }
 
-    // keyboard support
     document.addEventListener("keydown", e => {
       if (pinGate.style.display === "none") return;
       if (e.key >= "0" && e.key <= "9") pressNum(e.key);
@@ -492,7 +485,6 @@
       await startScanner(cameras[camIndex].id);
     });
 
-    // Scanner tidak diinisialisasi sampai PIN benar
   </script>
 </body>
 </html>
