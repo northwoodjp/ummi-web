@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMMI Masjid — Help Us Build a Masjid in Mie Prefecture Today</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+  <style>
+    /* ── FONT OVERRIDE ── */
+    * { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .section-title { font-family: 'Playfair Display', serif; }
+
+    /* ── EID BANNER ── */
+    .eid-banner {
+      background: linear-gradient(135deg, #002850 0%, #003B73 50%, #00437a 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+    .eid-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='rgba(212,175,55,0.08)' stroke-width='1'%3E%3Cpolygon points='40,2 54,14 74,14 62,28 68,48 40,38 12,48 18,28 6,14 26,14'/%3E%3Cpolygon points='40,12 50,20 64,20 56,30 60,44 40,36 20,44 24,30 16,20 30,20'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+    .eid-banner > * { position: relative; z-index: 1; }
+    .eid-eyebrow {
+      display: inline-block;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.4);
+      color: #F2D06B;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .eid-banner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: white;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .eid-banner p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.95rem;
+      margin-bottom: 1.8rem;
+    }
+    .eid-banner .arabic {
+      display: block;
+      font-size: 1.3rem;
+      color: #F2D06B;
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+    }
+    .btn-eid {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #D4AF37, #F2D06B);
+      color: #002850;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-eid:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(212,175,55,0.5); }
+    .eid-meta {
+      margin-top: 1.2rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .eid-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+    }
+    .eid-meta-item span:first-child { color: #F2D06B; }
+
+    /* ── HERO IMPROVEMENTS ── */
+    .hero-cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .btn-hero-primary {
+      display: inline-block;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, #D4AF37, #F2D06B);
+      color: #002850;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(212,175,55,0.5); }
+    .btn-hero-outline {
+      display: inline-block;
+      padding: 14px 36px;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      backdrop-filter: blur(6px);
+    }
+    .btn-hero-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.7); }
+
+    /* ── NAV IDUL FITRI LINK ── */
+    .nav-eid-link {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      background: linear-gradient(135deg, #D4AF37, #F2D06B);
+      color: #002850 !important;
+      font-weight: 700 !important;
+      font-size: 0.88rem !important;
+      padding: 6px 16px;
+      border-radius: 999px;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+    .nav-eid-link:hover { opacity: 0.9; transform: translateY(-1px); }
+    @media (max-width: 768px) {
+      .nav-eid-link { margin: 0.6rem 0; display: inline-block; }
+    }
+
+    /* ── PROGRESS IMPROVEMENTS ── */
+    .progress-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #002850;
+      font-family: 'Playfair Display', serif;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      max-width: 600px;
+      margin: 0.5rem auto 0;
+      font-size: 0.82rem;
+      color: #777;
+    }
+    .progress-pct { font-size: 0.88rem; font-weight: 700; color: #D4AF37; }
+
+    /* ── CARD & WAKAF IMPROVEMENTS ── */
+    .wakaf-card {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wakaf-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+    .wakaf-card h3 { color: #002850; margin-bottom: 0.4rem; }
+    .wakaf-card p { font-size: 1.2rem; font-weight: 700; color: #D4AF37; margin: 0.3rem 0; }
+    .wakaf-card small { color: #888; font-size: 0.8rem; display: block; }
+
+    .funding-card {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 3px solid #D4AF37;
+    }
+    .funding-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+
+    /* ── FLOATING BUTTONS ── */
+    .floating-donate {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .floating-donate:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(212,175,55,0.5); }
+    .floating-eid {
+      position: fixed;
+      bottom: 80px; right: 24px;
+      background: linear-gradient(135deg, #002850, #003B73);
+      color: white;
+      padding: 14px 22px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 30px rgba(0,40,80,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .floating-eid:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,40,80,0.4); }
+
+    /* ── FOOTER ── */
+    footer { line-height: 2; }
+    .footer-inner { max-width: 600px; margin: 0 auto; }
+    .footer-links {
+      display: flex; justify-content: center;
+      gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .footer-links a { font-size: 0.88rem; color: rgba(255,255,255,0.6); text-decoration: none; }
+    .footer-links a:hover { color: #F2D06B; }
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0; }
+    footer a { color: #F2D06B; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== NAVIGATION ==================== -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">UMMI Masjid</a>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
+      <div class="nav-links" id="nav">
+        <a href="#about">About</a>
+        <a href="#support">Support</a>
+        <a href="#location">Location</a>
+        <a href="#follow">Follow</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="eid-fitr/daftar_eid.html" class="nav-eid-link">🌙 Idul Fitri</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero">
+    <div class="fade">
+      <h1>A Masjid.<br>A Legacy.</h1>
+      <p>What we build today lives beyond us.</p>
+      <div class="deadline">
+        Second payment deadline — <strong>April 1, 2026</strong>
+      </div>
+      <div class="hero-cta-row">
+        <a href="#support" class="btn-hero-primary">Support the Masjid</a>
+        <a href="eid-fitr/daftar_eid.html" class="btn-hero-outline">🌙 Daftar Idul Fitri</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== IDUL FITRI BANNER ==================== -->
+  <div class="eid-banner">
+    <span class="eid-eyebrow">Idul Fitri 1447H</span>
+    <span class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</span>
+    <h2>Registrasi Sholat Idul Fitri<br>1447H / 2026M</h2>
+    <p>Masjid UMMI · Suzuka, Prefektur Mie, Jepang<br>
+    Kloter tersedia: 06.30 · 07.00 · 08.00</p>
+    <a href="eid-fitr/daftar_eid.html" class="btn-eid">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Daftar Sekarang
+    </a>
+    <div class="eid-meta">
+      <div class="eid-meta-item"><span>📅</span><span>31 Maret 2026</span></div>
+      <div class="eid-meta-item"><span>🕌</span><span>Masjid UMMI, Suzuka</span></div>
+      <div class="eid-meta-item"><span>👥</span><span>Kapasitas 100 per kloter</span></div>
+    </div>
+  </div>
+
+
+  <!-- ==================== ABOUT ==================== -->
+  <section id="about">
+    <h2 class="section-title fade">About UMMI</h2>
+    <p class="about fade">
+      <strong>一般社団法人 Ummah Muslim Mie Indonesia (UMMI)</strong> serves the Indonesian Muslim community in Mie Prefecture, Japan. We are building UMMI Masjid, a permanent home for prayer, learning, and community. Time is moving, and your support can make this lasting legacy a reality.
+    </p>
+    <div style="text-align:center">
+      <a class="learn-more fade" href="#timeline">Learn More</a>
+    </div>
+  </section>
+
+
+  <!-- ==================== COUNTDOWN ==================== -->
+  <section class="countdown-section fade">
+    <h2 class="section-title">Time Is Moving</h2>
+    <p class="countdown-sub">The building acquisition deadline is approaching. Every day matters.</p>
+    <div class="countdown-timer" id="countdown">
+      <div class="time-box"><span id="days">00</span><small>Days</small></div>
+      <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
+      <div class="time-box"><span id="minutes">00</span><small>Minutes</small></div>
+      <div class="time-box"><span id="seconds">00</span><small>Seconds</small></div>
+    </div>
+    <p class="countdown-note">Help secure a permanent home for the Muslim community in Mie.</p>
+  </section>
+
+
+  <!-- ==================== TIMELINE ==================== -->
+  <section id="timeline">
+    <h2 class="section-title fade">A Clear Path Forward</h2>
+    <p class="timeline-desc fade">
+      This is not built overnight. It grows with intention — step by step — guided by trust, transparency, and your support.
+    </p>
+    <div class="timeline-modern fade">
+      <div class="timeline-line-modern"></div>
+      <div class="timeline-step">
+        <span class="dot"></span>
+        <div class="card"><h3>Phase 1</h3><strong>Secure the Building</strong><p>Fundraising, purchase, legal process, and technical planning.</p></div>
+      </div>
+      <div class="timeline-step">
+        <span class="dot"></span>
+        <div class="card"><h3>Phase 2</h3><strong>Open for Prayer</strong><p>Essential renovation so daily and Friday prayers can begin as soon as possible.</p></div>
+      </div>
+      <div class="timeline-step">
+        <span class="dot"></span>
+        <div class="card"><h3>Phase 3</h3><strong>Grow the Community</strong><p>Classrooms, activity spaces, and facilities that nurture learning and belonging.</p></div>
+      </div>
+      <div class="timeline-step">
+        <span class="dot"></span>
+        <div class="card"><h3>Phase 4</h3><strong>Full Activation</strong><p>Official opening, public programs, and full integration into the local community.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== FUNDING ROADMAP ==================== -->
+  <section id="funding-roadmap" class="funding-roadmap fade">
+    <h2 class="section-title">Funding Roadmap</h2>
+    <p class="funding-intro">
+      The total capital requirement for UMMI Masjid is <strong>JPY 70,000,000</strong>, structured across three focused fundraising stages.
+    </p>
+    <div class="funding-grid">
+      <div class="funding-card">
+        <h3>Building Acquisition</h3>
+        <p class="fund-amount">JPY 50,000,000</p>
+        <p class="fund-desc">Securing the property through phased payments from December 2025 to April 2026.</p>
+        <small>¥6M down payment · ¥30M initial · ¥14M final</small>
+      </div>
+      <div class="funding-card">
+        <h3>Operational Renovation</h3>
+        <p class="fund-amount">JPY 10,000,000</p>
+        <p class="fund-desc">Essential repairs enabling a soft opening in May 2026 for daily and Friday prayers.</p>
+        <small>Capacity: up to 300 worshippers</small>
+      </div>
+      <div class="funding-card">
+        <h3>Community & Aesthetic</h3>
+        <p class="fund-amount">JPY 10,000,000</p>
+        <p class="fund-desc">Classrooms, community spaces, and exterior façade improvements by July 2026.</p>
+        <small>Long-term community impact</small>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== PROGRESS ==================== -->
+  <section class="progress-wrapper">
+    <p class="progress-statement fade">There's still a long way to go, and time is moving fast.</p>
+    <h2 class="section-title fade">Fundraising Progress</h2>
+    <p class="progress-amount fade">¥19,555,097</p>
+    <p class="fade" style="color:#777;margin-bottom:0.3rem">raised of JPY 70,000,000 total goal</p>
+    <div class="progress-bar fade">
+      <div class="progress" data-progress="27.93"></div>
+    </div>
+    <div class="progress-meta fade">
+      <span>Last updated: March 1, 2026</span>
+      <span class="progress-pct">27.93% funded</span>
+    </div>
+  </section>
+
+
+  <!-- ==================== WAKAF & INFAK ==================== -->
+  <section id="support" class="wakaf fade">
+    <h2 class="section-title fade">Support the Masjid</h2>
+    <h3 class="section-subtitle">Wakaf Jariyah</h3>
+    <p style="text-align:center; max-width:700px; margin:auto">Some donations help us finish. Wakaf builds something that lasts forever.</p>
+    <div class="slider">
+      <button class="slider-btn prev" aria-label="Previous">‹</button>
+      <div class="slider-track">
+        <div class="wakaf-card"><h3>Baqiyyatush Shalihat</h3><small>Wakaf for the deceased</small><p>¥10,000</p><small>or Rp1,000,000</small></div>
+        <div class="wakaf-card"><h3>Darussalaam</h3><p>¥10,000</p><small>or Rp1,000,000</small></div>
+        <div class="wakaf-card"><h3>Ma'wa</h3><p>¥15,000</p><small>or Rp1,500,000</small></div>
+        <div class="wakaf-card"><h3>Na'im</h3><p>¥20,000</p><small>or Rp2,000,000</small></div>
+        <div class="wakaf-card"><h3>Adn</h3><p>¥25,000</p><small>or Rp2,500,000</small></div>
+        <div class="wakaf-card"><h3>Firdaus</h3><p>¥30,000</p><small>or Rp3,000,000</small></div>
+      </div>
+      <button class="slider-btn next" aria-label="Next">›</button>
+    </div>
+  </section>
+
+  <section id="infak" class="wakaf fade">
+    <h3 class="section-subtitle">Infak</h3>
+    <p style="text-align:center;max-width:700px;margin:auto">Infak supports daily needs and immediate operations. Give any amount, anytime, with sincere intention.</p>
+    <div class="slider">
+      <button class="slider-btn prev">‹</button>
+      <div class="slider-track">
+        <div class="wakaf-card"><h3>Operational Needs</h3><p>Any Amount</p></div>
+        <div class="wakaf-card"><h3>Utilities & Maintenance</h3><p>Any Amount</p></div>
+        <div class="wakaf-card"><h3>Community Programs</h3><p>Any Amount</p></div>
+        <div class="wakaf-card"><h3>Emergency Support</h3><p>Any Amount</p></div>
+      </div>
+      <button class="slider-btn next">›</button>
+    </div>
+  </section>
+
+
+  <!-- ==================== BANK INFORMATION ==================== -->
+  <section id="bank-info" class="wakaf fade">
+    <h2 class="section-title">Bank Transfer Details</h2>
+    <p style="text-align:center; max-width:700px; margin:auto">Please transfer your donation to one of our official accounts below.</p>
+    <div class="slider">
+      <button class="slider-btn prev" aria-label="Previous">‹</button>
+      <div class="slider-track">
+        <div class="wakaf-card">
+          <h3>MUFG Bank</h3><small>Main Account</small>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Branch:</strong> 四日市支店 / 534</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Account No:</strong> 0587164</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Name:</strong> シャ)ウマームスリムミエインドネシア</p>
+        </div>
+        <div class="wakaf-card">
+          <h3>Japan Post Bank</h3>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Branch:</strong> ニニ八 / 228</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Number:</strong> 0791956</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Name:</strong> ヨシダロシ ハルヤティ</p>
+        </div>
+        <div class="wakaf-card">
+          <h3>Bank Syariah Indonesia</h3>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Account No:</strong> 7305811933</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Name:</strong> LUKMANUL HAKIM</p>
+        </div>
+      </div>
+      <button class="slider-btn next" aria-label="Next">›</button>
+    </div>
+    <p class="bank-note">After completing your transfer, please upload your payment proof for confirmation.</p>
+  </section>
+
+
+  <!-- ==================== DONATION INSTRUCTION ==================== -->
+  <section id="donation-instructions" class="donation-instructions fade">
+    <h2 class="section-title">How to Donate</h2>
+    <p class="donation-subtitle">
+      A transparent and guided process to support the future of UMMI Masjid.
+      <span class="donation-time">Estimated time: 2 minutes</span>
+    </p>
+    <div class="donation-steps-grid">
+      <div class="donation-step fade" style="transition-delay:0.1s">
+        <span class="step-number">01</span>
+        <h3>Select Donation Category</h3>
+        <p>Choose a wakaf category or infak that reflects your intention and ability.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.2s">
+        <span class="step-number">02</span>
+        <h3>Transfer Donation</h3>
+        <p>Send your contribution to one of our official bank accounts.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.3s">
+        <span class="step-number">03</span>
+        <h3>Upload Proof</h3>
+        <p>Submit a screenshot or photo of your transfer for confirmation.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.4s">
+        <span class="step-number">04</span>
+        <h3>Confirmation</h3>
+        <p>Your wakaf will be verified and recorded with gratitude and care.</p>
+      </div>
+    </div>
+    <div class="donation-cta fade" style="margin-top:2rem;">
+      <a href="donate.html" class="donation-btn">Proceed to Donation</a>
+    </div>
+  </section>
+
+
+  <!-- ==================== LOCATION ==================== -->
+  <section id="location">
+    <h2 class="section-title fade">Location</h2>
+    <div class="map fade">
+      <iframe
+        src="https://www.google.com/maps?q=3-ch%C5%8Dme-3-28%20Sanjo%2C%20Suzuka%2C%20Mie%20513-0806&output=embed"
+        loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+
+  <!-- ==================== FOLLOW US ==================== -->
+  <section id="follow">
+    <h2 class="section-title fade">Follow Us</h2>
+    <div class="social fade" style="text-align:center">
+      <a href="https://www.instagram.com/ummi.mieken?igsh=MXd2NWptYmhiNjU2cw==">Instagram</a>
+      <a href="https://www.facebook.com/UmmahMuslimMie">Facebook</a>
+      <a href="https://www.tiktok.com/@ummi.mieken?is_from_webapp=1&sender_device=pc.">TikTok</a>
+    </div>
+  </section>
+
+
+  <!-- ==================== FLOATING BUTTONS ==================== -->
+  <a href="eid-fitr/daftar_eid.html" class="floating-eid">🌙 Idul Fitri</a>
+  <a href="donate.html" class="floating-donate">💛 Donate</a>
+
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#support">Support</a>
+        <a href="#location">Location</a>
+        <a href="contact.html">Contact</a>
+        <a href="eid-fitr/daftar_eid.html">Idul Fitri</a>
+      </div>
+      <hr class="footer-divider">
+      <p>
+        "Whoever builds a masjid for Allah,<br>
+        Allah will build for him a house in Paradise."<br>
+        <em style="color:rgba(255,255,255,0.4)">— Prophet Muhammad ﷺ</em>
+      </p>
+      <p style="margin-top:1.5rem;font-size:0.82rem;color:rgba(255,255,255,0.35)">
+        © 2026 UMMI Masjid · <a href="mailto:info@ummi.jp">info@ummi.jp</a> · ummi.jp
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
