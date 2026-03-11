@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in Kehadiran — UMMI Masjid</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c; --gold2: #e8c96d;
+      --bg: #f0f2f5;
+      --white: #fff;
+      --dark: #1a1a2e;
+      --muted: #888;
+      --border: #e8eaf0;
+      --surface: #f7f8fa;
+      --green: #2e7d32; --green-bg: #e8f5e9;
+      --orange: #f57f17; --orange-bg: #fff8e1;
+      --red: #c62828; --red-bg: #ffebee;
+      --navy: #002850; --blue: #003B73;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem 1rem; overflow: hidden;
+    }
+
+    .card {
+      background: var(--white); border-radius: 24px;
+      padding: 2rem 1.5rem; width: 100%; max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      overflow-y: auto; max-height: calc(100vh - 3rem);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-eyebrow {
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: .3rem;
+    }
+    .form-title { font-size: 1.3rem; font-weight: 700; color: var(--dark); letter-spacing: -.3px; margin-bottom: 1.2rem; }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 13px; background: var(--surface);
+      border-radius: 10px; margin-bottom: .5rem;
+    }
+    .info-label { font-size: .75rem; color: var(--muted); font-weight: 500; }
+    .info-value { font-size: .86rem; font-weight: 700; color: var(--dark); font-family: 'IBM Plex Mono', monospace; }
+
+    .reg-detail {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: 1rem;
+    }
+    .reg-detail .rd-name {
+      font-size: 1rem; font-weight: 700; color: white; margin-bottom: 0.5rem;
+    }
+    .reg-detail .rd-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.8rem; color: rgba(255,255,255,0.7); padding: 2px 0;
+    }
+    .reg-detail .rd-row span:last-child { color: #F2D06B; font-weight: 600; }
+
+    .divider { height: 1px; background: #f0f0f0; margin: 1rem 0; }
+
+    .field-group { margin-bottom: 1.1rem; }
+    .field-label {
+      display: block; font-size: .75rem; font-weight: 600;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+    }
+    .field-input {
+      width: 100%; padding: 12px 15px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 1rem;
+      font-family: 'DM Sans', sans-serif; color: var(--dark);
+      outline: none; transition: border-color .2s, background .2s; resize: none;
+    }
+    .field-input:focus { border-color: var(--gold); background: #fff; }
+    input.field-input  { font-size: 1.4rem; font-weight: 700; text-align: center; }
+    textarea.field-input { min-height: 72px; line-height: 1.5; font-size: .93rem; }
+    .field-hint { font-size: .7rem; color: #aaa; margin-top: 4px; }
+
+    .btn {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #fff; border: none; border-radius: 13px;
+      font-size: .98rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; margin-top: .3rem;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn:active   { transform: scale(.97); }
+    .btn:disabled { background: linear-gradient(135deg, #ccc, #ddd); cursor: not-allowed; transform: none; }
+
+    #status {
+      margin-top: .9rem; padding: 12px 15px;
+      border-radius: 11px; font-size: .88rem;
+      font-weight: 600; text-align: center; display: none;
+      line-height: 1.5;
+    }
+    #status.ok  { background: var(--green-bg);  color: var(--green);  display: block; }
+    #status.dup { background: var(--orange-bg); color: var(--orange); display: block; }
+    #status.err { background: var(--red-bg);    color: var(--red);    display: block; }
+
+    .invalid-wrap { text-align: center; padding: 1rem 0; }
+    .invalid-icon  { font-size: 2.8rem; margin-bottom: .8rem; }
+    .invalid-title { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: .4rem; }
+    .invalid-sub   { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+
+    .loading-wrap { text-align: center; padding: 1.5rem 0; color: var(--muted); font-size: .9rem; }
+    .spinner-sm {
+      width: 28px; height: 28px;
+      border: 3px solid #f0e68c;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 0.7rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="loading-wrap">
+    <div class="spinner-sm"></div>
+    Memuat data...
+  </div>
+</div>
+
+<script>
+  /* ══════════════════════════════════════════════
+     CONFIG — sama dengan daftar_eid.html
+  ══════════════════════════════════════════════ */
+  const SB_URL = "https://szwjiylicvvixrqxxfqv.supabase.co";
+  const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6d2ppeWxpY3Z2aXhycXh4ZnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzYzNTAsImV4cCI6MjA4ODc1MjM1MH0.10mHqDRh6w9B7JJ70_dxZiSVBpnwaQEt0nGGulsrWV4";
+
+  /* ══════════════════════════════════════════════
+     SUPABASE HELPER
+  ══════════════════════════════════════════════ */
+  async function sbFetch(path, opts = {}) {
+    const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
+      headers: {
+        "apikey": SB_KEY,
+        "Authorization": `Bearer ${SB_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+        ...(opts.headers || {}),
+      },
+      ...opts,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.status === 204 ? null : res.json();
+  }
+
+  /* ══════════════════════════════════════════════
+     INIT — baca URL params
+  ══════════════════════════════════════════════ */
+  const params   = new URLSearchParams(window.location.search);
+  const regId    = params.get("id");
+  const card     = document.getElementById("card");
+
+  if (!regId) {
+    showInvalid("QR Tidak Valid", "Buka halaman ini melalui<br>scan QR Code peserta.");
+  } else {
+    loadRegistrasi();
+  }
+
+  /* ══════════════════════════════════════════════
+     LOAD DATA PENDAFTAR
+  ══════════════════════════════════════════════ */
+  async function loadRegistrasi() {
+    try {
+      // Cek apakah reg_id ada di tabel pendaftaran
+      const rows = await sbFetch(
+        `registrasi_idulfitri?reg_id=eq.${encodeURIComponent(regId)}&select=reg_id,nama,kloter,ikhwan,akhwat,total`
+      );
+
+      if (!rows || rows.length === 0) {
+        showInvalid("ID Tidak Ditemukan", `ID <strong>${regId}</strong> tidak terdaftar.<br>Hubungi panitia.`);
+        return;
+      }
+
+      const data = rows[0];
+
+      // Cek apakah sudah check-in sebelumnya
+      const existing = await sbFetch(
+        `checkin_idulfitri?reg_id=eq.${encodeURIComponent(regId)}&select=reg_id,jumlah_hadir,checked_at`
+      );
+
+      if (existing && existing.length > 0) {
+        const ci = existing[0];
+        const waktu = new Date(ci.checked_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        showAlreadyCheckin(data, ci.jumlah_hadir, waktu);
+        return;
+      }
+
+      // Belum check-in — tampilkan form
+      renderForm(data);
+
+    } catch (e) {
+      console.error(e);
+      showInvalid("Koneksi Gagal", "Periksa koneksi internet<br>dan coba lagi.");
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     RENDER FORM
+  ══════════════════════════════════════════════ */
+  function renderForm(data) {
+    card.innerHTML = `
+      <div style="animation: fadeUp .3s ease forwards;">
+        <div class="form-eyebrow">Idul Fitri 1447H · UMMI Masjid</div>
+        <div class="form-title">Konfirmasi Kehadiran</div>
+
+        <div class="reg-detail">
+          <div class="rd-name">${data.nama}</div>
+          <div class="rd-row"><span>ID Registrasi</span><span>${data.reg_id}</span></div>
+          <div class="rd-row"><span>Kloter</span><span>${data.kloter}</span></div>
+          <div class="rd-row"><span>Terdaftar</span><span>${data.total} orang (${data.ikhwan} ikhwan / ${data.akhwat} akhwat)</span></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field-group">
+          <label class="field-label" for="jumlah">Jumlah hadir aktual</label>
+          <input class="field-input" type="number" id="jumlah"
+            value="${data.total}" min="1" max="99" inputmode="numeric">
+          <div class="field-hint">Default dari pendaftaran: ${data.total} orang</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="catatan">
+            Catatan <span style="font-weight:400;text-transform:none">(opsional)</span>
+          </label>
+          <textarea class="field-input" id="catatan"
+            placeholder="Misal: terlambat, ada yang tidak hadir, dsb."
+            maxlength="200"></textarea>
+        </div>
+
+        <button class="btn" id="btn">✅ Konfirmasi Hadir</button>
+        <div id="status"></div>
+      </div>
+    `;
+
+    document.getElementById("btn").addEventListener("click", () => doCheckin(data));
+  }
+
+  /* ══════════════════════════════════════════════
+     DO CHECK-IN
+  ══════════════════════════════════════════════ */
+  async function doCheckin(data) {
+    const jumlah  = parseInt(document.getElementById("jumlah").value);
+    const catatan = document.getElementById("catatan").value.trim();
+    const btn     = document.getElementById("btn");
+    const statusEl = document.getElementById("status");
+
+    if (!jumlah || jumlah < 1) {
+      const inp = document.getElementById("jumlah");
+      inp.style.borderColor = "#ff4757";
+      inp.focus();
+      setTimeout(() => inp.style.borderColor = "", 1200);
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = "Memproses...";
+    statusEl.className = "";
+    statusEl.style.display = "none";
+
+    try {
+      await sbFetch("checkin_idulfitri", {
+        method: "POST",
+        body: JSON.stringify({
+          reg_id: data.reg_id,
+          jumlah_hadir: jumlah,
+          catatan: catatan || null,
+        }),
+      });
+
+      statusEl.innerHTML = `✅ Check-in berhasil!<br>Selamat datang, <strong>${data.nama}</strong>!<br><span style="font-size:.8rem;font-weight:400">${data.kloter} · ${jumlah} orang hadir</span>`;
+      statusEl.className = "ok";
+      btn.textContent = "✅ Selesai";
+
+    } catch (e) {
+      const errText = e.message || "";
+
+      // Primary key violation = sudah check-in
+      if (errText.includes("23505") || errText.includes("duplicate")) {
+        statusEl.textContent = "⚠️ Peserta ini sudah check-in sebelumnya.";
+        statusEl.className = "dup";
+        btn.disabled = false;
+        btn.textContent = "Konfirmasi Hadir";
+      } else {
+        statusEl.textContent = "❌ Gagal. Periksa koneksi dan coba lagi.";
+        statusEl.className = "err";
+        btn.disabled = false;
+        btn.textContent = "Konfirmasi Hadir";
+        console.error(e);
+      }
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     ALREADY CHECKED IN
+  ══════════════════════════════════════════════ */
+  function showAlreadyCheckin(data, jumlah, waktu) {
+    card.innerHTML = `
+      <div style="animation: fadeUp .3s ease forwards;">
+        <div class="form-eyebrow">Idul Fitri 1447H · UMMI Masjid</div>
+        <div class="form-title">Sudah Check-in</div>
+        <div class="reg-detail">
+          <div class="rd-name">${data.nama}</div>
+          <div class="rd-row"><span>ID Registrasi</span><span>${data.reg_id}</span></div>
+          <div class="rd-row"><span>Kloter</span><span>${data.kloter}</span></div>
+          <div class="rd-row"><span>Jumlah hadir</span><span>${jumlah} orang</span></div>
+          <div class="rd-row"><span>Waktu check-in</span><span>${waktu}</span></div>
+        </div>
+        <div id="status" class="dup" style="display:block;margin-top:1rem">
+          ⚠️ Peserta ini sudah check-in sebelumnya.
+        </div>
+      </div>
+    `;
+  }
+
+  /* ══════════════════════════════════════════════
+     INVALID / ERROR
+  ══════════════════════════════════════════════ */
+  function showInvalid(title, sub) {
+    card.innerHTML = `
+      <div class="invalid-wrap">
+        <div class="invalid-icon">⚠️</div>
+        <div class="invalid-title">${title}</div>
+        <div class="invalid-sub">${sub}</div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>

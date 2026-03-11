@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrasi Sholat Idul Fitri 1447H — UMMI Masjid</title>
+  <style>
+    /* ══════════════════════════════════════════════
+       VARIABLES & RESET
+    ══════════════════════════════════════════════ */
+    :root {
+      --navy:       #002850;
+      --blue:       #003B73;
+      --gold:       #D4AF37;
+      --soft-gold:  #F2D06B;
+      --white:      #FFFFFF;
+      --gray:       #333333;
+      --light-bg:   #F7F9FC;
+      --border:     #E2E8F0;
+      --success:    #27ae60;
+      --danger:     #c0392b;
+      --bg:         var(--white);
+      --text:       var(--gray);
+      --card-bg:    var(--white);
+      --input-bg:   var(--light-bg);
+      --nav-bg:     rgba(255,255,255,0.94);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:        #0f1923;
+        --text:      #d0d8e4;
+        --card-bg:   #172030;
+        --input-bg:  #1e2d42;
+        --border:    #2a3d55;
+        --light-bg:  #1a2840;
+        --nav-bg:    rgba(15,25,35,0.95);
+        --gray:      #d0d8e4;
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.65;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ══════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; width: 100%;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border); z-index: 1000;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: auto; padding: 1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo { font-weight: 700; color: var(--blue); text-decoration: none; font-size: 1.1rem; }
+    .nav-logo:hover { color: var(--gold); }
+    .nav-links a {
+      margin-left: 1.5rem; text-decoration: none;
+      color: var(--text); font-weight: 500; font-size: 0.95rem;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--blue); background: none; border: none; }
+    @media (max-width: 768px) {
+      .nav-links {
+        position: absolute; top: 64px; left: 0; width: 100%;
+        background: var(--card-bg); display: none; flex-direction: column;
+        padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { margin: 0.6rem 0; }
+      .hamburger { display: block; }
+    }
+
+    /* ══════════════════════════════════════════════
+       HERO with Islamic geometric pattern
+    ══════════════════════════════════════════════ */
+    .page-hero {
+      padding: 7rem 1.5rem 3.5rem;
+      background: linear-gradient(150deg, var(--navy) 0%, #00437a 60%, #005a9e 100%);
+      text-align: center; color: white; position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='rgba(212,175,55,0.10)' stroke-width='1'%3E%3Cpolygon points='40,2 54,14 74,14 62,28 68,48 40,38 12,48 18,28 6,14 26,14'/%3E%3Cpolygon points='40,12 50,20 64,20 56,30 60,44 40,36 20,44 24,30 16,20 30,20'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 80px 80px;
+      opacity: 1;
+      pointer-events: none;
+    }
+    .page-hero > * { position: relative; z-index: 1; }
+    .page-hero .arabic {
+      display: block; font-size: 1.6rem; color: var(--soft-gold);
+      margin-bottom: 1rem; letter-spacing: 0.04em;
+    }
+    .page-hero h1 { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.3; }
+    .page-hero p { margin-top: 0.5rem; color: rgba(255,255,255,0.65); font-size: 0.95rem; }
+
+    /* Countdown */
+    .countdown-wrap {
+      margin-top: 1.8rem;
+      display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    }
+    .cd-box {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 14px; padding: 0.7rem 1.1rem; min-width: 64px;
+      backdrop-filter: blur(6px);
+    }
+    .cd-num {
+      font-size: 1.8rem; font-weight: 800; color: var(--soft-gold);
+      line-height: 1; display: block; font-variant-numeric: tabular-nums;
+    }
+    .cd-label { font-size: 0.65rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; display: block; }
+
+    /* ══════════════════════════════════════════════
+       COUNTER STRIP
+    ══════════════════════════════════════════════ */
+    .counter-strip {
+      background: var(--gold); color: var(--navy);
+      text-align: center; padding: 0.9rem 1rem;
+      font-weight: 700; font-size: 1rem;
+    }
+    .counter-strip .num { font-size: 1.45rem; margin: 0 0.2rem; }
+
+    /* ══════════════════════════════════════════════
+       PROGRESS STEPS
+    ══════════════════════════════════════════════ */
+    .progress-wrap {
+      max-width: 760px; margin: 2rem auto 0; padding: 0 1.5rem;
+    }
+    .progress-steps {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin-bottom: 2rem;
+    }
+    .ps-item {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      flex: 1; position: relative;
+    }
+    .ps-item:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 16px; left: calc(50% + 16px);
+      width: calc(100% - 32px); height: 2px;
+      background: var(--border);
+      transition: background 0.4s;
+    }
+    .ps-item.done:not(:last-child)::after,
+    .ps-item.active:not(:last-child)::after { background: var(--gold); }
+    .ps-circle {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--card-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: #aaa;
+      transition: all 0.4s; z-index: 1;
+    }
+    .ps-item.done .ps-circle { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+    .ps-item.active .ps-circle { background: var(--navy); border-color: var(--gold); color: var(--soft-gold); box-shadow: 0 0 0 4px rgba(212,175,55,0.2); }
+    .ps-label { font-size: 0.68rem; color: #aaa; font-weight: 500; text-align: center; }
+    .ps-item.active .ps-label { color: var(--gold); font-weight: 700; }
+    .ps-item.done .ps-label { color: var(--text); }
+
+    /* ══════════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════════ */
+    .page-body { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 6rem; }
+
+    /* ══════════════════════════════════════════════
+       CARD
+    ══════════════════════════════════════════════ */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2rem 2.2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .card-title {
+      font-size: 1rem; font-weight: 700; color: var(--blue);
+      padding-bottom: 0.8rem; margin-bottom: 1.2rem;
+      border-bottom: 2px solid var(--light-bg);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      .card-title { color: var(--soft-gold); }
+    }
+
+    /* ══════════════════════════════════════════════
+       ANNOUNCEMENT
+    ══════════════════════════════════════════════ */
+    .announcement {
+      background: rgba(0,59,115,0.07);
+      border-left: 4px solid var(--blue);
+      border-radius: 0 16px 16px 0;
+      padding: 1.4rem 1.8rem; margin-bottom: 1.8rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      .announcement { background: rgba(0,91,173,0.15); }
+    }
+    .announcement h2 {
+      font-size: 0.78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--blue); margin-bottom: 0.6rem;
+    }
+    @media (prefers-color-scheme: dark) { .announcement h2 { color: var(--soft-gold); } }
+    .announcement p { font-size: 0.95rem; line-height: 1.75; }
+
+    /* ══════════════════════════════════════════════
+       KLOTER BADGES
+    ══════════════════════════════════════════════ */
+    .kloter-badges { display: flex; gap: 0.7rem; flex-wrap: wrap; margin: 0.8rem 0 1.4rem; }
+    .kbadge {
+      background: var(--navy); border-radius: 12px;
+      padding: 0.7rem 1rem; text-align: center; flex: 1; min-width: 110px;
+    }
+    .kbadge .kname { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-bottom: 0.2rem; }
+    .kbadge .ktime { font-size: 1.1rem; font-weight: 700; color: var(--soft-gold); }
+
+    /* ══════════════════════════════════════════════
+       RULES
+    ══════════════════════════════════════════════ */
+    .rules-list { list-style: none; }
+    .rules-list li {
+      padding: 0.45rem 0 0.45rem 1.4rem; position: relative;
+      font-size: 0.92rem; color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .rules-list li:last-child { border-bottom: none; }
+    .rules-list li::before { content: "▸"; position: absolute; left: 0; color: var(--gold); }
+    hr.divider { border: none; border-top: 2px solid var(--light-bg); margin: 0 0 1.4rem; }
+
+    /* ══════════════════════════════════════════════
+       CAPACITY
+    ══════════════════════════════════════════════ */
+    .cap-item { margin-bottom: 1.1rem; }
+    .cap-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.35rem; }
+    .cap-label { font-weight: 600; color: var(--navy); }
+    @media (prefers-color-scheme: dark) { .cap-label { color: var(--soft-gold); } }
+    .cap-count { color: #888; }
+    .cap-track { background: var(--light-bg); border-radius: 99px; height: 9px; overflow: hidden; }
+    .cap-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--gold), var(--soft-gold));
+      transition: width 1.1s cubic-bezier(.4,0,.2,1); width: 0%;
+    }
+    .cap-fill.warn { background: linear-gradient(90deg, #e67e22, #f39c12); }
+    .cap-fill.full { background: #888; }
+    .cap-sisa { font-size: 0.78rem; margin-top: 0.3rem; font-weight: 600; color: var(--success); }
+    .cap-sisa.habis { color: var(--danger); }
+
+    /* ══════════════════════════════════════════════
+       CONSENT
+    ══════════════════════════════════════════════ */
+    .consent-body { text-align: center; padding: 0.5rem 0; }
+    .consent-body p { font-size: 0.93rem; line-height: 1.75; margin-bottom: 1.8rem; }
+    .consent-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-agree {
+      background: linear-gradient(135deg, var(--gold), var(--soft-gold));
+      color: var(--navy); border: none; cursor: pointer;
+      padding: 14px 40px; border-radius: 999px;
+      font-size: 1rem; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-agree:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,175,55,0.45); }
+    .btn-disagree {
+      background: var(--card-bg); color: #999; border: 1.5px solid var(--border); cursor: pointer;
+      padding: 14px 40px; border-radius: 999px; font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .btn-disagree:hover { background: var(--light-bg); }
+
+    /* ══════════════════════════════════════════════
+       FORM
+    ══════════════════════════════════════════════ */
+    #form-section { display: none; }
+    .form-group { margin-bottom: 1.15rem; position: relative; }
+    .form-group label {
+      display: block; font-size: 0.78rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.4rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    @media (prefers-color-scheme: dark) { .form-group label { color: var(--soft-gold); } }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 13px 16px; border-radius: 12px;
+      border: 1.5px solid var(--border); font-size: 0.95rem;
+      background: var(--input-bg); color: var(--text); outline: none;
+      transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.13);
+      background: var(--card-bg);
+    }
+    /* Validation states */
+    .form-group input.valid { border-color: var(--success); }
+    .form-group input.valid:focus { box-shadow: 0 0 0 4px rgba(39,174,96,0.12); }
+    .form-group input.invalid { border-color: var(--danger); }
+    .form-group input.invalid:focus { box-shadow: 0 0 0 4px rgba(192,57,43,0.12); }
+    .field-icon {
+      position: absolute; right: 14px; top: 38px;
+      font-size: 0.9rem; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .inline-error {
+      font-size: 0.75rem; color: var(--danger);
+      margin-top: 4px; display: none;
+    }
+    .inline-error.show { display: block; }
+    .helper { font-size: 0.75rem; color: #888; margin-top: 0.3rem; }
+
+    /* ══════════════════════════════════════════════
+       KLOTER PICKER CARDS
+    ══════════════════════════════════════════════ */
+    .kloter-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.15rem; }
+    @media (max-width: 480px) { .kloter-picker { grid-template-columns: 1fr; } }
+    .kloter-card { position: relative; cursor: pointer; }
+    .kloter-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .kloter-card-inner {
+      border: 1.5px solid var(--border); border-radius: 16px;
+      background: var(--input-bg); padding: 1rem; text-align: center;
+      transition: all 0.2s; position: relative; overflow: hidden;
+    }
+    .kloter-card-inner::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(212,175,55,0.08), transparent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .kloter-card input:checked ~ .kloter-card-inner {
+      border-color: var(--gold);
+      background: var(--card-bg);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.2), 0 4px 16px rgba(212,175,55,0.15);
+    }
+    .kloter-card input:checked ~ .kloter-card-inner::before { opacity: 1; }
+    .kloter-card input:disabled ~ .kloter-card-inner {
+      opacity: 0.45; cursor: not-allowed; filter: grayscale(0.5);
+    }
+    .kc-num { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .kc-time { font-size: 1.4rem; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+    @media (prefers-color-scheme: dark) { .kc-time { color: var(--soft-gold); } }
+    .kloter-card input:checked ~ .kloter-card-inner .kc-time { color: var(--navy); }
+    @media (prefers-color-scheme: dark) {
+      .kloter-card input:checked ~ .kloter-card-inner .kc-time { color: var(--navy); }
+    }
+    .kc-sisa { font-size: 0.72rem; font-weight: 600; margin-top: 2px; }
+    .kc-sisa.green { color: var(--success); }
+    .kc-sisa.orange { color: #e67e22; }
+    .kc-sisa.red { color: var(--danger); }
+    .kc-full-badge {
+      position: absolute; top: 6px; right: 6px;
+      background: var(--danger); color: white;
+      font-size: 0.6rem; font-weight: 700; border-radius: 6px; padding: 2px 6px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .kloter-label {
+      display: block; font-size: 0.78rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.6rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    @media (prefers-color-scheme: dark) { .kloter-label { color: var(--soft-gold); } }
+
+    /* ══════════════════════════════════════════════
+       STEPPER
+    ══════════════════════════════════════════════ */
+    .stepper-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.15rem;
+    }
+    @media (max-width: 520px) { .stepper-row { grid-template-columns: 1fr; } }
+    .stepper-group {
+      background: var(--input-bg); border-radius: 14px; padding: 1.1rem;
+      border: 1.5px solid var(--border);
+    }
+    .stepper-title {
+      font-size: 0.7rem; font-weight: 700; color: var(--blue);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem;
+    }
+    @media (prefers-color-scheme: dark) { .stepper-title { color: var(--soft-gold); } }
+    .stepper-sub { display: flex; align-items: center; justify-content: space-between; }
+    .stepper-sub .gender { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+    .stepper-ctrl { display: flex; align-items: center; gap: 10px; }
+    .stepper-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--card-bg);
+      font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--blue);
+      transition: all 0.15s; user-select: none; line-height: 1;
+    }
+    .stepper-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(212,175,55,0.08); }
+    .stepper-btn:active { transform: scale(0.88); }
+    .stepper-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+    .stepper-val {
+      font-size: 1rem; font-weight: 700; min-width: 22px; text-align: center;
+      color: var(--navy); transition: transform 0.15s;
+    }
+    @media (prefers-color-scheme: dark) { .stepper-val { color: var(--soft-gold); } }
+    .stepper-val.bump { transform: scale(1.4); }
+
+    .total-badge {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(0,59,115,0.06); border-radius: 10px;
+      padding: 10px 14px; font-size: 0.88rem; margin-bottom: 1.15rem;
+    }
+    @media (prefers-color-scheme: dark) { .total-badge { background: rgba(212,175,55,0.07); } }
+    .total-badge .t-label { color: #888; }
+    .total-badge .t-count { font-weight: 700; font-size: 1.05rem; color: var(--navy); }
+    @media (prefers-color-scheme: dark) { .total-badge .t-count { color: var(--soft-gold); } }
+    .total-badge.warn .t-count { color: var(--danger); }
+    .stepper-label {
+      display: block; font-size: 0.78rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.6rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    @media (prefers-color-scheme: dark) { .stepper-label { color: var(--soft-gold); } }
+
+    /* ══════════════════════════════════════════════
+       SUBMIT
+    ══════════════════════════════════════════════ */
+    .btn-submit {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, var(--blue), var(--navy));
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem;
+      box-shadow: 0 8px 24px rgba(0,40,80,0.25);
+      transition: transform 0.2s, box-shadow 0.2s; font-family: inherit;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,40,80,0.35); }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* ══════════════════════════════════════════════
+       LOADING
+    ══════════════════════════════════════════════ */
+    #loading-box {
+      display: none; text-align: center;
+      background: var(--card-bg); border: 1.5px solid var(--gold);
+      border-radius: 16px; padding: 2rem; margin-top: 1.2rem;
+    }
+    .spinner {
+      width: 38px; height: 38px; border: 3px solid rgba(212,175,55,0.2);
+      border-top-color: var(--gold); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 0.9rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-box p { font-weight: 600; color: var(--navy); }
+    @media (prefers-color-scheme: dark) { #loading-box p { color: var(--soft-gold); } }
+    #loading-box small { color: #888; }
+
+    /* ══════════════════════════════════════════════
+       E-TICKET
+    ══════════════════════════════════════════════ */
+    #success-section { display: none; }
+    .ticket {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .ticket-header {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white; padding: 2.2rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .ticket-header::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(212,175,55,0.12)' stroke-width='1'%3E%3Cpolygon points='30,2 40,10 54,10 44,20 48,34 30,26 12,34 16,20 6,10 20,10'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .ticket-header > * { position: relative; z-index: 1; }
+    .ticket-header .check { font-size: 3.5rem; margin-bottom: 0.5rem; animation: popIn 0.5s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+    @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .ticket-header h2 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+    .ticket-header p { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+    .ticket-body { padding: 2rem 2.2rem; text-align: center; }
+    .reg-id-box {
+      background: var(--navy); color: var(--soft-gold);
+      font-size: 1.35rem; font-weight: 700; letter-spacing: 0.12em;
+      padding: 0.9rem 1.5rem; border-radius: 12px;
+      display: inline-block; margin: 0.8rem 0 1.5rem; word-break: break-all;
+    }
+    .ticket-rows { text-align: left; }
+    .ticket-row {
+      display: flex; justify-content: space-between;
+      padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.92rem;
+    }
+    .ticket-row:last-child { border-bottom: none; }
+    .tkey { color: #888; }
+    .tval { font-weight: 600; color: var(--navy); text-align: right; }
+    @media (prefers-color-scheme: dark) { .tval { color: var(--soft-gold); } }
+    .ticket-note {
+      background: var(--light-bg); border-radius: 12px;
+      padding: 1rem 1.2rem; margin-top: 1.2rem;
+      font-size: 0.84rem; color: #888; line-height: 1.7;
+    }
+    /* WA button on ticket */
+    .btn-wa-ticket {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 1.2rem; padding: 13px 28px;
+      background: #25d366; color: white; border: none; border-radius: 999px;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(37,211,102,0.35);
+      transition: transform 0.2s, box-shadow 0.2s; font-family: inherit;
+      text-decoration: none;
+    }
+    .btn-wa-ticket:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(37,211,102,0.45); }
+    .btn-back {
+      display: inline-block; margin-top: 0.8rem; padding: 12px 28px;
+      background: var(--light-bg); color: var(--text); border-radius: 999px;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      border: 1.5px solid var(--border);
+      transition: background 0.2s;
+    }
+    .btn-back:hover { background: var(--border); }
+    .ticket-actions { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    }
+
+    /* ══════════════════════════════════════════════
+       CONTACT
+    ══════════════════════════════════════════════ */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 480px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-group h3 {
+      font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #888; margin-bottom: 0.7rem;
+    }
+    .wa-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--light-bg); color: var(--text);
+      text-decoration: none; padding: 7px 13px; border-radius: 8px;
+      font-size: 0.84rem; font-weight: 500; margin: 0.2rem 0.2rem 0 0;
+      border: 1px solid var(--border);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .wa-btn:hover { background: #d4edda; color: #1a5e1a; border-color: #b2dfdb; }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════ */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 2.5rem 1.5rem;
+      font-size: 0.88rem; line-height: 1.9;
+    }
+    footer strong { color: var(--soft-gold); }
+
+    /* ══════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy); color: white;
+      padding: 12px 22px; border-radius: 50px;
+      font-size: 0.85rem; font-weight: 600;
+      opacity: 0; transition: all 0.3s; z-index: 1100;
+      white-space: nowrap; max-width: 90vw; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.err { background: var(--danger); }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Masjid UMMI</a>
+      <button class="hamburger" onclick="toggleNav()">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Beranda</a>
+        <a href="../index.html#about">Tentang</a>
+        <a href="../index.html#support">Donasi</a>
+        <a href="../index.html#location">Lokasi</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="page-hero">
+    <span class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</span>
+    <h1>Registrasi Sholat Idul Fitri<br>1447H / 2026M</h1>
+    <p>Masjid UMMI · Suzuka, Prefektur Mie, Jepang</p>
+    <div class="countdown-wrap">
+      <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Hari</span></div>
+      <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Jam</span></div>
+      <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Menit</span></div>
+      <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Detik</span></div>
+    </div>
+  </div>
+
+  <!-- COUNTER STRIP -->
+  <div class="counter-strip">
+    Total Pendaftar Saat Ini: <span class="num" id="counter-total">—</span> Jamaah
+  </div>
+
+  <!-- PROGRESS STEPS -->
+  <div class="progress-wrap">
+    <div class="progress-steps" id="progress-steps">
+      <div class="ps-item active" id="ps-1">
+        <div class="ps-circle">1</div>
+        <div class="ps-label">Tata Tertib</div>
+      </div>
+      <div class="ps-item" id="ps-2">
+        <div class="ps-circle">2</div>
+        <div class="ps-label">Persetujuan</div>
+      </div>
+      <div class="ps-item" id="ps-3">
+        <div class="ps-circle">3</div>
+        <div class="ps-label">Isi Form</div>
+      </div>
+      <div class="ps-item" id="ps-4">
+        <div class="ps-circle">✓</div>
+        <div class="ps-label">Selesai</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ANNOUNCEMENT -->
+    <div class="announcement">
+      <h2>📢 Pengumuman</h2>
+      <p>
+        Assalamualaikum warahmatullahi wabarakatuh.<br><br>
+        <strong>Pendaftaran Sholat Idul Fitri 1447 H di Masjid UMMI, Suzuka, Mie telah dibuka.</strong><br><br>
+        Silakan membaca tata tertib terlebih dahulu sebelum melakukan pendaftaran. Jazakumullahu khairan
+        atas perhatian dan kerjasama Anda.
+      </p>
+    </div>
+
+    <!-- RULES -->
+    <div class="card">
+      <div class="card-title">📋 Tata Tertib Pelaksanaan</div>
+      <p style="font-size:0.88rem;color:#888;margin-bottom:0.7rem">Estimasi waktu pelaksanaan:</p>
+      <div class="kloter-badges">
+        <div class="kbadge"><div class="kname">Kloter 1</div><div class="ktime">06.30</div></div>
+        <div class="kbadge"><div class="kname">Kloter 2</div><div class="ktime">07.00</div></div>
+        <div class="kbadge"><div class="kname">Kloter 3</div><div class="ktime">08.00</div></div>
+      </div>
+      <hr class="divider">
+      <ul class="rules-list">
+        <li>Sholat Idul Fitri dibagi menjadi 3 kloter, masing-masing ±100 jamaah (diatur panitia).</li>
+        <li>Wajib registrasi terlebih dahulu melalui form di bawah ini.</li>
+        <li>Satu kali registrasi dapat untuk beberapa orang — isi jumlah jamaah sesuai yang hadir.</li>
+        <li>Waktu dapat berubah sesuai kondisi dan diatur sepenuhnya oleh panitia.</li>
+        <li>Datang sebelum sholat dimulai dan tertib.</li>
+        <li>Berpakaian rapi dan menutup aurat.</li>
+        <li>Disarankan berwudhu dari rumah.</li>
+        <li>Bagi yang datang dengan kendaraan pribadi, silahkan parkir di coin parking terdekat.</li>
+        <li>Dilarang merokok di dalam dan sekitar masjid.</li>
+        <li>Jaga kebersihan lingkungan dan barang bawaan masing-masing.</li>
+        <li>Jika kapasitas kloter penuh, silakan pilih kloter lain yang tersedia.</li>
+        <li>Hubungi panitia jika terjadi hal yang tidak diinginkan.</li>
+      </ul>
+    </div>
+
+    <!-- CAPACITY -->
+    <div class="card">
+      <div class="card-title">📊 Kapasitas Per Kloter</div>
+      <div class="cap-item">
+        <div class="cap-row"><span class="cap-label">Kloter 1 — 06.30</span><span class="cap-count" id="ct1">Memuat...</span></div>
+        <div class="cap-track"><div class="cap-fill" id="cb1"></div></div>
+        <div class="cap-sisa" id="cs1"></div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-row"><span class="cap-label">Kloter 2 — 07.00</span><span class="cap-count" id="ct2">Memuat...</span></div>
+        <div class="cap-track"><div class="cap-fill" id="cb2"></div></div>
+        <div class="cap-sisa" id="cs2"></div>
+      </div>
+      <div class="cap-item">
+        <div class="cap-row"><span class="cap-label">Kloter 3 — 08.00</span><span class="cap-count" id="ct3">Memuat...</span></div>
+        <div class="cap-track"><div class="cap-fill" id="cb3"></div></div>
+        <div class="cap-sisa" id="cs3"></div>
+      </div>
+    </div>
+
+    <!-- CONSENT -->
+    <div class="card" id="consent-card">
+      <div class="card-title">📜 Persetujuan Tata Tertib</div>
+      <div class="consent-body">
+        <p>
+          Mohon membaca dan memahami tata tertib di atas sebelum melanjutkan.<br><br>
+          Jika Anda menyetujui seluruh ketentuan yang berlaku, silakan tekan <strong>"Saya Setuju"</strong> untuk menuju formulir pendaftaran.
+          Apabila tidak setuju, silakan tekan <strong>"Tidak Setuju"</strong> untuk kembali ke halaman utama.<br><br>
+          Jazakumullahu khairan atas perhatian dan pengertiannya.
+        </p>
+        <div class="consent-btns">
+          <button class="btn-agree" onclick="showForm()">✅ Saya Setuju</button>
+          <button class="btn-disagree" onclick="location.href='../index.html'">❌ Tidak Setuju</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div id="form-section">
+      <div class="card">
+        <div class="card-title">📝 Formulir Pendaftaran</div>
+
+        <!-- mini counter -->
+        <div style="background:var(--light-bg);border-radius:12px;padding:0.85rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);">
+          <span style="font-size:0.84rem;color:#888">Total pendaftar saat ini</span>
+          <span style="font-weight:700;color:var(--navy);font-size:1.05rem" id="counter-form">—</span>
+        </div>
+
+        <!-- Nama -->
+        <div class="form-group">
+          <label>Nama Lengkap *</label>
+          <input type="text" id="f-nama" placeholder="Masukkan nama lengkap Anda" autocomplete="name">
+          <span class="field-icon" id="icon-nama"></span>
+          <div class="inline-error" id="err-nama">Nama tidak boleh kosong</div>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="form-group">
+          <label>No. HP / WhatsApp *</label>
+          <input type="text" id="f-phone" placeholder="080-1234-5678 atau 08123456789" inputmode="tel" autocomplete="tel">
+          <span class="field-icon" id="icon-phone"></span>
+          <div class="helper">Untuk konfirmasi &amp; pengiriman QR code (format Japan atau Indonesia)</div>
+          <div class="inline-error" id="err-phone">Nomor HP tidak boleh kosong</div>
+        </div>
+
+        <!-- Alamat -->
+        <div class="form-group">
+          <label>Alamat</label>
+          <input type="text" id="f-kota" placeholder="Contoh: 3-chōme-3-28 Sanjo, Suzuka, Mie 513-0806">
+        </div>
+
+        <!-- Stepper Ikhwan & Akhwat -->
+        <span class="stepper-label">Jumlah Jamaah *</span>
+        <div class="stepper-row">
+          <div class="stepper-group">
+            <div class="stepper-title">🧑 Ikhwan (Laki-laki)</div>
+            <div class="stepper-sub">
+              <span class="gender">Jumlah</span>
+              <div class="stepper-ctrl">
+                <button type="button" class="stepper-btn" onclick="step('ikhwan', -1)" id="ikhwan-minus" disabled>−</button>
+                <span class="stepper-val" id="ikhwan-val">0</span>
+                <button type="button" class="stepper-btn" onclick="step('ikhwan', 1)">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="stepper-group">
+            <div class="stepper-title">🧕 Akhwat (Perempuan)</div>
+            <div class="stepper-sub">
+              <span class="gender">Jumlah</span>
+              <div class="stepper-ctrl">
+                <button type="button" class="stepper-btn" onclick="step('akhwat', -1)" id="akhwat-minus" disabled>−</button>
+                <span class="stepper-val" id="akhwat-val">0</span>
+                <button type="button" class="stepper-btn" onclick="step('akhwat', 1)">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="total-badge warn" id="total-badge">
+          <span class="t-label">Total jamaah</span>
+          <span class="t-count" id="total-count">0 orang</span>
+        </div>
+        <div class="inline-error" id="err-jamaah" style="margin-top:-0.8rem;margin-bottom:1rem;">Jumlah jamaah minimal 1 orang</div>
+
+        <!-- Kloter Picker Cards -->
+        <span class="kloter-label">Pilih Kloter *</span>
+        <div class="kloter-picker" id="kloter-picker">
+          <label class="kloter-card">
+            <input type="radio" name="kloter" value="Kloter 1 - 06.30" id="kopt1">
+            <div class="kloter-card-inner" id="kcinner1">
+              <div class="kc-num">Kloter 1</div>
+              <div class="kc-time">06.30</div>
+              <div class="kc-sisa green" id="kc-sisa1">Memuat...</div>
+            </div>
+          </label>
+          <label class="kloter-card">
+            <input type="radio" name="kloter" value="Kloter 2 - 07.00" id="kopt2">
+            <div class="kloter-card-inner" id="kcinner2">
+              <div class="kc-num">Kloter 2</div>
+              <div class="kc-time">07.00</div>
+              <div class="kc-sisa green" id="kc-sisa2">Memuat...</div>
+            </div>
+          </label>
+          <label class="kloter-card">
+            <input type="radio" name="kloter" value="Kloter 3 - 08.00" id="kopt3">
+            <div class="kloter-card-inner" id="kcinner3">
+              <div class="kc-num">Kloter 3</div>
+              <div class="kc-time">08.00</div>
+              <div class="kc-sisa green" id="kc-sisa3">Memuat...</div>
+            </div>
+          </label>
+        </div>
+        <div class="inline-error" id="err-kloter" style="margin-top:-0.8rem;margin-bottom:1rem;">Silakan pilih kloter</div>
+
+        <!-- Catatan -->
+        <div class="form-group">
+          <label>Pesan / Catatan</label>
+          <textarea id="f-pesan" rows="3" placeholder="Opsional — kebutuhan khusus, pertanyaan, dsb."></textarea>
+        </div>
+
+        <button class="btn-submit" id="btn-submit" onclick="submitForm()">
+          Daftar Sekarang →
+        </button>
+      </div>
+
+      <div id="loading-box">
+        <div class="spinner"></div>
+        <p>⏳ Mohon ditunggu, jangan refresh halaman.</p>
+        <small>Sistem sedang memproses pendaftaran Anda.</small>
+      </div>
+    </div>
+
+    <!-- E-TICKET -->
+    <div id="success-section">
+      <div class="ticket">
+        <div class="ticket-header">
+          <div class="check">✅</div>
+          <h2>Pendaftaran Berhasil!</h2>
+          <p>Jazakumullahu khairan — Anda telah terdaftar untuk Sholat Idul Fitri 1447H.</p>
+        </div>
+        <div class="ticket-body">
+          <p style="font-size:0.84rem;color:#aaa;margin-bottom:0.3rem">ID Registrasi Anda</p>
+          <div class="reg-id-box" id="reg-id-display">UMMI-1447H-0001</div>
+          <div class="ticket-rows">
+            <div class="ticket-row"><span class="tkey">Nama</span><span class="tval" id="tk-nama">—</span></div>
+            <div class="ticket-row"><span class="tkey">Kloter</span><span class="tval" id="tk-kloter">—</span></div>
+            <div class="ticket-row"><span class="tkey">Jumlah Jamaah</span><span class="tval" id="tk-total">—</span></div>
+            <div class="ticket-row"><span class="tkey">Ikhwan / Akhwat</span><span class="tval" id="tk-split">—</span></div>
+          </div>
+          <div class="ticket-note">
+            📌 Simpan ID registrasi ini sebagai bukti pendaftaran.<br>
+            Tunjukkan kepada panitia saat tiba di lokasi sholat.<br><br>
+            💬 Tekan tombol di bawah untuk membuka WhatsApp dan menerima link QR code Anda.
+          </div>
+          <div class="ticket-actions">
+            <a href="#" class="btn-wa-ticket" id="btn-wa-manual" target="_blank">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Buka WhatsApp — Terima QR Code
+            </a>
+            <a href="../index.html" class="btn-back">← Kembali ke Beranda</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="card" style="margin-top:2rem">
+      <div class="card-title">📞 Hubungi Panitia</div>
+      <div class="contact-grid">
+        <div class="contact-group">
+          <h3>Ikhwan</h3>
+          <a class="wa-btn" href="https://wa.me/819099190682" target="_blank">💬 Bpk. Kasan</a>
+          <a class="wa-btn" href="https://wa.me/819052949577" target="_blank">💬 Bpk. Yulianto</a>
+          <a class="wa-btn" href="https://wa.me/6282293066965" target="_blank">💬 Moan</a>
+        </div>
+        <div class="contact-group">
+          <h3>Akhwat</h3>
+          <a class="wa-btn" href="https://wa.me/819076718193" target="_blank">💬 Ibu Rosi</a>
+          <a class="wa-btn" href="https://wa.me/818075245247" target="_blank">💬 Salma</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-body -->
+
+  <footer>
+    <strong>UMMI Masjid</strong> · Suzuka, Mie Prefecture, Japan<br>
+    "Whoever builds a masjid for Allah, Allah will build for him a house in Paradise." — Nabi ﷺ<br><br>
+    © 2026 UMMI Masjid · ummi.jp
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ══════════════════════════════════════════════
+       CONFIG
+    ══════════════════════════════════════════════ */
+    const KAPASITAS = 100;
+    const IDUL_FITRI_DATE = new Date('2026-03-31T06:30:00+09:00'); // Adjust as needed
+
+    const KLOTERS = [
+      { id: 1, key: "Kloter 1 - 06.30" },
+      { id: 2, key: "Kloter 2 - 07.00" },
+      { id: 3, key: "Kloter 3 - 08.00" },
+    ];
+
+    const SB_URL = "https://szwjiylicvvixrqxxfqv.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6d2ppeWxpY3Z2aXhycXh4ZnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzYzNTAsImV4cCI6MjA4ODc1MjM1MH0.10mHqDRh6w9B7JJ70_dxZiSVBpnwaQEt0nGGulsrWV4";
+    const TABLE  = "registrasi_idulfitri";
+
+    /* ══════════════════════════════════════════════
+       COUNTDOWN
+    ══════════════════════════════════════════════ */
+    function updateCountdown() {
+      const now  = new Date();
+      const diff = IDUL_FITRI_DATE - now;
+      if (diff <= 0) {
+        document.querySelector('.countdown-wrap').innerHTML = '<div class="cd-box"><span class="cd-num" style="font-size:1.2rem">Hari H! 🌙</span></div>';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+      document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+      document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+      document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    /* ══════════════════════════════════════════════
+       PROGRESS STEPS
+    ══════════════════════════════════════════════ */
+    function setStep(n) {
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById('ps-' + i);
+        el.className = 'ps-item' + (i < n ? ' done' : i === n ? ' active' : '');
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       STEPPER
+    ══════════════════════════════════════════════ */
+    const counts = { ikhwan: 0, akhwat: 0 };
+
+    function step(key, delta) {
+      const next = counts[key] + delta;
+      if (next < 0 || next > 20) return;
+      counts[key] = next;
+      const valEl = document.getElementById(key + '-val');
+      valEl.textContent = next;
+      valEl.classList.add('bump');
+      setTimeout(() => valEl.classList.remove('bump'), 150);
+      document.getElementById(key + '-minus').disabled = next === 0;
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const t = counts.ikhwan + counts.akhwat;
+      document.getElementById('total-count').textContent = t + ' orang';
+      document.getElementById('total-badge').className = 'total-badge' + (t === 0 ? ' warn' : '');
+      if (t > 0) document.getElementById('err-jamaah').classList.remove('show');
+    }
+
+    /* ══════════════════════════════════════════════
+       INLINE VALIDATION
+    ══════════════════════════════════════════════ */
+    function validateField(id, iconId, errId) {
+      const inp = document.getElementById(id);
+      const icon = document.getElementById(iconId);
+      const err = document.getElementById(errId);
+      inp.addEventListener('blur', () => {
+        const ok = inp.value.trim().length > 0;
+        inp.className = ok ? 'valid' : 'invalid';
+        icon.textContent = ok ? '✅' : '❌';
+        err.classList.toggle('show', !ok);
+      });
+      inp.addEventListener('input', () => {
+        if (inp.value.trim().length > 0) {
+          inp.className = 'valid';
+          icon.textContent = '✅';
+          err.classList.remove('show');
+        }
+      });
+    }
+    validateField('f-nama',  'icon-nama',  'err-nama');
+    validateField('f-phone', 'icon-phone', 'err-phone');
+
+    /* ══════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════ */
+    function showToast(msg, isErr = true) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (isErr ? ' err' : '');
+      setTimeout(() => t.className = 'toast', 3200);
+    }
+
+    /* ══════════════════════════════════════════════
+       CONFETTI
+    ══════════════════════════════════════════════ */
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const colors = ['#D4AF37','#F2D06B','#002850','#003B73','#fff','#27ae60'];
+      const pieces = Array.from({length: 120}, () => ({
+        x: Math.random() * canvas.width,
+        y: -10 - Math.random() * 100,
+        r: 4 + Math.random() * 6,
+        d: 1.5 + Math.random() * 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.random() * 10 - 5,
+        tiltAngle: 0,
+        tiltSpeed: 0.05 + Math.random() * 0.08
+      }));
+      let frame = 0;
+      const maxFrames = 180;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.tiltAngle += p.tiltSpeed;
+          p.y += p.d;
+          p.tilt = Math.sin(p.tiltAngle) * 12;
+          ctx.beginPath();
+          ctx.lineWidth = p.r;
+          ctx.strokeStyle = p.color;
+          ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+          ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+          ctx.stroke();
+        });
+        frame++;
+        if (frame < maxFrames) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      draw();
+    }
+
+    /* ══════════════════════════════════════════════
+       SUPABASE HELPER
+    ══════════════════════════════════════════════ */
+    async function sbFetch(path, opts = {}) {
+      const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
+        headers: {
+          "apikey": SB_KEY,
+          "Authorization": `Bearer ${SB_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation",
+          ...(opts.headers || {}),
+        },
+        ...opts,
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.status === 204 ? null : res.json();
+    }
+
+    /* ══════════════════════════════════════════════
+       LOAD STATS — updates both capacity bars AND kloter cards
+    ══════════════════════════════════════════════ */
+    async function loadStats() {
+      try {
+        const rows = await sbFetch(`${TABLE}?select=kloter,ikhwan,akhwat`);
+        let total = 0;
+        const byK = { 1: 0, 2: 0, 3: 0 };
+
+        rows.forEach(r => {
+          const n = (parseInt(r.ikhwan) || 0) + (parseInt(r.akhwat) || 0);
+          total += n;
+          KLOTERS.forEach(k => { if (r.kloter === k.key) byK[k.id] += n; });
+        });
+
+        document.getElementById("counter-total").textContent = total.toLocaleString();
+        const cf = document.getElementById("counter-form");
+        if (cf) cf.textContent = total.toLocaleString() + " jamaah";
+
+        KLOTERS.forEach(({ id }) => {
+          const terisi = byK[id];
+          const sisa   = KAPASITAS - terisi;
+          const pct    = Math.min(100, Math.round(terisi / KAPASITAS * 100));
+          const isFull = sisa <= 0;
+
+          // Capacity bars
+          const bar = document.getElementById(`cb${id}`);
+          if (bar) { bar.style.width = pct + "%"; bar.className = "cap-fill" + (isFull ? " full" : pct >= 80 ? " warn" : ""); }
+          const ct = document.getElementById(`ct${id}`);
+          if (ct) ct.textContent = `${terisi} / ${KAPASITAS}`;
+          const cs = document.getElementById(`cs${id}`);
+          if (cs) { cs.textContent = isFull ? "🔴 Penuh" : `🟢 Sisa ${sisa} tempat`; cs.className = "cap-sisa" + (isFull ? " habis" : ""); }
+
+          // Kloter picker cards
+          const opt = document.getElementById(`kopt${id}`);
+          const sisaEl = document.getElementById(`kc-sisa${id}`);
+          const inner = document.getElementById(`kcinner${id}`);
+
+          // Remove existing full badge if any
+          const existingBadge = inner?.querySelector('.kc-full-badge');
+          if (existingBadge) existingBadge.remove();
+
+          if (opt) opt.disabled = isFull;
+          if (sisaEl) {
+            if (isFull) {
+              sisaEl.textContent = 'Penuh';
+              sisaEl.className = 'kc-sisa red';
+              const badge = document.createElement('div');
+              badge.className = 'kc-full-badge';
+              badge.textContent = 'PENUH';
+              inner?.appendChild(badge);
+            } else {
+              sisaEl.textContent = `Sisa ${sisa} tempat`;
+              sisaEl.className = 'kc-sisa' + (pct >= 80 ? ' orange' : ' green');
+            }
+          }
+        });
+      } catch (e) {
+        console.warn("Gagal load stats:", e);
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       GENERATE REG ID
+    ══════════════════════════════════════════════ */
+    async function generateRegId() {
+      try {
+        const data = await sbFetch(`${TABLE}?select=id&order=id.desc&limit=1`);
+        const next = data.length ? data[0].id + 1 : 1;
+        return `UMMI-1447H-${String(next).padStart(4, "0")}`;
+      } catch {
+        return `UMMI-1447H-${String(Date.now()).slice(-4)}`;
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       CONSENT
+    ══════════════════════════════════════════════ */
+    function showForm() {
+      document.getElementById("consent-card").style.display = "none";
+      document.getElementById("form-section").style.display = "block";
+      setStep(3);
+      document.getElementById("form-section").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    /* ══════════════════════════════════════════════
+       SUBMIT
+    ══════════════════════════════════════════════ */
+    async function submitForm() {
+      const nama   = document.getElementById("f-nama").value.trim();
+      const phone  = document.getElementById("f-phone").value.trim();
+      const kota   = document.getElementById("f-kota").value.trim();
+      const ikhwan = counts.ikhwan;
+      const akhwat = counts.akhwat;
+      const kloterEl = document.querySelector('input[name="kloter"]:checked');
+      const kloter = kloterEl ? kloterEl.value : '';
+      const pesan  = document.getElementById("f-pesan").value.trim();
+
+      // Validate
+      let ok = true;
+      if (!nama) {
+        document.getElementById('f-nama').className = 'invalid';
+        document.getElementById('icon-nama').textContent = '❌';
+        document.getElementById('err-nama').classList.add('show');
+        ok = false;
+      }
+      if (!phone) {
+        document.getElementById('f-phone').className = 'invalid';
+        document.getElementById('icon-phone').textContent = '❌';
+        document.getElementById('err-phone').classList.add('show');
+        ok = false;
+      }
+      if (ikhwan + akhwat < 1) {
+        document.getElementById('err-jamaah').classList.add('show');
+        ok = false;
+      }
+      if (!kloter) {
+        document.getElementById('err-kloter').classList.add('show');
+        ok = false;
+      }
+      if (!ok) { showToast('Mohon lengkapi semua data yang wajib diisi'); return; }
+
+      const btn = document.getElementById("btn-submit");
+      btn.disabled = true;
+      btn.textContent = '⏳ Mendaftar...';
+      document.getElementById("loading-box").style.display = "block";
+
+      try {
+        const regId = await generateRegId();
+        const total = ikhwan + akhwat;
+
+        await sbFetch(TABLE, {
+          method: "POST",
+          body: JSON.stringify({
+            reg_id: regId, nama, kota, kloter, ikhwan, akhwat, pesan,
+            phone,
+          }),
+        });
+
+        document.getElementById("form-section").style.display = "none";
+        document.getElementById("loading-box").style.display  = "none";
+
+        document.getElementById("reg-id-display").textContent = regId;
+        document.getElementById("tk-nama").textContent   = nama;
+        document.getElementById("tk-kloter").textContent = kloter;
+        document.getElementById("tk-total").textContent  = total + " orang";
+        document.getElementById("tk-split").textContent  = `${ikhwan} ikhwan / ${akhwat} akhwat`;
+
+        // Build WA link
+        let wa = phone.replace(/[^0-9]/g, '');
+        if (wa.startsWith('070') || wa.startsWith('080') || wa.startsWith('090')) wa = '81' + wa.substring(1);
+        else if (wa.startsWith('08')) wa = '62' + wa.substring(1);
+
+        const qrLink = `https://ummi.jp/event/qrcode.html?d=${btoa(JSON.stringify({ id: regId, jumlah: total }))}`;
+        const message =
+          `Assalamu'alaikum warahmatullahi wabarakatuh.\n\n` +
+          `Pendaftaran Sholat Idul Fitri 1447H di Masjid UMMI berhasil! ✅\n\n` +
+          `📋 Detail Pendaftaran:\n` +
+          `• Nama     : ${nama}\n` +
+          `• Kloter   : ${kloter}\n` +
+          `• Jamaah   : ${total} orang (${ikhwan} ikhwan / ${akhwat} akhwat)\n` +
+          `• ID Reg   : ${regId}\n\n` +
+          `🎫 QR Code Anda:\n${qrLink}\n\n` +
+          `Tunjukkan QR code ini kepada panitia saat tiba di lokasi.\n\n` +
+          `Jazakumullahu khairan. 🌙`;
+
+        const waUrl = wa ? `https://wa.me/${wa}?text=${encodeURIComponent(message)}` : '#';
+        document.getElementById('btn-wa-manual').href = waUrl;
+
+        setStep(4);
+        document.getElementById("success-section").style.display = "block";
+        document.getElementById("success-section").scrollIntoView({ behavior: "smooth" });
+        launchConfetti();
+        loadStats();
+
+        // Auto-redirect after 2.5s if WA available
+        if (wa) {
+          setTimeout(() => { window.location.href = waUrl; }, 2500);
+        }
+
+      } catch (err) {
+        document.getElementById("loading-box").style.display = "none";
+        btn.disabled = false;
+        btn.textContent = 'Daftar Sekarang →';
+        showToast('Terjadi kesalahan. Silakan coba lagi.', true);
+        console.error(err);
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════ */
+    function toggleNav() {
+      document.getElementById("nav-links").classList.toggle("open");
+    }
+    document.querySelectorAll("#nav-links a").forEach(a =>
+      a.addEventListener("click", () => document.getElementById("nav-links").classList.remove("open"))
+    );
+
+    /* ══════════════════════════════════════════════
+       INIT
+    ══════════════════════════════════════════════ */
+    setStep(1);
+    // Step 2 when scrolling to consent
+    const consentObs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) setStep(2);
+    }, { threshold: 0.5 });
+    consentObs.observe(document.getElementById('consent-card'));
+
+    loadStats();
+    setInterval(loadStats, 30_000);
+  </script>
+</body>
+</html>
