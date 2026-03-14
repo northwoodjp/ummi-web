@@ -460,21 +460,32 @@
     }
     .wa-btn:hover { background: #d4edda; color: #1a5e1a; border-color: #a8d5b5; }
 
-/* ── FLOATING BUTTONS ── */
-
-.floating-donate {
-  position: fixed; /* Ensures the button floats */
-  bottom: 20px; /* Distance from the bottom of the screen */
-  right: 20px;  /* Distance from the right edge of the screen */
+/* ══════════════════════════════════════════════
+       FLOATING BUTTON
+    ══════════════════════════════════════════════ */
+   
+.floating-button {
+  position: fixed; /* Ensures it floats */
+  bottom: 20px; /* Distance from bottom of the screen */
+  right: 20px;  /* Distance from the right edge */
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  font-size: 0.9rem;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+  color: white; /* Text color */
+  background-color: #D4AF37; /* Button background color */
+  padding: 12px 20px; /* Adds button-like spacing */
+  border: none; /* Removes any default borders */
+  border-radius: 50px; /* Makes it look like a button */
+  text-decoration: none; /* Removes underlines from links */
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); /* Adds a shadow effect */
+  cursor: pointer; /* Makes it look clickable */
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
-.floating-donate:hover {
-  transform: translateY(-2px);
+.floating-button:hover {
+  transform: translateY(-2px); /* Creates a hover animation */
+  background-color: #B89930; /* Slightly darker shade on hover */
   box-shadow: 0 16px 40px rgba(212, 175, 55, 0.5);
 }
 
@@ -801,8 +812,8 @@
 
   </div>
 
-<!-- ==================== FLOATING BUTTONS ==================== -->
-  <a href="../index.html#location" class="floating-donate">📍Lokasi</a>
+<!-- ==================== FLOATING BUTTON ==================== -->
+  <a href="../index.html#location" class="floating-button">📍Lokasi</a>
 
   <footer>
     <strong>UMMI Masjid</strong> · Suzuka, Mie Prefecture, Japan<br>
