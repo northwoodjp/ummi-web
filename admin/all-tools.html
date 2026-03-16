@@ -186,11 +186,10 @@
     /* ══════════════════════════════
        DAFTAR JAMAAH
     ══════════════════════════════ */
-     .search-bar {
+    .search-bar {
       display: flex; gap: 0.6rem; margin-bottom: 1rem;
       flex-wrap: wrap;
     }
-
     .search-bar input {
       flex: 1; padding: 10px 14px; border-radius: 10px;
       border: 1.5px solid var(--border); font-size: 0.88rem;
@@ -231,6 +230,143 @@
 
     .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
     .table-empty { text-align: center; padding: 2rem; color: #aaa; font-size: 0.88rem; }
+
+    /* Action buttons in table */
+    .action-btns { display: flex; gap: 6px; flex-wrap: nowrap; }
+
+    /* ══════════════════════════════
+       CHECK-IN MANUAL MODAL
+    ══════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0, 20, 50, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
+      border: 1px solid var(--border);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1.4rem;
+    }
+    .modal-title {
+      font-size: 1.1rem; font-weight: 800; color: var(--navy);
+    }
+    .modal-subtitle {
+      font-size: 0.8rem; color: var(--muted); margin-top: 2px;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+    }
+    .modal-close {
+      background: var(--bg); border: 1px solid var(--border);
+      width: 32px; height: 32px; border-radius: 8px;
+      cursor: pointer; font-size: 1rem; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s;
+    }
+    .modal-close:hover { background: var(--border); color: var(--navy); }
+
+    /* Jamaah info strip in modal */
+    .modal-info {
+      background: var(--bg); border-radius: 10px;
+      padding: 0.9rem 1rem; margin-bottom: 1.4rem;
+      border: 1px solid var(--border);
+    }
+    .modal-info-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.82rem; padding: 3px 0;
+    }
+    .modal-info-row .mkey { color: var(--muted); }
+    .modal-info-row .mval { font-weight: 700; color: var(--navy); }
+
+    /* Stepper */
+    .stepper-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--navy);
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .stepper-hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.8rem; }
+    .stepper {
+      display: flex; align-items: center; gap: 0;
+      border: 1.5px solid var(--border); border-radius: 12px;
+      overflow: hidden; margin-bottom: 1.2rem; background: var(--white);
+    }
+    .stepper-btn {
+      width: 52px; height: 52px; border: none; background: var(--bg);
+      font-size: 1.4rem; font-weight: 700; color: var(--navy);
+      cursor: pointer; flex-shrink: 0; transition: background 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stepper-btn:hover { background: #DDE5EF; }
+    .stepper-btn:active { background: #CED8E8; }
+    .stepper-val {
+      flex: 1; text-align: center;
+      font-size: 1.8rem; font-weight: 800; color: var(--navy);
+      font-family: 'IBM Plex Mono', monospace;
+      border-left: 1.5px solid var(--border);
+      border-right: 1.5px solid var(--border);
+      user-select: none; line-height: 52px; height: 52px;
+    }
+
+    /* Notes field in modal */
+    .modal-textarea {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-size: 0.88rem; font-family: 'DM Sans', sans-serif;
+      resize: none; outline: none; background: #F7F9FC;
+      color: #1a1a1a; transition: border-color 0.2s;
+      margin-bottom: 1.4rem;
+    }
+    .modal-textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.12); background: var(--white); }
+
+    /* Modal action buttons */
+    .modal-actions { display: flex; gap: 0.7rem; }
+    .btn-modal-cancel {
+      flex: 1; padding: 12px;
+      background: var(--white); color: var(--muted);
+      border: 1.5px solid var(--border); border-radius: 11px;
+      font-size: 0.9rem; font-weight: 600;
+      font-family: 'DM Sans', sans-serif; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-modal-cancel:hover { background: var(--bg); color: var(--navy); }
+    .btn-modal-submit {
+      flex: 2; padding: 12px;
+      background: linear-gradient(135deg, var(--success), #27ae60);
+      color: white; border: none; border-radius: 11px;
+      font-size: 0.9rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif; cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-modal-submit:hover { opacity: 0.9; }
+    .btn-modal-submit:active { transform: scale(0.98); }
+    .btn-modal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Already checked-in warning */
+    .modal-already-checked {
+      background: var(--success-bg); border: 1px solid #a9d9b8;
+      border-radius: 10px; padding: 0.9rem 1rem;
+      margin-bottom: 1.2rem; display: none;
+    }
+    .modal-already-checked.show { display: flex; align-items: center; gap: 8px; }
+    .mac-icon { font-size: 1.2rem; }
+    .mac-text { font-size: 0.83rem; color: var(--success); font-weight: 600; }
 
     /* ══════════════════════════════
        QR GENERATOR
@@ -418,6 +554,64 @@
 </div>
 
 <!-- ════════════════════════════════
+     CHECK-IN MANUAL MODAL
+════════════════════════════════ -->
+<div class="modal-overlay" id="checkinModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">✅ Check-in Manual</div>
+        <div class="modal-subtitle" id="modal-reg-id-label">—</div>
+      </div>
+      <button class="modal-close" onclick="closeCheckinModal()">✕</button>
+    </div>
+
+    <!-- Jamaah info -->
+    <div class="modal-info" id="modal-info">
+      <div class="modal-info-row">
+        <span class="mkey">Nama</span>
+        <span class="mval" id="modal-nama">—</span>
+      </div>
+      <div class="modal-info-row">
+        <span class="mkey">Kloter</span>
+        <span class="mval" id="modal-kloter">—</span>
+      </div>
+      <div class="modal-info-row">
+        <span class="mkey">Terdaftar</span>
+        <span class="mval" id="modal-terdaftar">—</span>
+      </div>
+    </div>
+
+    <!-- Already checked-in notice -->
+    <div class="modal-already-checked" id="modal-already-checked">
+      <span class="mac-icon">✅</span>
+      <span class="mac-text" id="modal-already-text">Jamaah ini sudah check-in.</span>
+    </div>
+
+    <!-- Jumlah hadir stepper -->
+    <div class="stepper-label">Jumlah Hadir</div>
+    <div class="stepper-hint" id="modal-stepper-hint">Sesuaikan dengan jumlah jamaah yang benar-benar hadir.</div>
+    <div class="stepper">
+      <button class="stepper-btn" onclick="stepCheckin(-1)">−</button>
+      <div class="stepper-val" id="modal-jumlah-val">1</div>
+      <button class="stepper-btn" onclick="stepCheckin(1)">+</button>
+    </div>
+
+    <!-- Catatan -->
+    <div class="stepper-label" style="margin-bottom:0.4rem">Catatan (opsional)</div>
+    <textarea class="modal-textarea" id="modal-catatan" rows="2" placeholder="Mis: 1 orang tidak hadir, sakit"></textarea>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeCheckinModal()">Batal</button>
+      <button class="btn-modal-submit" id="btn-modal-submit" onclick="submitManualCheckin()">
+        <span>✅ Konfirmasi Check-in</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
      APP
 ════════════════════════════════ -->
 <div id="app">
@@ -545,7 +739,7 @@
                 <th>Kloter</th>
                 <th>Total</th>
                 <th>Check-in</th>
-                <th>QR</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody id="jamaah-tbody">
@@ -734,6 +928,24 @@
     return res.json();
   }
 
+  async function sbPost(path, body) {
+    const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
+      method: 'POST',
+      headers: {
+        apikey: SB_KEY,
+        Authorization: `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
+    return res;
+  }
+
   /* ════════════════════
      DATA STORE
   ════════════════════ */
@@ -844,6 +1056,15 @@
       const isCI = checkinIds.has(r.reg_id);
       const total = (parseInt(r.ikhwan)||0) + (parseInt(r.akhwat)||0);
       const kloterShort = r.kloter.replace('Kloter ', 'K').replace(' - ', ' ');
+      const namaEscaped = r.nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const kloterEscaped = r.kloter.replace(/'/g, "\\'");
+
+      // Check-in button: green "Check-in" if not yet checked in, grey "Sudah" if done
+      const ciBtn = isCI
+        ? `<button class="btn-sm btn" style="padding:5px 10px;font-size:0.72rem;background:var(--success-bg);color:var(--success);border:1.5px solid #a9d9b8;opacity:1;cursor:default" disabled title="Sudah check-in">✅ Sudah</button>`
+        : `<button class="btn-sm btn" style="padding:5px 10px;font-size:0.72rem;background:linear-gradient(135deg,#1e8449,#27ae60)"
+              onclick="openCheckinModal('${r.reg_id}', '${namaEscaped}', '${kloterEscaped}', ${total})">✔ Check-in</button>`;
+
       return `
         <tr>
           <td><div class="reg-id-cell">${r.reg_id}</div></td>
@@ -851,8 +1072,13 @@
           <td><span class="kloter-chip">${kloterShort}</span></td>
           <td>${total} orang</td>
           <td><span class="checkin-chip ${isCI ? 'yes' : 'no'}">${isCI ? '✅ Hadir' : '—'}</span></td>
-          <td><button class="btn-sm btn" style="padding:5px 12px;font-size:0.72rem"
-            onclick="generateQRFromTable('${r.reg_id}', ${total}, '${r.nama.replace(/'/g,"\\'")}')">QR</button></td>
+          <td>
+            <div class="action-btns">
+              ${ciBtn}
+              <button class="btn-sm btn" style="padding:5px 10px;font-size:0.72rem"
+                onclick="generateQRFromTable('${r.reg_id}', ${total}, '${namaEscaped}')">🎫 QR</button>
+            </div>
+          </td>
         </tr>`;
     }).join('');
 
@@ -869,6 +1095,126 @@
       updatePreview();
       generateQR(regId, jumlah, nama);
     }, 150);
+  }
+
+  /* ════════════════════
+     CHECK-IN MANUAL MODAL
+  ════════════════════ */
+  let modalRegId   = '';
+  let modalJumlah  = 1;
+  let modalMaxJumlah = 1;
+  let modalAlreadyCheckin = false;
+
+  function openCheckinModal(regId, nama, kloter, totalTerdaftar) {
+    modalRegId  = regId;
+    modalJumlah = totalTerdaftar;
+    modalMaxJumlah = totalTerdaftar;
+
+    // Check if already checked in
+    const existing = allCheckin.find(c => c.reg_id === regId);
+    modalAlreadyCheckin = !!existing;
+
+    // Populate modal fields
+    document.getElementById('modal-reg-id-label').textContent = regId;
+    document.getElementById('modal-nama').textContent     = nama;
+    document.getElementById('modal-kloter').textContent   = kloter;
+    document.getElementById('modal-terdaftar').textContent = `${totalTerdaftar} orang`;
+    document.getElementById('modal-catatan').value        = '';
+
+    if (existing) {
+      // Pre-fill with existing data
+      modalJumlah = existing.jumlah_hadir;
+      document.getElementById('modal-already-checked').classList.add('show');
+      document.getElementById('modal-already-text').textContent =
+        `Sudah check-in: ${existing.jumlah_hadir} orang hadir. Data akan di-update.`;
+      document.getElementById('modal-catatan').value = existing.catatan || '';
+      document.getElementById('btn-modal-submit').querySelector('span').textContent = '🔄 Update Check-in';
+    } else {
+      document.getElementById('modal-already-checked').classList.remove('show');
+      document.getElementById('btn-modal-submit').querySelector('span').textContent = '✅ Konfirmasi Check-in';
+    }
+
+    document.getElementById('modal-jumlah-val').textContent = modalJumlah;
+    document.getElementById('modal-stepper-hint').textContent =
+      `Maks. ${totalTerdaftar} orang (sesuai pendaftaran). Sesuaikan jika ada yang tidak hadir.`;
+
+    document.getElementById('checkinModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCheckinModal() {
+    document.getElementById('checkinModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Close modal on overlay click
+  document.getElementById('checkinModal').addEventListener('click', function(e) {
+    if (e.target === this) closeCheckinModal();
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCheckinModal();
+  });
+
+  function stepCheckin(delta) {
+    const next = modalJumlah + delta;
+    if (next < 1 || next > modalMaxJumlah) return;
+    modalJumlah = next;
+    document.getElementById('modal-jumlah-val').textContent = modalJumlah;
+  }
+
+  async function submitManualCheckin() {
+    const btn     = document.getElementById('btn-modal-submit');
+    const catatan = document.getElementById('modal-catatan').value.trim();
+
+    btn.disabled = true;
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = `<span class="spinner-sm"></span><span>Menyimpan...</span>`;
+
+    try {
+      // Try INSERT first; if conflict (reg_id already exists), do UPDATE via PATCH
+      const existing = allCheckin.find(c => c.reg_id === modalRegId);
+
+      if (existing) {
+        // UPDATE existing record
+        const res = await fetch(`${SB_URL}/rest/v1/checkin_idulfitri?reg_id=eq.${encodeURIComponent(modalRegId)}`, {
+          method: 'PATCH',
+          headers: {
+            apikey: SB_KEY,
+            Authorization: `Bearer ${SB_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({
+            jumlah_hadir: modalJumlah,
+            catatan: catatan || null,
+            checked_at: new Date().toISOString(),
+          }),
+        });
+        if (!res.ok) throw new Error(await res.text());
+        showToast(`✅ Check-in diperbarui: ${modalJumlah} orang`, 'ok');
+      } else {
+        // INSERT new record
+        await sbPost('checkin_idulfitri', {
+          reg_id: modalRegId,
+          jumlah_hadir: modalJumlah,
+          catatan: catatan || null,
+          checked_at: new Date().toISOString(),
+        });
+        showToast(`✅ Check-in berhasil: ${modalJumlah} orang`, 'ok');
+      }
+
+      closeCheckinModal();
+      await refreshAll();   // re-fetch data & re-render table
+
+    } catch (err) {
+      console.error(err);
+      showToast('Gagal menyimpan check-in. Coba lagi.', 'err');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+    }
   }
 
   /* ════════════════════
