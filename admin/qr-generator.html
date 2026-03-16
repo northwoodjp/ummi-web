@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Generator — UMMI Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --navy: #002850; --blue: #003B73;
+      --gold: #D4AF37; --soft-gold: #F2D06B;
+      --bg: #F0F4F8; --white: #fff;
+      --border: #D1D9E6; --muted: #555;
+      --success: #1e8449; --danger: #c0392b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg); color: #1a1a1a;
+      min-height: 100vh; padding: 2rem 1rem;
+    }
+
+    .page-header {
+      text-align: center; margin-bottom: 2rem;
+    }
+    .page-header .eyebrow {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.4rem; display: block;
+    }
+    .page-header h1 {
+      font-size: 1.6rem; font-weight: 700; color: var(--navy);
+    }
+    .page-header p { font-size: 0.88rem; color: var(--muted); margin-top: 0.3rem; }
+
+    .container { max-width: 520px; margin: 0 auto; }
+
+    .card {
+      background: var(--white); border-radius: 20px;
+      padding: 1.8rem; margin-bottom: 1.2rem;
+      box-shadow: 0 2px 16px rgba(0,40,80,0.07);
+      border: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); margin-bottom: 1.2rem;
+    }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block; font-size: 0.75rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .form-group input {
+      width: 100%; padding: 12px 15px; border-radius: 12px;
+      border: 1.5px solid var(--border); font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif; color: #1a1a1a;
+      background: #F0F4F8; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-group input:focus {
+      border-color: var(--gold); background: var(--white);
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.15);
+    }
+    .form-group input[readonly] {
+      background: #e8edf3; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.88rem;
+    }
+    .field-hint { font-size: 0.72rem; color: #999; margin-top: 4px; }
+
+    .btn {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white; border: none; border-radius: 12px;
+      font-size: 0.95rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:active { transform: scale(0.98); }
+    .btn-outline {
+      background: var(--white); color: var(--navy);
+      border: 1.5px solid var(--border);
+      margin-top: 0.6rem;
+    }
+    .btn-outline:hover { background: #F0F4F8; opacity: 1; }
+
+    /* QR Result */
+    #result { display: none; }
+    .qr-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.5rem 0 0.5rem;
+    }
+    #qrcode {
+      background: white; padding: 16px; border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,40,80,0.1);
+      border: 1px solid var(--border);
+      display: inline-block;
+    }
+    #qrcode canvas, #qrcode img { display: block; }
+
+    .reg-info {
+      margin-top: 1.2rem; width: 100%;
+      background: #EBF3FB; border-radius: 12px; padding: 1rem 1.2rem;
+    }
+    .reg-info-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.84rem; padding: 4px 0;
+      border-bottom: 1px solid rgba(0,59,115,0.08);
+    }
+    .reg-info-row:last-child { border-bottom: none; }
+    .reg-info-row .key { color: var(--muted); }
+    .reg-info-row .val {
+      font-weight: 700; color: var(--navy);
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+    }
+
+    .btn-download {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--gold), var(--soft-gold));
+      color: var(--navy); border: none; border-radius: 12px;
+      font-size: 0.92rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; margin-top: 1rem;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-download:hover { opacity: 0.9; }
+    .btn-download:active { transform: scale(0.98); }
+
+    /* Batch section */
+    .batch-result { display: none; margin-top: 0.5rem; }
+    .batch-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; background: #F0F4F8;
+      border-radius: 10px; margin-bottom: 0.5rem;
+      border: 1px solid var(--border);
+    }
+    .batch-item .b-id {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem; font-weight: 600; color: var(--navy);
+    }
+    .batch-item .b-jumlah { font-size: 0.78rem; color: var(--muted); }
+    .batch-item .b-btn {
+      background: var(--navy); color: white;
+      border: none; border-radius: 8px;
+      padding: 6px 14px; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: opacity 0.2s;
+    }
+    .batch-item .b-btn:hover { opacity: 0.8; }
+
+    /* Loading from Supabase */
+    .load-status {
+      font-size: 0.8rem; color: var(--muted);
+      text-align: center; padding: 0.5rem 0;
+    }
+    .load-status.ok { color: var(--success); }
+    .load-status.err { color: var(--danger); }
+
+    /* Tab */
+    .tabs {
+      display: flex; gap: 0.5rem; margin-bottom: 1.2rem;
+    }
+    .tab-btn {
+      flex: 1; padding: 10px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--white);
+      font-size: 0.82rem; font-weight: 600; color: var(--muted);
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--navy); color: white; border-color: var(--navy);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="eyebrow">UMMI Masjid · Admin</span>
+    <h1>QR Code Generator</h1>
+    <p>Generate QR code untuk jamaah Idul Fitri 1447H</p>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('manual')">Manual</button>
+      <button class="tab-btn" onclick="switchTab('supabase')">Dari Supabase</button>
+    </div>
+
+    <!-- TAB MANUAL -->
+    <div class="tab-panel active" id="tab-manual">
+      <div class="card-title">Input Data Jamaah</div>
+
+      <div class="form-group">
+        <label>ID Registrasi *</label>
+        <input type="text" id="reg-id" placeholder="UMMI-1447H-0001"
+          oninput="this.value = this.value.toUpperCase()">
+        <div class="field-hint">Format: UMMI-1447H-XXXX</div>
+      </div>
+
+      <div class="form-group">
+        <label>Jumlah Jamaah *</label>
+        <input type="number" id="jumlah" placeholder="1" min="1" max="20" value="1" inputmode="numeric">
+      </div>
+
+      <div class="form-group">
+        <label>Nama (opsional)</label>
+        <input type="text" id="nama" placeholder="Untuk label di bawah QR">
+      </div>
+
+      <div class="form-group">
+        <label>URL QR (otomatis)</label>
+        <input type="text" id="qr-url-preview" readonly>
+        <div class="field-hint">URL yang akan di-encode ke dalam QR</div>
+      </div>
+
+      <button class="btn" onclick="generateQR()">Generate QR Code</button>
+    </div>
+
+    <!-- TAB SUPABASE -->
+    <div class="tab-panel" id="tab-supabase">
+      <div class="card-title">Load dari Database</div>
+      <p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">
+        Load semua pendaftar dari Supabase, lalu pilih siapa yang ingin dibuatkan QR.
+      </p>
+      <button class="btn" onclick="loadFromSupabase()" id="btn-load">
+        Load Data Pendaftar
+      </button>
+      <div class="load-status" id="load-status"></div>
+      <div class="batch-result" id="batch-result"></div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card" id="result">
+    <div class="card-title">QR Code</div>
+    <div class="qr-wrap">
+      <div id="qrcode"></div>
+      <div class="reg-info" id="reg-info"></div>
+    </div>
+    <button class="btn-download" onclick="downloadQR()">⬇️ Download QR Code</button>
+    <button class="btn btn-outline" onclick="resetForm()">← Generate Lagi</button>
+  </div>
+
+</div>
+
+<script>
+  const SB_URL = "https://szwjiylicvvixrqxxfqv.supabase.co";
+  const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6d2ppeWxpY3Z2aXhycXh4ZnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzYzNTAsImV4cCI6MjA4ODc1MjM1MH0.10mHqDRh6w9B7JJ70_dxZiSVBpnwaQEt0nGGulsrWV4";
+  const BASE_URL = "https://ummi.jp/eid-fitr/checkin.html";
+
+  /* ── URL PREVIEW ── */
+  function updatePreview() {
+    const id = document.getElementById('reg-id').value.trim();
+    const jumlah = document.getElementById('jumlah').value || 1;
+    if (!id) { document.getElementById('qr-url-preview').value = ''; return; }
+    const d = btoa(JSON.stringify({ id, jumlah: parseInt(jumlah) }));
+    document.getElementById('qr-url-preview').value = `${BASE_URL}?d=${d}`;
+  }
+
+  document.getElementById('reg-id').addEventListener('input', updatePreview);
+  document.getElementById('jumlah').addEventListener('input', updatePreview);
+
+  /* ── TABS ── */
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && tab === 'manual') || (i === 1 && tab === 'supabase'));
+    });
+    document.getElementById('tab-manual').classList.toggle('active', tab === 'manual');
+    document.getElementById('tab-supabase').classList.toggle('active', tab === 'supabase');
+    document.getElementById('result').style.display = 'none';
+  }
+
+  /* ── GENERATE QR ── */
+  let currentRegId = '';
+  let currentNama = '';
+
+  function generateQR(regId, jumlah, nama) {
+    const id      = regId  || document.getElementById('reg-id').value.trim();
+    const jml     = jumlah || parseInt(document.getElementById('jumlah').value) || 1;
+    const nm      = nama   || document.getElementById('nama')?.value?.trim() || '';
+
+    if (!id) {
+      alert('Mohon isi ID Registrasi');
+      return;
+    }
+
+    const d = btoa(JSON.stringify({ id, jumlah: jml }));
+    const url = `${BASE_URL}?d=${d}`;
+
+    currentRegId = id;
+    currentNama  = nm;
+
+    // Clear previous QR
+    const qrEl = document.getElementById('qrcode');
+    qrEl.innerHTML = '';
+
+    new QRCode(qrEl, {
+      text: url,
+      width: 220,
+      height: 220,
+      colorDark: '#002850',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M,
+    });
+
+    // Info
+    document.getElementById('reg-info').innerHTML = `
+      <div class="reg-info-row"><span class="key">ID Registrasi</span><span class="val">${id}</span></div>
+      <div class="reg-info-row"><span class="key">Jumlah Jamaah</span><span class="val">${jml} orang</span></div>
+      ${nm ? `<div class="reg-info-row"><span class="key">Nama</span><span class="val">${nm}</span></div>` : ''}
+      <div class="reg-info-row"><span class="key">URL</span><span class="val" style="font-size:0.7rem;word-break:break-all">${url}</span></div>
+    `;
+
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ── DOWNLOAD ── */
+  function downloadQR() {
+    const canvas = document.querySelector('#qrcode canvas');
+    if (!canvas) { alert('QR belum di-generate'); return; }
+
+    // Create canvas with label
+    const padding = 20;
+    const labelH  = currentNama ? 60 : 30;
+    const out = document.createElement('canvas');
+    out.width  = canvas.width  + padding * 2;
+    out.height = canvas.height + padding * 2 + labelH;
+
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, out.width, out.height);
+
+    // QR
+    ctx.drawImage(canvas, padding, padding);
+
+    // ID label
+    ctx.fillStyle = '#002850';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(currentRegId, out.width / 2, canvas.height + padding + 20);
+
+    // Nama label
+    if (currentNama) {
+      ctx.fillStyle = '#555';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(currentNama, out.width / 2, canvas.height + padding + 40);
+    }
+
+    const link = document.createElement('a');
+    link.download = `QR-${currentRegId}.png`;
+    link.href = out.toDataURL('image/png');
+    link.click();
+  }
+
+  /* ── RESET ── */
+  function resetForm() {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('reg-id').value = '';
+    document.getElementById('jumlah').value = '1';
+    document.getElementById('nama').value = '';
+    document.getElementById('qr-url-preview').value = '';
+    document.getElementById('reg-id').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── LOAD FROM SUPABASE ── */
+  async function loadFromSupabase() {
+    const btn = document.getElementById('btn-load');
+    const status = document.getElementById('load-status');
+    const result = document.getElementById('batch-result');
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Memuat...';
+    status.textContent = '';
+    status.className = 'load-status';
+
+    try {
+      const res = await fetch(
+        `${SB_URL}/rest/v1/registrasi_idulfitri?select=reg_id,nama,ikhwan,akhwat,total,kloter&order=id.asc`,
+        { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } }
+      );
+      if (!res.ok) throw new Error('Gagal load');
+      const rows = await res.json();
+
+      if (!rows.length) {
+        status.textContent = 'Belum ada pendaftar.';
+        status.className = 'load-status';
+        btn.disabled = false;
+        btn.textContent = 'Load Data Pendaftar';
+        return;
+      }
+
+      status.textContent = `✅ ${rows.length} pendaftar ditemukan`;
+      status.className = 'load-status ok';
+
+      result.innerHTML = rows.map(r => `
+        <div class="batch-item">
+          <div>
+            <div class="b-id">${r.reg_id}</div>
+            <div class="b-jumlah">${r.nama} · ${r.total || (r.ikhwan + r.akhwat)} orang · ${r.kloter}</div>
+          </div>
+          <button class="b-btn" onclick="generateQR('${r.reg_id}', ${r.total || (r.ikhwan + r.akhwat)}, '${r.nama.replace(/'/g, "\\'")}')">
+            QR
+          </button>
+        </div>
+      `).join('');
+      result.style.display = 'block';
+
+    } catch (e) {
+      status.textContent = '❌ Gagal memuat data. Cek koneksi.';
+      status.className = 'load-status err';
+    }
+
+    btn.disabled = false;
+    btn.textContent = '🔄 Refresh';
+  }
+</script>
+</body>
+</html>

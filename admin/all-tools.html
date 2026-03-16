@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — UMMI Masjid</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --navy: #002850; --blue: #003B73;
+      --gold: #D4AF37; --soft-gold: #F2D06B;
+      --bg: #F0F4F8; --white: #fff;
+      --border: #D1D9E6; --muted: #555;
+      --success: #1e8449; --success-bg: #eaf5ee;
+      --danger: #c0392b; --danger-bg: #fdf0f0;
+      --orange: #d35400; --orange-bg: #fef5ec;
+      --sidebar: #001e3c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: #1a1a1a; }
+
+    /* ══════════════════════════════
+       PIN GATE
+    ══════════════════════════════ */
+    #pinGate {
+      position: fixed; inset: 0;
+      background: var(--navy);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 999; padding: 2rem;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    #pinGate.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
+    #pinGate::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,175,55,0.04) 1px, transparent 1px);
+      background-size: 40px 40px; pointer-events: none;
+    }
+    .pin-logo { font-size: 2.4rem; margin-bottom: 0.5rem; }
+    .pin-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .pin-title { font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 0.3rem; }
+    .pin-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin-bottom: 2rem; text-align: center; }
+    .pin-dots { display: flex; gap: 14px; margin-bottom: 1.8rem; }
+    .pin-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2); background: transparent;
+      transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .pin-dot.filled { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,0.6); transform: scale(1.15); }
+    .pin-dot.error  { background: #e74c3c; border-color: #e74c3c; }
+    .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 260px; }
+    .num-btn {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      color: white; font-family: 'DM Sans', sans-serif;
+      font-size: 1.3rem; font-weight: 600; width: 100%; aspect-ratio: 1;
+      border-radius: 14px; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; user-select: none;
+    }
+    .num-btn:hover { background: rgba(255,255,255,0.12); }
+    .num-btn:active { transform: scale(0.93); background: rgba(212,175,55,0.2); border-color: var(--gold); }
+    .num-btn.del { font-size: 1rem; color: rgba(255,255,255,0.5); }
+    .num-btn.empty { visibility: hidden; }
+    .pin-error-msg { margin-top: 1.2rem; font-size: 0.8rem; color: #e74c3c; height: 1rem; opacity: 0; transition: opacity 0.2s; }
+    .pin-error-msg.show { opacity: 1; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+    .shake { animation: shake 0.4s ease; }
+
+    /* ══════════════════════════════
+       LAYOUT
+    ══════════════════════════════ */
+    #app { display: none; min-height: 100vh; }
+
+    /* Top bar */
+    .topbar {
+      background: var(--sidebar); color: white;
+      padding: 0.9rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+    }
+    .topbar-logo { font-weight: 700; font-size: 1rem; color: var(--soft-gold); }
+    .topbar-logo span { color: rgba(255,255,255,0.5); font-weight: 400; font-size: 0.82rem; margin-left: 8px; }
+    .topbar-right { display: flex; align-items: center; gap: 0.8rem; }
+    .last-update { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+    .btn-refresh {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: white; border-radius: 8px; padding: 6px 14px;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+    }
+    .btn-refresh:hover { background: rgba(255,255,255,0.15); }
+    .btn-logout {
+      background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.3);
+      color: #e74c3c; border-radius: 8px; padding: 6px 14px;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+    }
+    .btn-logout:hover { background: rgba(231,76,60,0.25); }
+
+    /* Tab nav */
+    .tab-nav {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      display: flex; overflow-x: auto; scrollbar-width: none;
+    }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-nav-btn {
+      flex-shrink: 0; padding: 1rem 1.5rem;
+      border: none; background: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
+      color: var(--muted); border-bottom: 2px solid transparent;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .tab-nav-btn.active { color: var(--navy); border-bottom-color: var(--gold); }
+    .tab-nav-btn:hover { color: var(--navy); }
+
+    .main { padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ══════════════════════════════
+       CARDS & COMMON
+    ══════════════════════════════ */
+    .card {
+      background: var(--white); border-radius: 16px;
+      padding: 1.5rem; margin-bottom: 1.2rem;
+      box-shadow: 0 2px 12px rgba(0,40,80,0.06);
+      border: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* ══════════════════════════════
+       DASHBOARD — STAT CARDS
+    ══════════════════════════════ */
+    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    @media (min-width: 600px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+    .stat-card {
+      background: var(--white); border-radius: 14px;
+      padding: 1.2rem; border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,40,80,0.06);
+    }
+    .stat-card .s-label { font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .stat-card .s-value { font-size: 1.8rem; font-weight: 800; color: var(--navy); line-height: 1; }
+    .stat-card .s-sub { font-size: 0.72rem; color: #aaa; margin-top: 4px; }
+    .stat-card.gold .s-value { color: #B8860B; }
+    .stat-card.green .s-value { color: var(--success); }
+    .stat-card.blue .s-value { color: var(--blue); }
+
+    /* Kloter capacity */
+    .kloter-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .kloter-card {
+      flex: 1 1 200px; min-width: 0;
+      background: var(--white); border-radius: 14px;
+      padding: 1.2rem; border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,40,80,0.06);
+    }
+    .kc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; }
+    .kc-name { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .kc-time { font-size: 1.2rem; font-weight: 800; color: var(--navy); }
+    .kc-badge { font-size: 0.62rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+    .kc-badge.ok { background: var(--success-bg); color: var(--success); }
+    .kc-badge.warn { background: var(--orange-bg); color: var(--orange); }
+    .kc-badge.full { background: var(--danger-bg); color: var(--danger); }
+    .kc-track { background: var(--bg); border-radius: 99px; height: 8px; overflow: hidden; margin: 0.6rem 0; border: 1px solid var(--border); }
+    .kc-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #B8860B, var(--gold)); transition: width 1s ease; width: 0%; }
+    .kc-fill.warn { background: linear-gradient(90deg, var(--orange), #e67e22); }
+    .kc-fill.full { background: #bbb; }
+    .kc-count { font-size: 0.78rem; font-weight: 700; color: var(--navy); }
+    .kc-sisa { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+    /* Gender split */
+    .gender-bar { display: flex; border-radius: 8px; overflow: hidden; height: 28px; margin-top: 0.8rem; }
+    .gb-ikhwan { background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; transition: width 0.8s ease; }
+    .gb-akhwat { background: #c0392b; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; transition: width 0.8s ease; }
+    .gender-legend { display: flex; gap: 1rem; margin-top: 0.6rem; font-size: 0.75rem; color: var(--muted); }
+    .gl-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; }
+
+    /* ══════════════════════════════
+       DAFTAR JAMAAH
+    ══════════════════════════════ */
+     .search-bar {
+      display: flex; gap: 0.6rem; margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1; padding: 10px 14px; border-radius: 10px;
+      border: 1.5px solid var(--border); font-size: 0.88rem;
+      font-family: 'DM Sans', sans-serif; outline: none; background: var(--white);
+      transition: border-color 0.2s;
+      min-width: 0;
+    }
+    .search-bar input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.12); }
+    .search-bar select {
+      flex: 1 1 120px; min-width: 0; padding: 10px 12px; border-radius: 10px;
+      border: 1.5px solid var(--border); font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif; outline: none; background: var(--white);
+      cursor: pointer;
+    }
+
+    .jamaah-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .jamaah-table th {
+      background: var(--bg); text-align: left;
+      padding: 10px 12px; font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .jamaah-table td { padding: 11px 12px; border-bottom: 1px solid #f0f4f8; vertical-align: middle; }
+    .jamaah-table tr:last-child td { border-bottom: none; }
+    .jamaah-table tr:hover td { background: #fafbfc; }
+    .reg-id-cell { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 600; color: var(--navy); }
+    .kloter-chip {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      background: rgba(0,40,80,0.07); color: var(--navy);
+      font-size: 0.72rem; font-weight: 700;
+    }
+    .checkin-chip {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 0.72rem; font-weight: 700;
+    }
+    .checkin-chip.yes { background: var(--success-bg); color: var(--success); }
+    .checkin-chip.no  { background: var(--bg); color: #aaa; }
+
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    .table-empty { text-align: center; padding: 2rem; color: #aaa; font-size: 0.88rem; }
+
+    /* ══════════════════════════════
+       QR GENERATOR
+    ══════════════════════════════ */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input {
+      width: 100%; padding: 11px 14px; border-radius: 10px;
+      border: 1.5px solid var(--border); font-size: 0.92rem;
+      font-family: 'DM Sans', sans-serif; outline: none; background: #F0F4F8;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-group input:focus { border-color: var(--gold); background: var(--white); box-shadow: 0 0 0 3px rgba(212,175,55,0.12); }
+    .form-group input[readonly] { background: #e8edf3; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; }
+    .field-hint { font-size: 0.72rem; color: #999; margin-top: 4px; }
+
+    .btn {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white; border: none; border-radius: 11px;
+      font-size: 0.92rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:active { transform: scale(0.98); }
+    .btn-gold {
+      background: linear-gradient(135deg, #B8860B, var(--gold));
+      color: var(--navy);
+    }
+    .btn-outline {
+      background: var(--white); color: var(--navy);
+      border: 1.5px solid var(--border); margin-top: 0.6rem;
+    }
+    .btn-outline:hover { background: #F0F4F8; opacity: 1; }
+    .btn-sm {
+      width: auto; padding: 7px 16px; font-size: 0.78rem;
+      border-radius: 8px; display: inline-block;
+    }
+
+    .qr-result { display: none; }
+    .qr-wrap { display: flex; flex-direction: column; align-items: center; padding: 1rem 0; }
+    #qrcode { background: white; padding: 14px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,40,80,0.1); border: 1px solid var(--border); display: inline-block; }
+    #qrcode canvas, #qrcode img { display: block; }
+
+    .reg-info { margin-top: 1.2rem; width: 100%; background: #EBF3FB; border-radius: 10px; padding: 0.9rem 1.1rem; }
+    .reg-info-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 4px 0; border-bottom: 1px solid rgba(0,59,115,0.08); }
+    .reg-info-row:last-child { border-bottom: none; }
+    .reg-info-row .key { color: var(--muted); }
+    .reg-info-row .val { font-weight: 700; color: var(--navy); font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; word-break: break-all; text-align: right; max-width: 60%; }
+
+    .quick-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; max-height: 350px; overflow-y: auto; }
+    .quick-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 13px; background: #F0F4F8;
+      border-radius: 10px; border: 1px solid var(--border);
+    }
+    .qi-info .qi-id { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 600; color: var(--navy); }
+    .qi-info .qi-meta { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .qi-btn {
+      background: var(--navy); color: white; border: none; border-radius: 7px;
+      padding: 6px 13px; font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif; flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+    .qi-btn:hover { opacity: 0.8; }
+
+    .load-status { font-size: 0.78rem; text-align: center; padding: 0.5rem 0; color: var(--muted); }
+    .load-status.ok { color: var(--success); }
+    .load-status.err { color: var(--danger); }
+
+    .batch-result { display: none; margin-top: 0.8rem; max-height: 400px; overflow-y: auto; }
+    .batch-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; background: #F0F4F8;
+      border-radius: 10px; margin-bottom: 0.5rem;
+      border: 1px solid var(--border);
+    }
+    .batch-item .b-id { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+    .batch-item .b-jumlah { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .batch-item .b-btn {
+      background: var(--navy); color: white; border: none; border-radius: 8px;
+      padding: 6px 14px; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif; flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+    .batch-item .b-btn:hover { opacity: 0.8; }
+
+    .btn-download {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--gold), var(--soft-gold));
+      color: var(--navy); border: none; border-radius: 12px;
+      font-size: 0.92rem; font-weight: 700;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 1rem;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-download:hover { opacity: 0.9; }
+    .btn-download:active { transform: scale(0.98); }
+
+    .tab-btn {
+      flex: 1; padding: 10px 16px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--white);
+      font-size: 0.84rem; font-weight: 600; color: var(--muted);
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .tab-btn:hover { border-color: var(--navy); color: var(--navy); background: #EBF3FB; }
+    .tab-btn.active {
+      background: var(--navy); color: white; border-color: var(--navy);
+      box-shadow: 0 4px 12px rgba(0,40,80,0.2);
+    }
+
+    .qrtab { display: none; }
+    .qrtab.active { display: block; }
+
+    /* Scan link */
+    .scan-link-card {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 16px; padding: 1.8rem;
+      text-align: center; color: white;
+      box-shadow: 0 4px 20px rgba(0,40,80,0.2);
+    }
+    .scan-link-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .scan-link-card p { font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-bottom: 1.4rem; }
+    .btn-scan-open {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--gold), var(--soft-gold));
+      color: var(--navy); font-weight: 700; font-size: 0.95rem;
+      padding: 13px 30px; border-radius: 999px; text-decoration: none;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-scan-open:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,175,55,0.5); }
+
+    /* Spinner */
+    .spinner-sm { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy); color: white;
+      padding: 11px 20px; border-radius: 50px;
+      font-size: 0.83rem; font-weight: 600;
+      opacity: 0; transition: all 0.3s; z-index: 9999;
+      white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.err { background: var(--danger); }
+    .toast.ok { background: var(--success); }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     PIN GATE
+════════════════════════════════ -->
+<div id="pinGate">
+  <div class="pin-logo">🔐</div>
+  <div class="pin-eyebrow">UMMI Masjid</div>
+  <div class="pin-title">Admin Panel</div>
+  <div class="pin-sub">Masukkan PIN untuk melanjutkan</div>
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+  <div class="numpad">
+    <button class="num-btn" onclick="pressNum('1')">1</button>
+    <button class="num-btn" onclick="pressNum('2')">2</button>
+    <button class="num-btn" onclick="pressNum('3')">3</button>
+    <button class="num-btn" onclick="pressNum('4')">4</button>
+    <button class="num-btn" onclick="pressNum('5')">5</button>
+    <button class="num-btn" onclick="pressNum('6')">6</button>
+    <button class="num-btn" onclick="pressNum('7')">7</button>
+    <button class="num-btn" onclick="pressNum('8')">8</button>
+    <button class="num-btn" onclick="pressNum('9')">9</button>
+    <button class="num-btn empty"></button>
+    <button class="num-btn" onclick="pressNum('0')">0</button>
+    <button class="num-btn del" onclick="pressDelete()">⌫</button>
+  </div>
+  <div class="pin-error-msg" id="pinError">PIN salah. Coba lagi.</div>
+</div>
+
+<!-- ════════════════════════════════
+     APP
+════════════════════════════════ -->
+<div id="app">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      UMMI Admin
+      <span>Idul Fitri 1447H</span>
+    </div>
+    <div class="topbar-right">
+      <span class="last-update" id="last-update"></span>
+      <button class="btn-refresh" onclick="refreshAll()">🔄 Refresh</button>
+      <button class="btn-logout" onclick="logout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- Tab Nav -->
+  <div class="tab-nav">
+    <button class="tab-nav-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+    <button class="tab-nav-btn" onclick="switchTab('jamaah')">👥 Jamaah</button>
+    <button class="tab-nav-btn" onclick="switchTab('qrgen')">🎫 QR Generator</button>
+    <button class="tab-nav-btn" onclick="switchTab('scanner')">📷 Scanner</button>
+  </div>
+
+  <div class="main">
+
+    <!-- ─── DASHBOARD ─── -->
+    <div class="tab-panel active" id="panel-dashboard">
+
+      <div class="stat-grid">
+        <div class="stat-card gold">
+          <div class="s-label">Total Pendaftar</div>
+          <div class="s-value" id="s-total-reg">—</div>
+          <div class="s-sub">orang terdaftar</div>
+        </div>
+        <div class="stat-card green">
+          <div class="s-label">Sudah Check-in</div>
+          <div class="s-value" id="s-total-checkin">—</div>
+          <div class="s-sub">orang hadir</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="s-label">Ikhwan</div>
+          <div class="s-value" id="s-ikhwan">—</div>
+          <div class="s-sub">laki-laki</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Akhwat</div>
+          <div class="s-value" id="s-akhwat">—</div>
+          <div class="s-sub">perempuan</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Kapasitas Per Kloter</div>
+        <div class="kloter-grid" id="kloter-grid">
+          <div class="kloter-card" id="kc-1">
+            <div class="kc-header">
+              <div><div class="kc-name">Kloter 1</div><div class="kc-time">06.30</div></div>
+              <span class="kc-badge ok" id="kb-1">—</span>
+            </div>
+            <div class="kc-track"><div class="kc-fill" id="kf-1"></div></div>
+            <div class="kc-count" id="kct-1">— / 150</div>
+            <div class="kc-sisa" id="kcs-1"></div>
+          </div>
+          <div class="kloter-card" id="kc-2">
+            <div class="kc-header">
+              <div><div class="kc-name">Kloter 2</div><div class="kc-time">07.45</div></div>
+              <span class="kc-badge ok" id="kb-2">—</span>
+            </div>
+            <div class="kc-track"><div class="kc-fill" id="kf-2"></div></div>
+            <div class="kc-count" id="kct-2">— / 150</div>
+            <div class="kc-sisa" id="kcs-2"></div>
+          </div>
+          <div class="kloter-card" id="kc-3">
+            <div class="kc-header">
+              <div><div class="kc-name">Kloter 3</div><div class="kc-time">08.45</div></div>
+              <span class="kc-badge ok" id="kb-3">—</span>
+            </div>
+            <div class="kc-track"><div class="kc-fill" id="kf-3"></div></div>
+            <div class="kc-count" id="kct-3">— / 150</div>
+            <div class="kc-sisa" id="kcs-3"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">👥 Statistik Ikhwan / Akhwat</div>
+        <div class="gender-bar">
+          <div class="gb-ikhwan" id="gb-ikhwan" style="width:50%">Ikhwan</div>
+          <div class="gb-akhwat" id="gb-akhwat" style="width:50%">Akhwat</div>
+        </div>
+        <div class="gender-legend">
+          <span><span class="gl-dot" style="background:var(--navy)"></span>Ikhwan: <strong id="gl-ikhwan">—</strong></span>
+          <span><span class="gl-dot" style="background:#c0392b"></span>Akhwat: <strong id="gl-akhwat">—</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── JAMAAH ─── -->
+    <div class="tab-panel" id="panel-jamaah">
+      <div class="card">
+        <div class="card-title">👥 Daftar Jamaah</div>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Cari nama atau ID..." oninput="filterTable()">
+          <select id="filter-kloter" onchange="filterTable()">
+            <option value="">Semua Kloter</option>
+            <option value="Kloter 1 - 06.30">Kloter 1 — 06.30</option>
+            <option value="Kloter 2 - 07.45">Kloter 2 — 07.45</option>
+            <option value="Kloter 3 - 08.45">Kloter 3 — 08.45</option>
+          </select>
+          <select id="filter-checkin" onchange="filterTable()">
+            <option value="">Semua</option>
+            <option value="yes">Sudah Check-in</option>
+            <option value="no">Belum Check-in</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table class="jamaah-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Kloter</th>
+                <th>Total</th>
+                <th>Check-in</th>
+                <th>QR</th>
+              </tr>
+            </thead>
+            <tbody id="jamaah-tbody">
+              <tr><td colspan="6" class="table-empty">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:0.8rem" id="table-count"></div>
+      </div>
+    </div>
+
+    <!-- ─── QR GENERATOR ─── -->
+    <div class="tab-panel" id="panel-qrgen">
+      <div style="max-width:520px;margin:0 auto">
+
+        <div class="card">
+          <div class="tabs" style="display:flex;gap:0.5rem;margin-bottom:1.2rem">
+            <button class="tab-btn active" onclick="switchQRTab('manual')">Manual</button>
+            <button class="tab-btn" onclick="switchQRTab('supabase')">Dari Supabase</button>
+          </div>
+
+          <!-- TAB MANUAL -->
+          <div class="qrtab active" id="qrtab-manual">
+            <div class="card-title">Input Data Jamaah</div>
+            <div class="form-group">
+              <label>ID Registrasi *</label>
+              <input type="text" id="reg-id" placeholder="UMMI-1447H-0001"
+                oninput="this.value=this.value.toUpperCase();updatePreview()">
+              <div class="field-hint">Format: UMMI-1447H-XXXX</div>
+            </div>
+            <div class="form-group">
+              <label>Jumlah Jamaah *</label>
+              <input type="number" id="jumlah" placeholder="1" min="1" max="20" value="1" inputmode="numeric" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+              <label>Nama (opsional)</label>
+              <input type="text" id="nama" placeholder="Untuk label di bawah QR">
+            </div>
+            <div class="form-group">
+              <label>URL QR (otomatis)</label>
+              <input type="text" id="qr-url-preview" readonly>
+              <div class="field-hint">URL yang akan di-encode ke dalam QR</div>
+            </div>
+            <button class="btn" onclick="generateQR()">Generate QR Code</button>
+          </div>
+
+          <!-- TAB SUPABASE -->
+          <div class="qrtab" id="qrtab-supabase">
+            <div class="card-title">Load dari Database</div>
+            <p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">
+              Load semua pendaftar dari Supabase, lalu pilih siapa yang ingin dibuatkan QR.
+            </p>
+            <button class="btn" onclick="loadFromSupabase()" id="btn-load">Load Data Pendaftar</button>
+            <div class="load-status" id="load-status"></div>
+            <div class="batch-result" id="batch-result"></div>
+          </div>
+        </div>
+
+        <!-- RESULT -->
+        <div class="card" id="qr-result-panel" style="display:none">
+          <div class="card-title">QR Code</div>
+          <div class="qr-wrap">
+            <div id="qrcode"></div>
+            <div class="reg-info" id="reg-info"></div>
+          </div>
+          <button class="btn-download" onclick="downloadQR()">⬇️ Download QR Code</button>
+          <button class="btn btn-outline" onclick="resetQRForm()">← Generate Lagi</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── SCANNER ─── -->
+    <div class="tab-panel" id="panel-scanner">
+      <div class="scan-link-card">
+        <div style="font-size:3rem;margin-bottom:0.8rem">📷</div>
+        <h3>QR Scanner</h3>
+        <p>Buka halaman scanner untuk memulai check-in jamaah menggunakan kamera perangkat.</p>
+        <a href="scan.html" target="_blank" class="btn-scan-open">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+          Buka Scanner
+        </a>
+      </div>
+
+      <div class="card" style="margin-top:1.2rem">
+        <div class="card-title">📋 Log Check-in Terbaru</div>
+        <div class="table-wrap">
+          <table class="jamaah-table">
+            <thead>
+              <tr><th>ID</th><th>Nama</th><th>Kloter</th><th>Jumlah Hadir</th><th>Waktu</th></tr>
+            </thead>
+            <tbody id="checkin-tbody">
+              <tr><td colspan="5" class="table-empty">Memuat...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ════════════════════
+     CONFIG
+  ════════════════════ */
+  const CORRECT_PIN = "3456";
+  const KAPASITAS   = 150;
+  const SB_URL = "https://szwjiylicvvixrqxxfqv.supabase.co";
+  const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6d2ppeWxpY3Z2aXhycXh4ZnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzYzNTAsImV4cCI6MjA4ODc1MjM1MH0.10mHqDRh6w9B7JJ70_dxZiSVBpnwaQEt0nGGulsrWV4";
+  const BASE_URL    = "https://ummi.jp/eid-fitr/checkin.html";
+  const KLOTERS = [
+    { id: 1, key: "Kloter 1 - 06.30" },
+    { id: 2, key: "Kloter 2 - 07.45" },
+    { id: 3, key: "Kloter 3 - 08.45" },
+  ];
+
+  /* ════════════════════
+     PIN GATE
+  ════════════════════ */
+  const pinGate  = document.getElementById('pinGate');
+  const pinError = document.getElementById('pinError');
+  const dots     = [0,1,2,3].map(i => document.getElementById('d'+i));
+  let pinInput   = "";
+
+  if (localStorage.getItem('ummi_admin_pin') === 'ok') unlockApp();
+
+  function updateDots() {
+    dots.forEach((d, i) => {
+      d.classList.toggle('filled', i < pinInput.length);
+      d.classList.remove('error');
+    });
+  }
+  function pressNum(n) {
+    if (pinInput.length >= CORRECT_PIN.length) return;
+    pinInput += n; updateDots();
+    if (pinInput.length === CORRECT_PIN.length) setTimeout(checkPin, 120);
+  }
+  function pressDelete() {
+    if (!pinInput.length) return;
+    pinInput = pinInput.slice(0,-1); updateDots();
+    pinError.classList.remove('show');
+  }
+  function checkPin() {
+    if (pinInput === CORRECT_PIN) {
+      localStorage.setItem('ummi_admin_pin', 'ok');
+      pinGate.classList.add('hide');
+      setTimeout(() => pinGate.style.display = 'none', 420);
+      unlockApp();
+    } else {
+      dots.forEach(d => { d.classList.remove('filled'); d.classList.add('error'); });
+      document.getElementById('pinDots').classList.add('shake');
+      pinError.classList.add('show');
+      setTimeout(() => {
+        document.getElementById('pinDots').classList.remove('shake');
+        dots.forEach(d => d.classList.remove('error'));
+        pinInput = ''; updateDots();
+      }, 700);
+    }
+  }
+  function unlockApp() {
+    document.getElementById('app').style.display = 'block';
+    refreshAll();
+  }
+  function logout() {
+    localStorage.removeItem('ummi_admin_pin');
+    location.reload();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (pinGate.style.display === 'none') return;
+    if (e.key >= '0' && e.key <= '9') pressNum(e.key);
+    if (e.key === 'Backspace') pressDelete();
+  });
+
+  /* ════════════════════
+     SUPABASE HELPER
+  ════════════════════ */
+  async function sbFetch(path) {
+    const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+
+  /* ════════════════════
+     DATA STORE
+  ════════════════════ */
+  let allJamaah  = [];
+  let allCheckin = [];
+
+  async function refreshAll() {
+    try {
+      [allJamaah, allCheckin] = await Promise.all([
+        sbFetch('registrasi_idulfitri?select=reg_id,nama,phone,kloter,ikhwan,akhwat,total,created_at&order=id.asc'),
+        sbFetch('checkin_idulfitri?select=reg_id,jumlah_hadir,catatan,checked_at&order=checked_at.desc'),
+      ]);
+      updateDashboard();
+      renderJamaahTable();
+      renderCheckinLog();
+      document.getElementById('last-update').textContent =
+        'Update: ' + new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    } catch(e) {
+      showToast('Gagal memuat data', 'err');
+    }
+  }
+
+  /* ════════════════════
+     DASHBOARD
+  ════════════════════ */
+  function updateDashboard() {
+    const checkinIds = new Set(allCheckin.map(c => c.reg_id));
+    let totalJamaah = 0, totalIkhwan = 0, totalAkhwat = 0;
+    const byK = { 1:0, 2:0, 3:0 };
+
+    allJamaah.forEach(r => {
+      const ikh = parseInt(r.ikhwan)||0;
+      const akh = parseInt(r.akhwat)||0;
+      totalJamaah += ikh + akh;
+      totalIkhwan += ikh;
+      totalAkhwat += akh;
+      KLOTERS.forEach(k => { if (r.kloter === k.key) byK[k.id] += ikh + akh; });
+    });
+
+    document.getElementById('s-total-reg').textContent    = totalJamaah.toLocaleString();
+    document.getElementById('s-total-checkin').textContent = checkinIds.size;
+    document.getElementById('s-ikhwan').textContent        = totalIkhwan.toLocaleString();
+    document.getElementById('s-akhwat').textContent        = totalAkhwat.toLocaleString();
+
+    // Gender bar
+    const total = totalIkhwan + totalAkhwat || 1;
+    const ikhPct = Math.round(totalIkhwan / total * 100);
+    const akhPct = 100 - ikhPct;
+    document.getElementById('gb-ikhwan').style.width = ikhPct + '%';
+    document.getElementById('gb-ikhwan').textContent = ikhPct > 10 ? `Ikhwan ${ikhPct}%` : '';
+    document.getElementById('gb-akhwat').style.width = akhPct + '%';
+    document.getElementById('gb-akhwat').textContent = akhPct > 10 ? `Akhwat ${akhPct}%` : '';
+    document.getElementById('gl-ikhwan').textContent = totalIkhwan;
+    document.getElementById('gl-akhwat').textContent = totalAkhwat;
+
+    // Kloter cards
+    KLOTERS.forEach(({ id }) => {
+      const terisi = byK[id];
+      const sisa   = KAPASITAS - terisi;
+      const pct    = Math.min(100, Math.round(terisi / KAPASITAS * 100));
+      const isFull = sisa <= 0;
+      const isWarn = pct >= 80 && !isFull;
+
+      const fill  = document.getElementById(`kf-${id}`);
+      const badge = document.getElementById(`kb-${id}`);
+      const count = document.getElementById(`kct-${id}`);
+      const sisaEl = document.getElementById(`kcs-${id}`);
+
+      fill.style.width = pct + '%';
+      fill.className = 'kc-fill' + (isFull ? ' full' : isWarn ? ' warn' : '');
+      count.textContent = `${terisi} / ${KAPASITAS}`;
+      sisaEl.textContent = isFull ? '🔴 Penuh' : `🟢 Sisa ${sisa} tempat`;
+
+      badge.textContent  = isFull ? 'PENUH' : isWarn ? 'HAMPIR' : 'TERSEDIA';
+      badge.className    = 'kc-badge' + (isFull ? ' full' : isWarn ? ' warn' : ' ok');
+    });
+  }
+
+  /* ════════════════════
+     JAMAAH TABLE
+  ════════════════════ */
+  function renderJamaahTable() {
+    filterTable();
+  }
+
+  function filterTable() {
+    const q       = document.getElementById('search-input').value.toLowerCase();
+    const kloter  = document.getElementById('filter-kloter').value;
+    const ciFilter = document.getElementById('filter-checkin').value;
+    const checkinIds = new Set(allCheckin.map(c => c.reg_id));
+
+    const filtered = allJamaah.filter(r => {
+      const matchQ = !q || r.nama.toLowerCase().includes(q) || r.reg_id.toLowerCase().includes(q);
+      const matchK = !kloter || r.kloter === kloter;
+      const isCI   = checkinIds.has(r.reg_id);
+      const matchCI = !ciFilter || (ciFilter === 'yes' ? isCI : !isCI);
+      return matchQ && matchK && matchCI;
+    });
+
+    const tbody = document.getElementById('jamaah-tbody');
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="table-empty">Tidak ada data</td></tr>`;
+      document.getElementById('table-count').textContent = '';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(r => {
+      const isCI = checkinIds.has(r.reg_id);
+      const total = (parseInt(r.ikhwan)||0) + (parseInt(r.akhwat)||0);
+      const kloterShort = r.kloter.replace('Kloter ', 'K').replace(' - ', ' ');
+      return `
+        <tr>
+          <td><div class="reg-id-cell">${r.reg_id}</div></td>
+          <td>${r.nama}</td>
+          <td><span class="kloter-chip">${kloterShort}</span></td>
+          <td>${total} orang</td>
+          <td><span class="checkin-chip ${isCI ? 'yes' : 'no'}">${isCI ? '✅ Hadir' : '—'}</span></td>
+          <td><button class="btn-sm btn" style="padding:5px 12px;font-size:0.72rem"
+            onclick="generateQRFromTable('${r.reg_id}', ${total}, '${r.nama.replace(/'/g,"\\'")}')">QR</button></td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('table-count').textContent =
+      `Menampilkan ${filtered.length} dari ${allJamaah.length} pendaftar`;
+  }
+
+  function generateQRFromTable(regId, jumlah, nama) {
+    switchTab('qrgen');
+    setTimeout(() => {
+      document.getElementById('reg-id').value = regId;
+      document.getElementById('jumlah').value = jumlah;
+      if (document.getElementById('nama')) document.getElementById('nama').value = nama;
+      updatePreview();
+      generateQR(regId, jumlah, nama);
+    }, 150);
+  }
+
+  /* ════════════════════
+     CHECKIN LOG
+  ════════════════════ */
+  function renderCheckinLog() {
+    const tbody = document.getElementById('checkin-tbody');
+    if (!allCheckin.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="table-empty">Belum ada check-in</td></tr>`;
+      return;
+    }
+    const checkinMap = {};
+    allJamaah.forEach(r => checkinMap[r.reg_id] = r);
+
+    tbody.innerHTML = allCheckin.slice(0,30).map(c => {
+      const reg = checkinMap[c.reg_id] || {};
+      const waktu = new Date(c.checked_at).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+      const kloterShort = (reg.kloter||'').replace('Kloter ','K').replace(' - ',' ');
+      return `
+        <tr>
+          <td><div class="reg-id-cell">${c.reg_id}</div></td>
+          <td>${reg.nama || '—'}</td>
+          <td><span class="kloter-chip">${kloterShort||'—'}</span></td>
+          <td>${c.jumlah_hadir} orang</td>
+          <td>${waktu}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  /* ════════════════════
+     QR GENERATOR
+  ════════════════════ */
+  let currentRegId = '', currentNama = '';
+
+  function switchQRTab(tab) {
+    document.querySelectorAll('#panel-qrgen .tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && tab === 'manual') || (i === 1 && tab === 'supabase'));
+    });
+    document.querySelectorAll('.qrtab').forEach(p => p.classList.remove('active'));
+    document.getElementById('qrtab-' + tab).classList.add('active');
+    document.getElementById('qr-result-panel').style.display = 'none';
+  }
+
+  function updatePreview() {
+    const id = document.getElementById('reg-id').value.trim();
+    const jumlah = document.getElementById('jumlah').value || 1;
+    if (!id) { document.getElementById('qr-url-preview').value = ''; return; }
+    const d = btoa(JSON.stringify({ id, jumlah: parseInt(jumlah) }));
+    document.getElementById('qr-url-preview').value = `${BASE_URL}?d=${d}`;
+  }
+
+  function generateQR(regId, jumlah, nama) {
+    const id  = regId  || document.getElementById('reg-id').value.trim();
+    const jml = jumlah || parseInt(document.getElementById('jumlah').value) || 1;
+    const nm  = nama   || document.getElementById('nama')?.value?.trim() || '';
+
+    if (!id) { showToast('Mohon isi ID Registrasi', 'err'); return; }
+
+    const d   = btoa(JSON.stringify({ id, jumlah: jml }));
+    const url = `${BASE_URL}?d=${d}`;
+    currentRegId = id; currentNama = nm;
+
+    const qrEl = document.getElementById('qrcode');
+    qrEl.innerHTML = '';
+    new QRCode(qrEl, {
+      text: url, width: 220, height: 220,
+      colorDark: '#002850', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M,
+    });
+
+    document.getElementById('reg-info').innerHTML = `
+      <div class="reg-info-row"><span class="key">ID Registrasi</span><span class="val">${id}</span></div>
+      <div class="reg-info-row"><span class="key">Jumlah Jamaah</span><span class="val">${jml} orang</span></div>
+      ${nm ? `<div class="reg-info-row"><span class="key">Nama</span><span class="val">${nm}</span></div>` : ''}
+      <div class="reg-info-row"><span class="key">URL</span><span class="val" style="font-size:0.7rem;word-break:break-all">${url}</span></div>
+    `;
+
+    document.getElementById('qr-result-panel').style.display = 'block';
+    document.getElementById('qr-result-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function downloadQR() {
+    const canvas = document.querySelector('#qrcode canvas');
+    if (!canvas) { showToast('QR belum di-generate', 'err'); return; }
+    const padding = 20;
+    const labelH  = currentNama ? 60 : 30;
+    const out = document.createElement('canvas');
+    out.width  = canvas.width  + padding * 2;
+    out.height = canvas.height + padding * 2 + labelH;
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(canvas, padding, padding);
+    ctx.fillStyle = '#002850'; ctx.font = 'bold 14px monospace'; ctx.textAlign = 'center';
+    ctx.fillText(currentRegId, out.width/2, canvas.height + padding + 20);
+    if (currentNama) {
+      ctx.fillStyle = '#555'; ctx.font = '12px sans-serif';
+      ctx.fillText(currentNama, out.width/2, canvas.height + padding + 40);
+    }
+    const link = document.createElement('a');
+    link.download = `QR-${currentRegId}.png`;
+    link.href = out.toDataURL('image/png'); link.click();
+  }
+
+  function resetQRForm() {
+    document.getElementById('qr-result-panel').style.display = 'none';
+    document.getElementById('reg-id').value = '';
+    document.getElementById('jumlah').value = '1';
+    if (document.getElementById('nama')) document.getElementById('nama').value = '';
+    document.getElementById('qr-url-preview').value = '';
+    document.getElementById('reg-id').focus();
+  }
+
+  async function loadFromSupabase() {
+    const btn    = document.getElementById('btn-load');
+    const status = document.getElementById('load-status');
+    const result = document.getElementById('batch-result');
+    btn.disabled = true; btn.textContent = '⏳ Memuat...';
+    status.textContent = ''; status.className = 'load-status';
+    try {
+      if (!allJamaah.length) await refreshAll();
+      const rows = allJamaah;
+      if (!rows.length) {
+        status.textContent = 'Belum ada pendaftar.';
+        btn.disabled = false; btn.textContent = 'Load Data Pendaftar'; return;
+      }
+      status.textContent = `✅ ${rows.length} pendaftar ditemukan`;
+      status.className = 'load-status ok';
+      result.innerHTML = rows.map(r => `
+        <div class="batch-item">
+          <div>
+            <div class="b-id">${r.reg_id}</div>
+            <div class="b-jumlah">${r.nama} · ${(parseInt(r.ikhwan)||0)+(parseInt(r.akhwat)||0)} orang · ${r.kloter}</div>
+          </div>
+          <button class="b-btn" onclick="generateQR('${r.reg_id}', ${(parseInt(r.ikhwan)||0)+(parseInt(r.akhwat)||0)}, '${r.nama.replace(/'/g,"\\'")}')">QR</button>
+        </div>
+      `).join('');
+      result.style.display = 'block';
+    } catch(e) {
+      status.textContent = '❌ Gagal memuat data. Cek koneksi.';
+      status.className = 'load-status err';
+    }
+    btn.disabled = false; btn.textContent = '🔄 Refresh';
+  }
+
+  /* ════════════════════
+     TAB SWITCHING
+  ════════════════════ */
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    const idx = ['dashboard','jamaah','qrgen','scanner'].indexOf(tab);
+    document.querySelectorAll('.tab-nav-btn')[idx]?.classList.add('active');
+    if (tab === 'scanner') renderCheckinLog();
+  }
+
+  /* ════════════════════
+     TOAST
+  ════════════════════ */
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (type ? ' ' + type : '');
+    setTimeout(() => t.className = 'toast', 3000);
+  }
+
+  /* Auto refresh every 30s */
+  setInterval(() => { if (document.getElementById('app').style.display !== 'none') refreshAll(); }, 30000);
+</script>
+</body>
+</html>
