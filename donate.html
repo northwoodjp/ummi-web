@@ -3,293 +3,1886 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Infak & Wakaf | UMMI Masjid</title>
+  <title>Infak & Wakaf | Masjid UMMI</title>
 
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --navy:      #001E3C;
+      --blue:      #00376B;
+      --gold:      #C9A84C;
+      --soft-gold: #F0D080;
+      --gold-light:#FDF5DC;
+      --white:     #FFFFFF;
+      --bg:        #F6F8FC;
+      --card-bg:   #FFFFFF;
+      --border:    #DDE4EF;
+      --muted:     #6B7A99;
+      --text:      #111827;
+      --success:   #1a7a42;
+      --danger:    #C0392B;
+      --input-bg:  #EFF3FA;
+      --nav-bg:    rgba(255, 255, 255, 0.96);
+    }
+
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 1.15rem;
+    }
+
+    .nav-logo:hover {
+      color: var(--gold);
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--blue);
+      background: none;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: absolute;
+        top: 64px;
+        left: 0;
+        width: 100%;
+        background: var(--card-bg);
+        display: none;
+        flex-direction: column;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        margin: 0.6rem 0;
+      }
+
+      .hamburger {
+        display: block;
+      }
+    }
+
+
+    /* ============================================================
+       PAGE HERO
+    ============================================================ */
+    .page-hero {
+      padding: 7.5rem 1.5rem 4rem;
+      background: linear-gradient(150deg, var(--navy) 0%, #00376B 60%, #004F99 100%);
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='rgba(201,168,76,0.10)' stroke-width='1'%3E%3Cpath d='M0,40 Q20,20 40,40 Q60,60 80,40'/%3E%3Cpath d='M40,0 Q60,20 40,40 Q20,60 40,80'/%3E%3Cpath d='M0,40 Q20,60 40,40 Q60,20 80,40'/%3E%3Cpath d='M40,0 Q20,20 40,40 Q60,60 40,80'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 80px 80px;
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    .page-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-hero .arabic {
+      display: block;
+      font-size: 1.7rem;
+      color: var(--soft-gold);
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .page-hero p {
+      margin-top: 0.6rem;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.95rem;
+    }
+
+    .lang-switch {
+      display: inline-block;
+      margin-bottom: 1.2rem;
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .lang-switch:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+
+    /* ============================================================
+       HADITH STRIP
+    ============================================================ */
+    .hadith-strip {
+      background: var(--gold);
+      text-align: center;
+      padding: 1rem 1.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+
+    /* ============================================================
+       PAGE LAYOUT
+    ============================================================ */
+    .page-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 6rem;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 2px solid var(--input-bg);
+      margin: 0 0 1.4rem;
+    }
+
+    .helper {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+
+    /* ============================================================
+       CARD
+    ============================================================ */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 2rem 2.2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 2px 18px rgba(0, 30, 60, 0.06);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.4rem;
+      border-bottom: 2px solid var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+
+    /* ============================================================
+       BANK SLIDER
+    ============================================================ */
+    .bank-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.9rem;
+    }
+
+    .bank-nav-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .bank-nav-arrows {
+      display: flex;
+      gap: 6px;
+    }
+
+    .bank-arrow {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--card-bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      color: var(--blue);
+      padding: 0;
+    }
+
+    .bank-arrow:hover {
+      border-color: var(--gold);
+      background: var(--gold-light);
+      color: #8a6a00;
+    }
+
+    .bank-arrow:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      background: var(--card-bg);
+      border-color: var(--border);
+      color: var(--blue);
+    }
+
+    .bank-arrow svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.5;
+    }
+
+    .bank-slider-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bank-slider {
+      display: flex;
+      gap: 1rem;
+      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    .bank-slider .bank-block {
+      min-width: 100%;
+      flex-shrink: 0;
+    }
+
+    .bank-dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 1.1rem;
+    }
+
+    .bank-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: var(--border);
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s, width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .bank-dot.active {
+      background: var(--gold);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* Bank block card */
+    .bank-block {
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+    }
+
+    .bank-block .bank-flag {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .bank-block .bank-name {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .bank-block .bank-account {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 0.06em;
+    }
+
+    .bank-block .bank-branch {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .bank-block .bank-holder {
+      font-size: 0.82rem;
+      color: var(--navy);
+      font-weight: 600;
+      margin-top: 0.1rem;
+    }
+
+    .copy-btn {
+      margin-top: 0.8rem;
+      padding: 8px 16px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .copy-btn:hover {
+      background: var(--blue);
+    }
+
+    .copy-btn.copied {
+      background: var(--success);
+    }
+
+
+    /* ============================================================
+       FORM BASE
+    ============================================================ */
+    .form-group {
+      margin-bottom: 1.15rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.45rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-size: 0.95rem;
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+      font-family: inherit;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #aab4c8;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.15);
+      background: var(--card-bg);
+    }
+
+    .form-group input.valid  { border-color: var(--success); background: #f0faf4; }
+    .form-group input.invalid { border-color: var(--danger);  background: #fdf0f0; }
+
+    .inline-error {
+      font-size: 0.75rem;
+      color: var(--danger);
+      margin-top: 4px;
+      display: none;
+      font-weight: 600;
+    }
+
+    .inline-error.show {
+      display: block;
+    }
+
+
+    /* ============================================================
+       CURRENCY PILLS
+    ============================================================ */
+    .currency-section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .currency-pills {
+      display: flex;
+      gap: 0.7rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .currency-pill {
+      position: relative;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .currency-pill input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .currency-pill-inner {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--input-bg);
+      padding: 0.85rem 1rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .currency-pill-inner .cy-flag {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .currency-pill-inner .cy-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .currency-pill-inner .cy-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .currency-pill input:checked ~ .currency-pill-inner {
+      border-color: var(--gold);
+      background: var(--gold-light);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+    }
+
+
+    /* ============================================================
+       DONATION TYPE TABS
+    ============================================================ */
+    .dtype-section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .dtype-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .dtype-tab {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .dtype-tab input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .dtype-tab-inner {
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      background: var(--input-bg);
+      padding: 1.2rem 1rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .dtype-tab-inner .dt-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .dtype-tab-inner .dt-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .dtype-tab-inner .dt-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .dtype-tab input:checked ~ .dtype-tab-inner {
+      border-color: var(--gold);
+      background: var(--gold-light);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2), 0 4px 16px rgba(201, 168, 76, 0.15);
+    }
+
+
+    /* ============================================================
+       WAKAF SECTION
+    ============================================================ */
+    #wakaf-section {
+      display: none;
+    }
+
+    .wakaf-stepper-wrap {
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .wakaf-step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .wakaf-step-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .wakaf-step-price {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .stepper-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stepper-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--card-bg);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--blue);
+      transition: all 0.15s;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .stepper-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-light);
+    }
+
+    .stepper-btn:active {
+      transform: scale(0.88);
+    }
+
+    .stepper-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .stepper-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      min-width: 28px;
+      text-align: center;
+      color: var(--navy);
+      transition: transform 0.15s;
+    }
+
+    .stepper-val.bump {
+      transform: scale(1.35);
+    }
+
+    .wakaf-area-display {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .wakaf-area-display .area-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .wakaf-area-display .area-val {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    /* Wakaf total badge */
+    .wakaf-total-badge {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 14px;
+      padding: 1.1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.15rem;
+    }
+
+    .wakaf-total-badge .wt-left .wt-label {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .wakaf-total-badge .wt-left .wt-area {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--soft-gold);
+      margin-top: 2px;
+    }
+
+    .wakaf-total-badge .wt-amount {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wakaf-total-badge.empty {
+      background: var(--input-bg);
+    }
+
+    .wakaf-total-badge.empty .wt-left .wt-label,
+    .wakaf-total-badge.empty .wt-left .wt-area {
+      color: var(--muted);
+    }
+
+    .wakaf-total-badge.empty .wt-amount {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+
+    /* ============================================================
+       INFAK SECTION
+    ============================================================ */
+    #infak-section {
+      display: none;
+    }
+
+
+    /* ============================================================
+       CERTIFICATE RADIOS
+    ============================================================ */
+    .cert-radios {
+      display: flex;
+      gap: 0.7rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .cert-radio {
+      position: relative;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .cert-radio input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .cert-radio-inner {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--input-bg);
+      padding: 0.85rem 1rem;
+      text-align: center;
+      transition: all 0.2s;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--navy);
+    }
+
+    .cert-radio input:checked ~ .cert-radio-inner {
+      border-color: var(--gold);
+      background: var(--gold-light);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+    }
+
+
+    /* ============================================================
+       FILE UPLOAD
+    ============================================================ */
+    .file-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--input-bg);
+      position: relative;
+    }
+
+    .file-upload-area:hover {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+
+    .file-upload-area.has-file {
+      border-color: var(--success);
+      background: #f0faf4;
+      border-style: solid;
+    }
+
+    .file-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .file-upload-icon {
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .file-upload-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .file-upload-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .file-name-display {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--success);
+      margin-top: 6px;
+    }
+
+
+    /* ============================================================
+       SUBMIT BUTTON
+    ============================================================ */
+    .btn-submit {
+      width: 100%;
+      padding: 17px;
+      background: linear-gradient(135deg, var(--blue), var(--navy));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 30, 60, 0.28);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'DM Sans', sans-serif;
+      margin-top: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 30, 60, 0.38);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+
+    /* ============================================================
+       LOADING BOX
+    ============================================================ */
+    #loading-box {
+      display: none;
+      text-align: center;
+      background: var(--card-bg);
+      border: 1.5px solid var(--gold);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 1.2rem;
+    }
+
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 3px solid rgba(201, 168, 76, 0.25);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 0.9rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #loading-box p     { font-weight: 700; color: var(--navy); }
+    #loading-box small { color: var(--muted); }
+
+
+    /* ============================================================
+       SUCCESS SECTION
+    ============================================================ */
+    #success-section {
+      display: none;
+    }
+
+    .success-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 30, 60, 0.12);
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-header {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .success-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='rgba(201,168,76,0.10)' stroke-width='1'%3E%3Cpath d='M0,40 Q20,20 40,40 Q60,60 80,40'/%3E%3Cpath d='M40,0 Q60,20 40,40 Q20,60 40,80'/%3E%3Cpath d='M0,40 Q20,60 40,40 Q60,20 80,40'/%3E%3Cpath d='M40,0 Q20,20 40,40 Q60,60 40,80'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .success-header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .success-header .check {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      animation: popIn 0.5s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .success-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .success-header p {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.9rem;
+    }
+
+    .success-body {
+      padding: 2rem 2.2rem;
+      text-align: center;
+    }
+
+    .success-rows {
+      text-align: left;
+      margin-bottom: 1.4rem;
+    }
+
+    .success-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+    }
+
+    .success-row:last-child {
+      border-bottom: none;
+    }
+
+    .skey { color: var(--muted); font-weight: 500; }
+    .sval { font-weight: 700; color: var(--navy); text-align: right; }
+
+    .success-note {
+      background: var(--gold-light);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      font-size: 0.84rem;
+      color: #6B5A1A;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .btn-wa-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1.2rem;
+      padding: 13px 28px;
+      background: #1a9645;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(26, 150, 69, 0.35);
+      transition: transform 0.2s;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-wa-success:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 12px 28px;
+      background: var(--input-bg);
+      color: var(--navy);
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1.5px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .btn-back:hover {
+      background: var(--border);
+    }
+
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1100;
+      white-space: nowrap;
+      max-width: 90vw;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.err  { background: var(--danger); }
+    .toast.ok   { background: var(--success); }
+
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--navy);
+      color: rgba(255, 255, 255, 0.65);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: 0.88rem;
+      line-height: 1.9;
+      footer a { color: #F2D06B; text-decoration: none; }
+    }
+
+    footer strong {
+      color: var(--soft-gold);
+    }
+ 
+    .footer-inner { max-width: 600px; margin: 0 auto; }
+    .footer-links {
+      display: flex; justify-content: center;
+      gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .footer-links a { font-size: 0.88rem; color: rgba(255,255,255,0.6); text-decoration: none; }
+    .footer-links a:hover { color: #F2D06B; }
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0; }
+    footer a { color: #F2D06B; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    footer strong {
+      color: var(--soft-gold);
+    }
+
+  </style>
 </head>
 <body>
 
-<!-- ==================== NAVIGATION ==================== -->
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
 <nav>
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">UMMI Masjid</a>
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <a href="index.html" class="nav-logo">Masjid UMMI</a>
+    <button class="hamburger" onclick="document.getElementById('nav').classList.toggle('open')">☰</button>
     <div class="nav-links" id="nav">
       <a href="index.html#about">About</a>
       <a href="index.html#support">Support</a>
       <a href="index.html#location">Location</a>
       <a href="index.html#follow">Follow</a>
       <a href="contact.html">Contact Us</a>
-	</div>
+    </div>
   </div>
 </nav>
 
-<!-- ==================== PAGE HEADER ==================== -->
-<section class="donation-instructions fade">
-<a href="donasi.html" class="lang-switch">🇮🇩 ID</a>
-  <h2 class="section-title">Make a Donation</h2>
-  <p class="donation-subtitle">
-    Your contribution supports the establishment and sustainability of UMMI Masjid.
-  </p>
 
-<form class="donation-form" id="donationForm">
+<!-- ============================================================
+     HERO
+============================================================ -->
+<div class="page-hero">
+  <a href="donasi.html" class="lang-switch">🇮🇩 ID</a>
+  <span class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</span>
+  <h1>Infak & Wakaf<br>Masjid UMMI</h1>
+  <p>Suzuka, Mie Prefecture, Japan</p>
+</div>
 
-  <!-- Name -->
-  <div class="form-group">
-    <label>Your Name</label>
-    <input type="text" name="donor_name" placeholder="Full name" required />
-  </div>
 
-  <!-- Currency -->
-  <div class="form-group">
-    <label>Currency</label>
-    <div style="display:flex; gap:5rem;">
-      <label><input type="radio" name="currency" value="JPY" required /> JPY</label>
-      <label><input type="radio" name="currency" value="IDR" /> IDR</label>
+<!-- ============================================================
+     HADITH STRIP
+============================================================ -->
+<div class="hadith-strip">
+  "Whoever builds a masjid for Allah, Allah will build for him a house in Paradise." — Prophet Muhammad ﷺ
+</div>
+
+
+<div class="page-body">
+
+  <!-- ── BANK ACCOUNTS SLIDER ── -->
+  <div class="card">
+    <div class="card-title">🏦 Donation Accounts</div>
+
+    <div class="bank-nav">
+      <span class="bank-nav-label" id="bank-counter">1 / 3</span>
+      <div class="bank-nav-arrows">
+        <button class="bank-arrow" id="bank-prev" onclick="goToSlide(currentSlide - 1)" disabled aria-label="Previous">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+          </svg>
+        </button>
+        <button class="bank-arrow" id="bank-next" onclick="goToSlide(currentSlide + 1)" aria-label="Next">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="bank-slider-wrap">
+      <div class="bank-slider" id="bankSlider">
+
+        <div class="bank-block">
+          <span class="bank-flag">🇯🇵</span>
+          <div class="bank-name">MUFG Bank (JPY) · Primary Account</div>
+          <div class="bank-account">0587164</div>
+          <div class="bank-branch">Branch: Yokkaichi / 534</div>
+          <div class="bank-holder">シャ)ウマームスリムミエインドネシア</div>
+          <button class="copy-btn" onclick="copyText('0587164', this)">📋 Copy Number</button>
+        </div>
+
+        <div class="bank-block">
+          <span class="bank-flag">🇯🇵</span>
+          <div class="bank-name">Japan Post Bank (JPY)</div>
+          <div class="bank-account">12250 0791956</div>
+          <div class="bank-holder">ヨシダロシ ハルヤティ</div>
+          <button class="copy-btn" onclick="copyText('122500791956', this)">📋 Copy Number</button>
+        </div>
+
+        <div class="bank-block">
+          <span class="bank-flag">🇮🇩</span>
+          <div class="bank-name">Bank Syariah Indonesia (IDR)</div>
+          <div class="bank-account">7305811933</div>
+          <div class="bank-holder">LUKMANUL HAKIM</div>
+          <button class="copy-btn" onclick="copyText('7305811933', this)">📋 Copy Number</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bank-dots">
+      <button class="bank-dot active" onclick="goToSlide(0)" aria-label="Account 1"></button>
+      <button class="bank-dot"        onclick="goToSlide(1)" aria-label="Account 2"></button>
+      <button class="bank-dot"        onclick="goToSlide(2)" aria-label="Account 3"></button>
     </div>
   </div>
 
 
-  <!-- Donation Type -->
-  <div class="form-group">
-    <label>Donation Type</label>
-    <select name="donation_type" id="donationType" required>
-      <option value="">Select</option>
-      <option value="Wakaf">Wakaf</option>
-      <option value="Infak">Infak (General Donation)</option>
-    </select>
+  <!-- ── DONATION FORM ── -->
+  <div class="card" id="form-card">
+    <div class="card-title">📝 Donation Form</div>
+
+    <!-- Currency -->
+    <span class="currency-section-label">Currency</span>
+    <div class="currency-pills">
+      <label class="currency-pill">
+        <input type="radio" name="currency" value="JPY" id="cur-jpy" checked>
+        <div class="currency-pill-inner">
+          <span class="cy-flag">🇯🇵</span>
+          <span class="cy-name">JPY</span>
+          <span class="cy-sub">Japanese Yen</span>
+        </div>
+      </label>
+      <label class="currency-pill">
+        <input type="radio" name="currency" value="IDR" id="cur-idr">
+        <div class="currency-pill-inner">
+          <span class="cy-flag">🇮🇩</span>
+          <span class="cy-name">IDR</span>
+          <span class="cy-sub">Indonesian Rupiah</span>
+        </div>
+      </label>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Donation Type -->
+    <span class="dtype-section-label">Donation Type</span>
+    <div class="dtype-tabs">
+      <label class="dtype-tab">
+        <input type="radio" name="donation_type" value="Wakaf" id="type-wakaf">
+        <div class="dtype-tab-inner">
+          <span class="dt-icon">🕌</span>
+          <span class="dt-name">Wakaf</span>
+          <span class="dt-desc">Land / building endowment per m²</span>
+        </div>
+      </label>
+      <label class="dtype-tab">
+        <input type="radio" name="donation_type" value="Infak" id="type-infak">
+        <div class="dtype-tab-inner">
+          <span class="dt-icon">💛</span>
+          <span class="dt-name">Infak</span>
+          <span class="dt-desc">General donation for mosque operations</span>
+        </div>
+      </label>
+    </div>
+
+    <!-- Wakaf -->
+    <div id="wakaf-section">
+      <hr class="section-divider">
+      <div class="wakaf-stepper-wrap">
+        <div class="wakaf-step-header">
+          <span class="wakaf-step-title">🏗️ Number of Wakaf Units</span>
+          <span class="wakaf-step-price" id="unit-price-label">1 unit = ¥25,000 / 0.5 m²</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 0.88rem; color: var(--text); font-weight: 600;">Units (×0.5 m² each)</span>
+          <div class="stepper-ctrl">
+            <button type="button" class="stepper-btn" onclick="stepWakaf(-1)" id="wakaf-minus" disabled>−</button>
+            <span class="stepper-val" id="wakaf-val">0</span>
+            <button type="button" class="stepper-btn" onclick="stepWakaf(1)">+</button>
+          </div>
+        </div>
+        <div class="wakaf-area-display">
+          <span class="area-label">Total wakaf area</span>
+          <span class="area-val" id="wakaf-area-val">0 m²</span>
+        </div>
+      </div>
+      <div class="wakaf-total-badge empty" id="wakaf-badge">
+        <div class="wt-left">
+          <div class="wt-label">Wakaf Total</div>
+          <div class="wt-area" id="wakaf-badge-area">Please select the number of units first</div>
+        </div>
+        <div class="wt-amount" id="wakaf-badge-amount">—</div>
+      </div>
+      <div class="inline-error" id="err-wakaf">Minimum 1 wakaf unit required</div>
+    </div>
+
+    <!-- Infak -->
+    <div id="infak-section">
+      <hr class="section-divider">
+      <div class="form-group">
+        <label>Infak Amount</label>
+        <input type="number" id="infak-amount" min="1" placeholder="Enter amount" />
+        <div class="helper" id="infak-helper">Enter amount in JPY</div>
+      </div>
+      <div class="inline-error" id="err-infak">Infak amount cannot be empty</div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Name -->
+    <div class="form-group">
+      <label>Full Name *</label>
+      <input type="text" id="f-nama" name="donor_name" placeholder="Your full name" autocomplete="name">
+      <div class="inline-error" id="err-nama">Name cannot be empty</div>
+    </div>
+
+    <!-- Contact -->
+    <div class="form-group">
+      <label>Contact (Email / WhatsApp) *</label>
+      <input type="text" id="f-contact" name="contact" placeholder="email@example.com or 08012345678">
+      <div class="inline-error" id="err-contact">Contact cannot be empty</div>
+    </div>
+
+    <!-- Certificate -->
+    <span class="currency-section-label">Donation Certificate</span>
+    <div class="cert-radios">
+      <label class="cert-radio">
+        <input type="radio" name="certificate_required" value="Ya" id="cert-ya">
+        <div class="cert-radio-inner">✅ Yes, I want a certificate</div>
+      </label>
+      <label class="cert-radio">
+        <input type="radio" name="certificate_required" value="Tidak" id="cert-tidak">
+        <div class="cert-radio-inner">🚫 No, thank you</div>
+      </label>
+    </div>
+
+    <div class="form-group" id="cert-name-group" style="display: none;">
+      <label>Name on Certificate *</label>
+      <input type="text" id="f-cert-name" placeholder="Name to appear on the certificate">
+      <div class="helper">Can be your own name, family member, or a deceased loved one</div>
+      <div class="inline-error" id="err-cert">Certificate name cannot be empty</div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- File Upload -->
+    <div class="form-group">
+      <label>Transfer Proof *</label>
+      <div class="file-upload-area" id="upload-area">
+        <input type="file" id="transferProof" accept="image/*,application/pdf" onchange="handleFileChange(this)">
+        <div class="file-upload-icon" id="upload-icon">📎</div>
+        <div class="file-upload-text" id="upload-text">Click or drag & drop file here</div>
+        <div class="file-upload-sub"  id="upload-sub">JPG, PNG, or PDF · Max 5MB</div>
+        <div class="file-name-display" id="file-name"></div>
+      </div>
+      <div class="inline-error" id="err-file">Transfer proof is required</div>
+    </div>
+
+    <!-- Notes -->
+    <div class="form-group">
+      <label>Notes (Optional)</label>
+      <textarea id="f-message" rows="3" placeholder="Message, prayer, or additional information..."></textarea>
+    </div>
+
+    <button class="btn-submit" id="btn-submit" onclick="submitForm()">Submit Donation →</button>
   </div>
 
-  <!-- Wakaf -->
-  <div class="form-group" id="wakafOptions" style="display:none;">
-    <label>Wakaf Type</label>
 
-    <select name="wakaf_package" id="wakafPackage">
-      <option value="">Select Wakaf</option>
-
-      <option value="Baqiyyatush Shalihat (for the Deceased)" data-jpy="10000" data-idr="1000000"></option>
-      <option value="Darussalam" data-jpy="10000" data-idr="1000000"></option>
-      <option value="Ma'wa" data-jpy="15000" data-idr="1500000"></option>
-      <option value="Na'im" data-jpy="20000" data-idr="2000000"></option>
-      <option value="Adn" data-jpy="25000" data-idr="2500000"></option>
-      <option value="Firdaus" data-jpy="30000" data-idr="3000000"></option>
-    </select>
+  <!-- ── LOADING ── -->
+  <div id="loading-box">
+    <div class="spinner"></div>
+    <p>⏳ Please wait, do not refresh the page.</p>
+    <small>The system is processing your submission.</small>
   </div>
 
-  <!-- Infak -->
-  <div class="form-group" id="infakAmount" style="display:none;">
-    <label>Infak Amount</label>
-    <input type="number" name="infak_amount" min="1" placeholder="Enter amount" />
+
+  <!-- ── SUCCESS ── -->
+  <div id="success-section">
+    <div class="success-card">
+      <div class="success-header">
+        <div class="check">✅</div>
+        <h2>Donation Received!</h2>
+        <p>Jazakumullahu khairan for your generosity. May it be a lasting act of charity.</p>
+      </div>
+      <div class="success-body">
+        <div class="success-rows">
+          <div class="success-row"><span class="skey">Name</span>    <span class="sval" id="sk-nama">—</span></div>
+          <div class="success-row"><span class="skey">Type</span>    <span class="sval" id="sk-jenis">—</span></div>
+          <div class="success-row"><span class="skey">Amount</span>  <span class="sval" id="sk-amount">—</span></div>
+          <div class="success-row"><span class="skey">Contact</span> <span class="sval" id="sk-contact">—</span></div>
+        </div>
+        <div class="success-note">
+          📌 The committee will verify your transfer and contact you via the provided details.<br><br>
+          💬 Click the button below to open WhatsApp and send your confirmation to the committee.
+        </div>
+        <div class="success-actions">
+          <a href="#" class="btn-wa-success" id="btn-wa-manual" target="_blank">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Confirm via WhatsApp
+          </a>
+          <a href="index.html" class="btn-back">← Back to Home</a>
+        </div>
+      </div>
+    </div>
   </div>
 
- <!-- Certificate Choice -->
-<div class="form-group">
-  <label>Donation Certificate</label>
-  <div style="display:flex; gap:3rem;">
-    <label>
-      <input type="radio" name="certificate_required" value="Ya">
-      Yes
-    </label>
-    <label>
-      <input type="radio" name="certificate_required" value="Tidak">
-      No
-    </label>
-  </div>
-</div>
+</div><!-- end .page-body -->
 
-<!-- Certificate Name -->
-<div class="form-group" id="certificateNameGroup" style="display:none;">
-  <label>Name on Certificate</label>
-  <input
-    type="text"
-    name="certificate_name"
-    placeholder="Full name for certificate"
-  required/>
-</div>
 
-  <!-- Contact -->
-  <div class="form-group">
-    <label>Contact Person</label>
-    <input type="text" name="contact" placeholder="Email or WhatsApp" required />
-  </div>
-
-  <!-- Upload -->
-  <div class="form-group">
-    <label>Upload Transfer Proof</label>
-    <input type="file" id="transferProof" accept="image/*,application/pdf" required/>
-  </div>
-
-  <!-- Message -->
-  <div class="form-group">
-    <label>Message (Optional)</label>
-    <textarea name="message" rows="4" placeholder="Type here..""></textarea>
-  </div>
-
-  <button type="submit" class="donation-btn">
-    Proceed to Donation
-  </button>
-
-</form>
-</section>
-
-<!-- ==================== FOOTER ==================== -->
+<!-- ============================================================
+     FOOTER
+============================================================ -->
 <footer>
-  <p>
-    <br><br>
-    “Whoever builds a masjid for Allah,
-    Allah will build for him a house in Paradise.”
-    <br>— Prophet Muhammad ﷺ
-    <br><br>
-    © UMMI Masjid · ummi.jp · info@ummi.jp
-  </p>
+    <div class="footer-inner">
+       <p>
+        <strong>Masjid UMMI</strong> · Suzuka, Mie Prefecture, Japan<br>"Whoever builds a masjid for Allah,<br>
+        Allah will build for him a house in Paradise."<br>
+        <em style="color:rgba(255,255,255,0.4)">— Prophet Muhammad ﷺ</em>
+      </p>
+      <p style="margin-top:1.5rem;font-size:0.82rem;color:rgba(255,255,255,0.35)">
+        © 2026 Masjid UMMI · <a href="mailto:info@ummi.jp">info@ummi.jp</a> · ummi.jp
+      </p>
+    </div>
 </footer>
 
-<!-- ==================== SCRIPT ==================== -->
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
 <script>
-/* Donation type toggle */
-const donationType = document.getElementById("donationType");
-const wakafOptions = document.getElementById("wakafOptions");
-const infakAmount = document.getElementById("infakAmount");
 
-donationType.addEventListener("change", () => {
-  wakafOptions.style.display = "none";
-  infakAmount.style.display = "none";
+  /* ============================================================
+     CONSTANTS
+  ============================================================ */
+  const PRICE_JPY    = 25000;
+  const PRICE_IDR    = 2500000;
+  const TOTAL_SLIDES = 3;
+  const GAS_URL      = 'https://script.google.com/macros/s/AKfycbzyRAi99ksEHqJnhzjKNbd_YYm9AqdZam2ZqN0BJrJmtqi0AdkLa2Q-3iWbR0GN1PMf/exec';
+  const WORKER_URL   = 'https://ummi-donationform.northwoodjp.workers.dev/';
+  const WA_PANITIA   = '818048420815';
 
-  if (donationType.value === "Wakaf") wakafOptions.style.display = "block";
-  if (donationType.value === "Infak") infakAmount.style.display = "block";
-});
-
-/* Pattern A: Compact amount badge */
-const currencyRadios = document.querySelectorAll("input[name='currency']");
-const wakafPackage = document.getElementById("wakafPackage");
-
-function formatShort(amount, currency) {
-  return currency === "JPY"
-    ? `¥${Number(amount).toLocaleString()}`
-    : `Rp${Number(amount).toLocaleString("id-ID")}`;
-}
-
-function updateWakafOptions() {
-  const currency = document.querySelector("input[name='currency']:checked")?.value;
-  if (!currency) return;
-
-  [...wakafPackage.options].forEach(opt => {
-    if (!opt.dataset.jpy) return;
-
-    const amount = currency === "JPY" ? opt.dataset.jpy : opt.dataset.idr;
-    opt.textContent = `${opt.value}   ${formatShort(amount, currency)}`;
-  });
-}
-
-currencyRadios.forEach(r => r.addEventListener("change", updateWakafOptions));
-updateWakafOptions();
+  let currentSlide = 0;
+  let wakafUnits   = 0;
 
 
-/* Certificate toggle */
-const certRadios = document.querySelectorAll(
-  "input[name='certificate_required']"
-);
-const certNameGroup = document.getElementById("certificateNameGroup");
-const certNameInput = certNameGroup.querySelector("input");
+  /* ============================================================
+     BANK SLIDER
+  ============================================================ */
+  function goToSlide(index) {
+    if (index < 0 || index >= TOTAL_SLIDES) return;
 
-certRadios.forEach(radio => {
-  radio.addEventListener("change", () => {
-    if (radio.value === "Ya" && radio.checked) {
-      certNameGroup.style.display = "block";
-      certNameInput.required = true;
-    } else if (radio.value === "Tidak" && radio.checked) {
-      certNameGroup.style.display = "none";
-      certNameInput.required = false;
-      certNameInput.value = "";
-    }
-  });
-});
+    currentSlide = index;
 
+    const wrap       = document.getElementById('bankSlider').parentElement;
+    const slideWidth = wrap.offsetWidth + 16; // 16px = 1rem gap
 
-/* Upload helper */
-async function uploadFile(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const data = e.target.result.split(",");
-      resolve({
-        fileName: file.name,
-        data: e.target.result.split(",")[1],
-      });
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+    document.getElementById('bankSlider').style.transform =
+      `translateX(-${index * slideWidth}px)`;
 
-/* Submit */
-const form = document.getElementById("donationForm");
-
-form.addEventListener("submit", async e => {
-  e.preventDefault();
-
-  const btn = form.querySelector("button");
-  btn.disabled = true;
-  btn.textContent = "Submitting...";
-
-  try {
-    const formData = new FormData(form);
-    const payload = {};
-    for (let [k, v] of formData.entries()) payload[k] = v;
-    payload.timestamp = new Date().toISOString();
-
-    if (payload.donation_type === "Wakaf") {
-      const opt = wakafPackage.selectedOptions[0];
-      payload.amount =
-        payload.currency === "JPY" ? opt.dataset.jpy : opt.dataset.idr;
-      payload.wakaf_name = opt.value;
-    }
-
-    if (payload.donation_type === "Infak") {
-      payload.amount = payload.infak_amount;
-    }
-
-    const fileInput = document.getElementById("transferProof");
-    if (fileInput.files.length > 0) {
-      payload.fileData = await uploadFile(fileInput.files[0]);
-    }
-
-    // ---- Send to Google Sheets ----//
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbzyRAi99ksEHqJnhzjKNbd_YYm9AqdZam2ZqN0BJrJmtqi0AdkLa2Q-3iWbR0GN1PMf/exec",
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-      }
+    document.querySelectorAll('.bank-dot').forEach((dot, i) =>
+      dot.classList.toggle('active', i === index)
     );
 
-    const result = await res.json();
-    if (result.status !== "success") throw new Error(result.message);
+    document.getElementById('bank-prev').disabled    = index === 0;
+    document.getElementById('bank-next').disabled    = index === TOTAL_SLIDES - 1;
+    document.getElementById('bank-counter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  }
 
-    // ---- Send WhatsApp notification via Cloudflare Worker ----//
-    try {
-      await fetch("https://ummi-donationform.northwoodjp.workers.dev/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-    } catch (waErr) {
-      console.warn("WhatsApp notification failed:", waErr);
+  // Recalculate slide position on resize
+  window.addEventListener('resize', () => goToSlide(currentSlide));
+
+  // Touch swipe support
+  (function initSwipe() {
+    const el = document.getElementById('bankSlider');
+    let startX = 0;
+
+    el.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    el.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        goToSlide(diff > 0 ? currentSlide + 1 : currentSlide - 1);
+      }
+    });
+  })();
+
+
+  /* ============================================================
+     HELPERS
+  ============================================================ */
+  function getCurrency() {
+    return document.querySelector('input[name="currency"]:checked')?.value || 'JPY';
+  }
+
+  function formatAmount(amount, currency) {
+    return currency === 'JPY'
+      ? `¥${Number(amount).toLocaleString()}`
+      : `Rp${Number(amount).toLocaleString('id-ID')}`;
+  }
+
+  function showToast(msg, type = 'err') {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className   = `toast show ${type}`;
+    setTimeout(() => { toast.className = 'toast'; }, 3500);
+  }
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload  = e => resolve({ fileName: file.name, data: e.target.result.split(',')[1] });
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  /* ============================================================
+     CURRENCY CHANGE
+  ============================================================ */
+  document.querySelectorAll('input[name="currency"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      updateWakafBadge();
+      updateUnitPriceLabel();
+      document.getElementById('infak-helper').textContent =
+        `Enter amount in ${getCurrency()}`;
+    });
+  });
+
+  function updateUnitPriceLabel() {
+    const cur   = getCurrency();
+    const price = cur === 'JPY' ? PRICE_JPY : PRICE_IDR;
+    document.getElementById('unit-price-label').textContent =
+      `1 unit = ${formatAmount(price, cur)} / 0.5 m²`;
+  }
+
+
+  /* ============================================================
+     DONATION TYPE TOGGLE
+  ============================================================ */
+  document.querySelectorAll('input[name="donation_type"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.getElementById('wakaf-section').style.display =
+        radio.value === 'Wakaf' && radio.checked ? 'block' : 'none';
+      document.getElementById('infak-section').style.display =
+        radio.value === 'Infak' && radio.checked ? 'block' : 'none';
+    });
+  });
+
+
+  /* ============================================================
+     WAKAF STEPPER
+  ============================================================ */
+  function stepWakaf(delta) {
+    const next = wakafUnits + delta;
+    if (next < 0 || next > 100) return;
+
+    wakafUnits = next;
+
+    const valEl = document.getElementById('wakaf-val');
+    valEl.textContent = next;
+    valEl.classList.add('bump');
+    setTimeout(() => valEl.classList.remove('bump'), 150);
+
+    document.getElementById('wakaf-minus').disabled = next === 0;
+
+    updateWakafBadge();
+
+    if (next > 0) {
+      document.getElementById('err-wakaf').classList.remove('show');
+    }
+  }
+
+  function updateWakafBadge() {
+    const cur   = getCurrency();
+    const price = cur === 'JPY' ? PRICE_JPY : PRICE_IDR;
+    const area  = (wakafUnits * 0.5).toFixed(1);
+    const badge = document.getElementById('wakaf-badge');
+
+    document.getElementById('wakaf-area-val').textContent = `${area} m²`;
+
+    if (wakafUnits === 0) {
+      badge.className = 'wakaf-total-badge empty';
+      document.getElementById('wakaf-badge-area').textContent   = 'Please select the number of units first';
+      document.getElementById('wakaf-badge-amount').textContent = '—';
+    } else {
+      badge.className = 'wakaf-total-badge';
+      document.getElementById('wakaf-badge-area').textContent   = `${wakafUnits} unit × 0.5 m² = ${area} m²`;
+      document.getElementById('wakaf-badge-amount').textContent = formatAmount(wakafUnits * price, cur);
+    }
+  }
+
+
+  /* ============================================================
+     CERTIFICATE TOGGLE
+  ============================================================ */
+  document.querySelectorAll('input[name="certificate_required"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const show  = radio.value === 'Ya' && radio.checked;
+      const group = document.getElementById('cert-name-group');
+      const input = document.getElementById('f-cert-name');
+
+      group.style.display = show ? 'block' : 'none';
+      input.required      = show;
+
+      if (!show) {
+        input.value = '';
+        document.getElementById('err-cert').classList.remove('show');
+      }
+    });
+  });
+
+
+  /* ============================================================
+     FILE UPLOAD UI
+  ============================================================ */
+  function handleFileChange(input) {
+    const area = document.getElementById('upload-area');
+
+    if (input.files.length > 0) {
+      area.classList.add('has-file');
+      document.getElementById('upload-icon').textContent   = '✅';
+      document.getElementById('upload-text').textContent   = 'File selected';
+      document.getElementById('upload-sub').style.display  = 'none';
+      document.getElementById('file-name').textContent     = input.files[0].name;
+      document.getElementById('err-file').classList.remove('show');
+    } else {
+      area.classList.remove('has-file');
+      document.getElementById('upload-icon').textContent   = '📎';
+      document.getElementById('upload-text').textContent   = 'Click or drag & drop file here';
+      document.getElementById('upload-sub').style.display  = 'block';
+      document.getElementById('file-name').textContent     = '';
+    }
+  }
+
+
+  /* ============================================================
+     COPY TO CLIPBOARD
+  ============================================================ */
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 Copy Number';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+
+  /* ============================================================
+     FORM SUBMISSION
+  ============================================================ */
+  async function submitForm() {
+    const cur      = getCurrency();
+    const dtype    = document.querySelector('input[name="donation_type"]:checked')?.value;
+    const nama     = document.getElementById('f-nama').value.trim();
+    const contact  = document.getElementById('f-contact').value.trim();
+    const certReq  = document.querySelector('input[name="certificate_required"]:checked')?.value;
+    const certName = document.getElementById('f-cert-name').value.trim();
+    const fileInput = document.getElementById('transferProof');
+    const message  = document.getElementById('f-message').value.trim();
+
+    // ── Validation ──
+    let valid = true;
+
+    if (!nama) {
+      document.getElementById('err-nama').classList.add('show');
+      valid = false;
+    }
+    if (!contact) {
+      document.getElementById('err-contact').classList.add('show');
+      valid = false;
+    }
+    if (!fileInput.files.length) {
+      document.getElementById('err-file').classList.add('show');
+      valid = false;
+    }
+    if (!dtype) {
+      showToast('Please select a donation type first');
+      valid = false;
+    } else if (dtype === 'Wakaf' && wakafUnits < 1) {
+      document.getElementById('err-wakaf').classList.add('show');
+      valid = false;
+    } else if (dtype === 'Infak') {
+      const val = document.getElementById('infak-amount').value;
+      if (!val || parseFloat(val) <= 0) {
+        document.getElementById('err-infak').classList.add('show');
+        valid = false;
+      }
+    }
+    if (certReq === 'Ya' && !certName) {
+      document.getElementById('err-cert').classList.add('show');
+      valid = false;
     }
 
-    // ---- Success redirect ----//
-    window.location.href = `thankyou.html?ref=${Date.now()}`;
+    if (!valid) {
+      showToast('Please complete all required fields');
+      return;
+    }
 
-  } catch (err) {
-    alert("Submission failed: " + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Proceed to Donation";
+    // ── Loading state ──
+    const btn = document.getElementById('btn-submit');
+    btn.disabled    = true;
+    btn.textContent = '⏳ Submitting...';
+    document.getElementById('loading-box').style.display = 'block';
+
+    try {
+      // ── Build payload ──
+      const price = cur === 'JPY' ? PRICE_JPY : PRICE_IDR;
+      let amount, amountDisplay;
+
+      if (dtype === 'Wakaf') {
+        amount        = wakafUnits * price;
+        amountDisplay = `${formatAmount(amount, cur)} (${wakafUnits} unit / ${(wakafUnits * 0.5).toFixed(1)} m²)`;
+      } else {
+        amount        = parseFloat(document.getElementById('infak-amount').value);
+        amountDisplay = formatAmount(amount, cur);
+      }
+
+      const fileData = await readFileAsBase64(fileInput.files[0]);
+
+      const payload = {
+        donor_name:           nama,
+        contact,
+        currency:             cur,
+        donation_type:        dtype,
+        amount:               String(amount),
+        amount_display:       amountDisplay,
+        certificate_required: certReq || 'Tidak',
+        certificate_name:     certReq === 'Ya' ? certName : '',
+        message,
+        fileData,
+        timestamp:            new Date().toISOString(),
+        ...(dtype === 'Wakaf' && {
+          wakaf_units: wakafUnits,
+          wakaf_area:  (wakafUnits * 0.5).toFixed(1),
+        }),
+      };
+
+      // ── Send to Google Sheets ──
+      const res    = await fetch(GAS_URL, {
+        method:  'POST',
+        body:    JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      });
+      const result = await res.json();
+      if (result.status !== 'success') throw new Error(result.message);
+
+      // ── Send Telegram notification via Cloudflare Worker ──
+      try {
+        const { fileData: _stripped, ...payloadWithoutFile } = payload;
+        await fetch(WORKER_URL, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payloadWithoutFile),
+        });
+      } catch (telegramErr) {
+        console.warn('Telegram notification failed:', telegramErr);
+      }
+
+      // ── Show success UI ──
+      document.getElementById('form-card').style.display    = 'none';
+      document.getElementById('loading-box').style.display  = 'none';
+      document.getElementById('sk-nama').textContent    = nama;
+      document.getElementById('sk-jenis').textContent   = dtype;
+      document.getElementById('sk-amount').textContent  = amountDisplay;
+      document.getElementById('sk-contact').textContent = contact;
+
+      const waMsg = [
+        `Assalamu'alaikum warahmatullahi wabarakatuh.`,
+        ``,
+        `I would like to confirm the following donation:`,
+        ``,
+        `• Name: ${nama}`,
+        `• Type: ${dtype}`,
+        `• Amount: ${amountDisplay}`,
+        `• Contact: ${contact}`,
+        ``,
+        `Transfer proof has been submitted via the form.`,
+        ``,
+        `Jazakumullahu khairan.`,
+      ].join('\n');
+
+      document.getElementById('btn-wa-manual').href =
+        `https://wa.me/${WA_PANITIA}?text=${encodeURIComponent(waMsg)}`;
+
+      document.getElementById('success-section').style.display = 'block';
+      document.getElementById('success-section').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      document.getElementById('loading-box').style.display = 'none';
+      btn.disabled    = false;
+      btn.textContent = 'Submit Donation →';
+      showToast('An error occurred. Please try again.');
+      console.error(err);
+    }
   }
-});
-</script>
 
+
+  /* ============================================================
+     LIVE ERROR CLEARING
+  ============================================================ */
+  const errorMap = {
+    'f-nama':       'err-nama',
+    'f-contact':    'err-contact',
+    'f-cert-name':  'err-cert',
+    'infak-amount': 'err-infak',
+  };
+
+  Object.entries(errorMap).forEach(([inputId, errorId]) => {
+    const el = document.getElementById(inputId);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      if (el.value.trim()) {
+        document.getElementById(errorId)?.classList.remove('show');
+      }
+    });
+  });
+
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  updateUnitPriceLabel();
+  updateWakafBadge();
+
+</script>
 </body>
 </html>

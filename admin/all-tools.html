@@ -695,6 +695,15 @@
             <div class="kc-count" id="kct-3">— / 150</div>
             <div class="kc-sisa" id="kcs-3"></div>
           </div>
+          <div class="kloter-card" id="kc-4">
+            <div class="kc-header">
+              <div><div class="kc-name">Kloter 4</div><div class="kc-time">09.45</div></div>
+              <span class="kc-badge ok" id="kb-4">—</span>
+            </div>
+            <div class="kc-track"><div class="kc-fill" id="kf-4"></div></div>
+            <div class="kc-count" id="kct-4">— / 150</div>
+            <div class="kc-sisa" id="kcs-4"></div>
+          </div>
         </div>
       </div>
 
@@ -723,6 +732,7 @@
             <option value="Kloter 1 - 06.30">Kloter 1 — 06.30</option>
             <option value="Kloter 2 - 07.45">Kloter 2 — 07.45</option>
             <option value="Kloter 3 - 08.45">Kloter 3 — 08.45</option>
+            <option value="Kloter 4 - 09.45">Kloter 4 — 09.45</option>
           </select>
           <select id="filter-checkin" onchange="filterTable()">
             <option value="">Semua</option>
@@ -857,6 +867,7 @@
     { id: 1, key: "Kloter 1 - 06.30" },
     { id: 2, key: "Kloter 2 - 07.45" },
     { id: 3, key: "Kloter 3 - 08.45" },
+    { id: 4, key: "Kloter 4 - 09.45" },
   ];
 
   /* ════════════════════
@@ -974,7 +985,7 @@
   function updateDashboard() {
     const checkinIds = new Set(allCheckin.map(c => c.reg_id));
     let totalJamaah = 0, totalIkhwan = 0, totalAkhwat = 0;
-    const byK = { 1:0, 2:0, 3:0 };
+    const byK = { 1:0, 2:0, 3:0, 4:0 };
 
     allJamaah.forEach(r => {
       const ikh = parseInt(r.ikhwan)||0;

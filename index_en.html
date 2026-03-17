@@ -1,43 +1,18 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Masjid UMMI — Mari Wujudkan Masjid di Prefektur Mie</title>
-
+  <title>Masjid UMMI — Help Us Build a Masjid in Mie Prefecture Today</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 
-   <style>
-     /* ============================================================
-       TOAST
-    ============================================================ */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--navy);
-      color: white;
-      padding: 12px 22px;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 1100;
-      white-space: nowrap;
-      max-width: 90vw;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
+  <style>
 
-    .lang-switch {
+     .lang-switch {
       display: inline-block;
       margin-bottom: 1.2rem;
       background: rgba(255, 255, 255, 0.12);
@@ -54,6 +29,7 @@
       background: rgba(255, 255, 255, 0.22);
     }
 
+      
     /* ── FONT OVERRIDE ── */
     * { font-family: 'DM Sans', sans-serif; }
     h1, h2, h3, .section-title { font-family: 'Playfair Display', serif; }
@@ -254,7 +230,7 @@
     .floating-eid:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,40,80,0.4); }
 
     /* ── FOOTER ── */
-     footer {
+    footer {
       background: var(--navy);
       color: rgba(255, 255, 255, 0.65);
       text-align: center;
@@ -282,48 +258,45 @@
     footer strong {
       color: var(--soft-gold);
     }
-    
   </style>
 </head>
 
 <body>
 
-<!-- ==================== NAVIGATION ==================== -->
-<nav>
-<div class="nav-inner">
+  <!-- ==================== NAVIGATION ==================== -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Masjid UMMI</a>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
+      <div class="nav-links" id="nav">
+        <a href="#about">About</a>
+        <a href="#support">Support</a>
+        <a href="#location">Location</a>
+        <a href="#follow">Follow</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="eid-fitr/daftar_eid.html" class="nav-eid-link">Idul Fitri</a>
+      </div>
+    </div>
+  </nav>
 
-<a href="index.html" class="nav-logo">Masjid UMMI</a>
 
-<div class="hamburger" onclick="toggleMenu()">☰</div>
-
-<div class="nav-links" id="nav">
-<a href="#about">Tentang</a>
-<a href="#support">Dukung</a>
-<a href="#location">Lokasi</a>
-<a href="#follow">Ikuti Kami</a>
-<a href="contact.html">Hubungi Kami</a>
-<a href="eid-fitr/daftar_eid.html" class="nav-eid-link">Idul Fitri</a>
-</div>
-
-</div>
-</nav>
-
-<!-- ==================== HERO ==================== -->
+  <!-- ==================== HERO ==================== -->
   <section class="hero">
     <div class="fade">
-    <a href="index_en.html" class="lang-switch">🇬🇧 EN</a>
-      <h1>Sebuah Masjid.<br>Sebuah Warisan.</h1>
-      <p>Apa yang kita bangun hari ini akan terus memberi manfaat setelah kita tiada.</p>
+      <a href="index.html" class="lang-switch">🇮🇩 ID</a>
+      <h1>A Masjid.<br>A Legacy.</h1>
+      <p>What we build today lives beyond us.</p>
       <div class="deadline">
         Second payment deadline — <strong>April 1, 2026</strong>
       </div>
       <div class="hero-cta-row">
-        <a href="#support" class="btn-hero-primary">Dukung Pembangunan Masjid</a>
+        <a href="#support" class="btn-hero-primary">Support the Masjid</a>
       </div>
     </div>
   </section>
 
-<!-- ==================== IDUL FITRI BANNER ==================== -->
+
+  <!-- ==================== IDUL FITRI BANNER ==================== -->
   <div class="eid-banner">
     <span class="eid-eyebrow">Idul Fitri 1447H</span>
     <span class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</span>
@@ -341,148 +314,217 @@
     </div>
   </div>
 
-<!-- ==================== ABOUT ==================== -->
+
+  <!-- ==================== ABOUT ==================== -->
   <section id="about">
-    <h2 class="section-title fade">Tentang UMMI</h2>
+    <h2 class="section-title fade">About UMMI</h2>
     <p class="about fade">
-      <strong>一般社団法人 Ummah Muslim Mie Indonesia (UMMI)</strong> melayani komunitas Muslim Indonesia di Prefektur Mie, Jepang. Kami sedang membangun Masjid UMMI sebagai tempat ibadah permanen — pusat sholat, pembelajaran, dan kebersamaan bagi umat. Waktu terus berjalan, dan dukungan Anda dapat mewujudkan warisan kebaikan yang akan memberi manfaat bagi generasi mendatang.
+      <strong>一般社団法人 Ummah Muslim Mie Indonesia (UMMI)</strong> serves the Indonesian Muslim community in Mie Prefecture, Japan. We are building UMMI Masjid, a permanent home for prayer, learning, and community. Time is moving, and your support can make this lasting legacy a reality.
     </p>
     <div style="text-align:center">
-      <a class="learn-more fade" href="#timeline">Pelajari Lebih Lanjut</a>
+      <a class="learn-more fade" href="#timeline">Learn More</a>
     </div>
   </section>
 
-<!-- ==================== COUNTDOWN ==================== -->
+
+  <!-- ==================== COUNTDOWN ==================== -->
   <section class="countdown-section fade">
-    <h2 class="section-title">Waktu Terus Berjalan</h2>
-    <p class="countdown-sub">Batas waktu pembelian bangunan semakin dekat. Setiap hari sangat berarti.</p>
+    <h2 class="section-title">Time Is Moving</h2>
+    <p class="countdown-sub">The building acquisition deadline is approaching. Every day matters.</p>
     <div class="countdown-timer" id="countdown">
-      <div class="time-box"><span id="days">00</span><small>Hari</small></div>
-      <div class="time-box"><span id="hours">00</span><small>Jam</small></div>
-      <div class="time-box"><span id="minutes">00</span><small>Menit</small></div>
-      <div class="time-box"><span id="seconds">00</span><small>Detik</small></div>
+      <div class="time-box"><span id="days">00</span><small>Days</small></div>
+      <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
+      <div class="time-box"><span id="minutes">00</span><small>Minutes</small></div>
+      <div class="time-box"><span id="seconds">00</span><small>Seconds</small></div>
     </div>
-    <p class="countdown-note">Mari bersama mewujudkan rumah ibadah permanen bagi komunitas Muslim di Prefektur Mie.</p>
+    <p class="countdown-note">Help secure a permanent home for the Muslim community in Mie.</p>
   </section>
 
 
-<!-- ==================== TIMELINE ==================== -->
+  <!-- ==================== TIMELINE ==================== -->
   <section id="timeline">
-    <h2 class="section-title fade">Langkah Menuju Terwujudnya Masjid</h2>
+    <h2 class="section-title fade">A Clear Path Forward</h2>
     <p class="timeline-desc fade">
-      Pembangunan ini tidak terjadi dalam semalam. Ia tumbuh dengan niat baik, langkah demi langkah, dengan amanah, transparansi, dan dukungan dari Anda semua.
-
+      This is not built overnight. It grows with intention — step by step — guided by trust, transparency, and your support.
     </p>
     <div class="timeline-modern fade">
       <div class="timeline-line-modern"></div>
       <div class="timeline-step">
         <span class="dot"></span>
-        <div class="card"><h3>Tahap 1</h3><strong>Pembelian Bangunan</strong><p>Penggalangan dana, pembelian properti, proses legal, serta perencanaan teknis.</p></div>
+        <div class="card"><h3>Phase 1</h3><strong>Secure the Building</strong><p>Fundraising, purchase, legal process, and technical planning.</p></div>
       </div>
       <div class="timeline-step">
         <span class="dot"></span>
-        <div class="card"><h3>Tahap 2</h3><strong>Mulai Digunakan untuk Sholat</strong><p>Renovasi dasar agar sholat lima waktu dan sholat Jumat dapat segera dilaksanakan.</p></div>
+        <div class="card"><h3>Phase 2</h3><strong>Open for Prayer</strong><p>Essential renovation so daily and Friday prayers can begin as soon as possible.</p></div>
       </div>
       <div class="timeline-step">
         <span class="dot"></span>
-        <div class="card"><h3>Tahap 3</h3><strong>Mengembangkan Komunitas</strong><p>Pembangunan ruang kelas, ruang kegiatan, dan fasilitas pembelajaran bagi umat.</p></div>
+        <div class="card"><h3>Phase 3</h3><strong>Grow the Community</strong><p>Classrooms, activity spaces, and facilities that nurture learning and belonging.</p></div>
       </div>
       <div class="timeline-step">
         <span class="dot"></span>
-        <div class="card"><h3>Tahap 4</h3><strong>Operasional Penuh</strong><p>Peresmian masjid, program-program publik, serta keterlibatan aktif dengan masyarakat sekitar.</p></div>
+        <div class="card"><h3>Phase 4</h3><strong>Full Activation</strong><p>Official opening, public programs, and full integration into the local community.</p></div>
       </div>
     </div>
   </section>
 
-<!-- ==================== FUNDING ROADMAP ==================== -->
+
+  <!-- ==================== FUNDING ROADMAP ==================== -->
   <section id="funding-roadmap" class="funding-roadmap fade">
-    <h2 class="section-title">Rencana Pendanaan</h2>
+    <h2 class="section-title">Funding Roadmap</h2>
     <p class="funding-intro">
-      Total kebutuhan pembangunan Masjid UMMI adalah <strong>JPY 70,000,000</strong>, struktur di atas tiga tahap penggalangan dana.
+      The total capital requirement for UMMI Masjid is <strong>JPY 70,000,000</strong>, structured across three focused fundraising stages.
     </p>
     <div class="funding-grid">
       <div class="funding-card">
-        <h3>Pembelian Bangunan</h3>
+        <h3>Building Acquisition</h3>
         <p class="fund-amount">JPY 50,000,000</p>
-        <p class="fund-desc">Pengamanan properti melalui pembayaran bertahap dari Desember 2025 hingga April 2026.</p>
-        <small>¥6M DP · ¥30M pembayaran awal · ¥14M pembayaran akhir</small>
+        <p class="fund-desc">Securing the property through phased payments from December 2025 to April 2026.</p>
+        <small>¥6M down payment · ¥30M initial · ¥14M final</small>
       </div>
       <div class="funding-card">
-        <h3>Renovasi Operasional</h3>
+        <h3>Operational Renovation</h3>
         <p class="fund-amount">JPY 10,000,000</p>
-        <p class="fund-desc">Perbaikan dasar agar masjid dapat mulai digunakan pada Mei 2026 untuk sholat harian dan sholat Jumat.</p>
-        <small>Kapasitas: hingga 300 jamaah</small>
+        <p class="fund-desc">Essential repairs enabling a soft opening in May 2026 for daily and Friday prayers.</p>
+        <small>Capacity: up to 300 worshippers</small>
       </div>
       <div class="funding-card">
-        <h3>Fasilitas Komunitas</h3>
+        <h3>Community & Aesthetic</h3>
         <p class="fund-amount">JPY 10,000,000</p>
-        <p class="fund-desc">Pembangunan ruang kelas, fasilitas komunitas, dan perbaikan tampilan eksterior masjid.</p>
-        <small>Manfaat jangka panjang bagi komunitas</small>
+        <p class="fund-desc">Classrooms, community spaces, and exterior façade improvements by July 2026.</p>
+        <small>Long-term community impact</small>
       </div>
     </div>
   </section>
 
-<!-- ==================== PROGRESS ==================== -->
-<section class="progress-wrapper">
-    <p class="progress-statement fade">Perjalanan masih panjang, sementara waktu terus berjalan.</p>
-    <h2 class="section-title fade">Progress Penggalangan Dana</h2>
+
+  <!-- ==================== PROGRESS ==================== -->
+  <section class="progress-wrapper">
+    <p class="progress-statement fade">There's still a long way to go, and time is moving fast.</p>
+    <h2 class="section-title fade">Fundraising Progress</h2>
     <p class="progress-amount fade">¥20,260,471</p>
-    <p class="fade" style="color:#777;margin-bottom:0.3rem">terkumpul dari target JPY 70,000,000</p>
+    <p class="fade" style="color:#777;margin-bottom:0.3rem">raised of JPY 70,000,000 total goal</p>
     <div class="progress-bar fade">
       <div class="progress" data-progress="28"></div>
     </div>
     <div class="progress-meta fade">
-      <span>Pembaruan terakhir: 11 Maret 2026</span>
-      <span class="progress-pct">28% tercapai</span>
+      <span>Last updated: March 11, 2026</span>
+      <span class="progress-pct">28% funded</span>
     </div>
   </section>
 
-<!-- ==================== WAKAF ==================== -->
-<section id="support" class="wakaf fade">
-    <h2 class="section-title fade">Dukung Pembangunan Masjid</h2>
+
+  <!-- ==================== WAKAF & INFAK ==================== -->
+  <section id="support" class="wakaf fade">
+    <h2 class="section-title fade">Support the Masjid</h2>
     <h3 class="section-subtitle">Wakaf Jariyah</h3>
-    <p style="text-align:center; max-width:700px; margin:auto">Setiap 0.5m² yang Anda wakafkan
-      akan menjadi bagian permanen dari masjid ini,tercatat sebagai amal jariyah
-      di dunia dan di akhirat.</p>
+    <p style="text-align:center; max-width:700px; margin:auto">Every 0.5m² you dedicate becomes a permanent part of this masjid, 
+      recorded in this world and the hereafter.</p>
     <div class="slider">
         <div class="slider-track">
-        <div class="wakaf-card"><h3>Luas 0.5m²</h3><p>¥25,000</p><small>or Rp2,500,000</small></div>
-        <div class="wakaf-card"><h3>Luas 1m²</h3><p>¥50,000</p><small>or Rp5,000,000</small></div>
+        <div class="wakaf-card"><h3>0.5m²</h3><p>¥25,000</p><small>or Rp2,500,000</small></div>
+        <div class="wakaf-card"><h3>1m²</h3><p>¥50,000</p><small>or Rp5,000,000</small></div>
     </div>
-</section>
+  
+  </section>
 
-
-
-<!-- ==================== INFAK ==================== -->
-
-<section id="infak" class="wakaf fade">
+  <section id="infak" class="wakaf fade">
     <h3 class="section-subtitle">Infak</h3>
-    <p style="text-align:center;max-width:700px;margin:auto">Infak membantu memenuhi kebutuhan operasional dan kebutuhan mendesak masjid. Berikan sesuai kemampuan Anda, kapan saja, dengan niat yang tulus.</p>
+    <p style="text-align:center;max-width:700px;margin:auto">Infak supports daily needs and immediate operations. Give any amount, anytime, with sincere intention.</p>
     <div class="slider">
       <button class="slider-btn prev">‹</button>
       <div class="slider-track">
-        <div class="wakaf-card"><h3>Kebutuhan Operasional</h3><p>Nominal Tidak Ditentukan</p></div>
-        <div class="wakaf-card"><h3>Utilities & Maintenance</h3><p>Nominal Tidak Ditentukan</p></div>
-        <div class="wakaf-card"><h3>Community Programs</h3><p>Nominal Tidak Ditentukan</p></div>
-        <div class="wakaf-card"><h3>Emergency Support</h3><p>Nominal Tidak Ditentukan</p></div>
+        <div class="wakaf-card"><h3>Operational Needs</h3><p>Any Amount</p></div>
+        <div class="wakaf-card"><h3>Utilities & Maintenance</h3><p>Any Amount</p></div>
+        <div class="wakaf-card"><h3>Community Programs</h3><p>Any Amount</p></div>
+        <div class="wakaf-card"><h3>Emergency Support</h3><p>Any Amount</p></div>
       </div>
       <button class="slider-btn next">›</button>
     </div>
   </section>
 
 
-<!-- ==================== LOCATION ==================== -->
-<section id="location">
-    <h2 class="section-title">Lokasi</h2>
-    <div class="map">
-        <iframe src="https://www.google.com/maps?q=3-ch%C5%8Dme-3-28%20Sanjo%2C%20Suzuka%2C%20Mie%20513-0806&output=embed"
-        loading="lazy"allowfullscreen></iframe>
+  <!-- ==================== BANK INFORMATION ==================== -->
+  <section id="bank-info" class="wakaf fade">
+    <h2 class="section-title">Bank Transfer Details</h2>
+    <p style="text-align:center; max-width:700px; margin:auto">Please transfer your donation to one of our official accounts below.</p>
+    <div class="slider">
+      <button class="slider-btn prev" aria-label="Previous">‹</button>
+      <div class="slider-track">
+        <div class="wakaf-card">
+          <h3>MUFG Bank</h3><small>Main Account</small>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Branch:</strong> 四日市支店 / 534</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Account No:</strong> 0587164</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Name:</strong> シャ)ウマームスリムミエインドネシア</p>
+        </div>
+        <div class="wakaf-card">
+          <h3>Japan Post Bank</h3>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Branch:</strong> ニニ八 / 228</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Number:</strong> 0791956</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Name:</strong> ヨシダロシ ハルヤティ</p>
+        </div>
+        <div class="wakaf-card">
+          <h3>Bank Syariah Indonesia</h3>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Account No:</strong> 7305811933</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Name:</strong> LUKMANUL HAKIM</p>
+        </div>
+      </div>
+      <button class="slider-btn next" aria-label="Next">›</button>
     </div>
-</section>
+    <p class="bank-note">After completing your transfer, please upload your payment proof for confirmation.</p>
+  </section>
 
-<!-- ==================== FOLLOW US ==================== -->
+
+  <!-- ==================== DONATION INSTRUCTION ==================== -->
+  <section id="donation-instructions" class="donation-instructions fade">
+    <h2 class="section-title">How to Donate</h2>
+    <p class="donation-subtitle">
+      A transparent and guided process to support the future of UMMI Masjid.
+      <span class="donation-time">Estimated time: 2 minutes</span>
+    </p>
+    <div class="donation-steps-grid">
+      <div class="donation-step fade" style="transition-delay:0.1s">
+        <span class="step-number">01</span>
+        <h3>Select Donation Category</h3>
+        <p>Choose a wakaf category or infak that reflects your intention and ability.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.2s">
+        <span class="step-number">02</span>
+        <h3>Transfer Donation</h3>
+        <p>Send your contribution to one of our official bank accounts.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.3s">
+        <span class="step-number">03</span>
+        <h3>Upload Proof</h3>
+        <p>Submit a screenshot or photo of your transfer for confirmation.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.4s">
+        <span class="step-number">04</span>
+        <h3>Confirmation</h3>
+        <p>Your wakaf will be verified and recorded with gratitude and care.</p>
+      </div>
+    </div>
+    <div class="donation-cta fade" style="margin-top:2rem;">
+      <a href="donate.html" class="donation-btn">Proceed to Donation</a>
+    </div>
+  </section>
+
+
+  <!-- ==================== LOCATION ==================== -->
+  <section id="location">
+    <h2 class="section-title fade">Location</h2>
+    <div class="map fade">
+      <iframe
+        src="https://www.google.com/maps?q=3-ch%C5%8Dme-3-28%20Sanjo%2C%20Suzuka%2C%20Mie%20513-0806&output=embed"
+        loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+
+  <!-- ==================== FOLLOW US ==================== -->
   <section id="follow">
-    <h2 class="section-title fade">Ikuti Kami</h2>
+    <h2 class="section-title fade">Follow Us</h2>
     <div class="social fade" style="text-align:center">
       <a href="https://www.instagram.com/ummi.mieken?igsh=MXd2NWptYmhiNjU2cw==">Instagram</a>
       <a href="https://www.facebook.com/UmmahMuslimMie">Facebook</a>
@@ -490,17 +532,18 @@
     </div>
   </section>
 
-<!-- ==================== FLOATING BUTTONS ==================== -->
+
+  <!-- ==================== FLOATING BUTTONS ==================== -->
   <a href="eid-fitr/daftar_eid.html" class="floating-eid">Idul Fitri</a>
-  <a href="donate.html" class="floating-donate">Donasi</a>
+  <a href="donate.html" class="floating-donate">Donate</a>
 
 
-<!-- ==================== FOOTER ==================== -->
- <footer>
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
     <div class="footer-inner">
        <p>
-        <strong>Masjid UMMI</strong> · Suzuka, Prefektur Mie, Japan<br>"Barang siapa membangun masjid karena Allah,
-        maka Allah akan membangunkan baginya rumah di surga"<br>
+        <strong>Masjid UMMI</strong> · Suzuka, Mie Prefecture, Japan<br>"Whoever builds a masjid for Allah,<br>
+        Allah will build for him a house in Paradise."<br>
         <em style="color:rgba(255,255,255,0.4)">— Prophet Muhammad ﷺ</em>
       </p>
       <p style="margin-top:1.5rem;font-size:0.82rem;color:rgba(255,255,255,0.35)">
@@ -510,7 +553,6 @@
   </footer>
   
 <div class="toast" id="toast"></div>
-
 
 </body>
 </html>
