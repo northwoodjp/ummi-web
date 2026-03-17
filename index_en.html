@@ -12,24 +12,29 @@
 
   <style>
 
-     .lang-switch {
+    .lang-switch {
       display: inline-block;
-      margin-bottom: 1.2rem;
-      background: rgba(255, 255, 255, 0.12);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      margin-left: 1.5rem;
+      background: #EFF3FA;
+      color: #001E3C;
+      border: 1.5px solid #DDE4EF;
       border-radius: 999px;
       padding: 5px 14px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
     }
     .lang-switch:hover {
-      background: rgba(255, 255, 255, 0.22);
+      background: #FDF5DC;
+      border-color: #C9A84C;
+      color: #001E3C;
+    }
+    @media (max-width: 768px) {
+      .lang-switch { margin: 0.6rem 0; display: inline-block; }
     }
 
-      
     /* ── FONT OVERRIDE ── */
     * { font-family: 'DM Sans', sans-serif; }
     h1, h2, h3, .section-title { font-family: 'Playfair Display', serif; }
@@ -237,13 +242,8 @@
       padding: 2.5rem 1.5rem;
       font-size: 0.88rem;
       line-height: 1.9;
-      footer a { color: #F2D06B; text-decoration: none; }
     }
-
-    footer strong {
-      color: var(--soft-gold);
-    }
- 
+    footer strong { color: var(--soft-gold); }
     .footer-inner { max-width: 600px; margin: 0 auto; }
     .footer-links {
       display: flex; justify-content: center;
@@ -255,9 +255,6 @@
     footer a { color: #F2D06B; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    footer strong {
-      color: var(--soft-gold);
-    }
   </style>
 </head>
 
@@ -266,7 +263,7 @@
   <!-- ==================== NAVIGATION ==================== -->
   <nav>
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Masjid UMMI</a>
+      <a href="index_en.html" class="nav-logo">Masjid UMMI</a>
       <div class="hamburger" onclick="toggleMenu()">☰</div>
       <div class="nav-links" id="nav">
         <a href="#about">About</a>
@@ -274,7 +271,7 @@
         <a href="#location">Location</a>
         <a href="#follow">Follow</a>
         <a href="contact.html">Contact Us</a>
-        <a href="eid-fitr/daftar_eid.html" class="nav-eid-link">Idul Fitri</a>
+        <a href="index.html" class="lang-switch">🇮🇩 ID</a>
       </div>
     </div>
   </nav>
@@ -283,7 +280,6 @@
   <!-- ==================== HERO ==================== -->
   <section class="hero">
     <div class="fade">
-      <a href="index.html" class="lang-switch">🇮🇩 ID</a><br>
       <h1>A Masjid.<br>A Legacy.</h1>
       <p>What we build today lives beyond us.</p>
       <div class="deadline">
@@ -418,14 +414,14 @@
   <section id="support" class="wakaf fade">
     <h2 class="section-title fade">Support the Masjid</h2>
     <h3 class="section-subtitle">Wakaf Jariyah</h3>
-    <p style="text-align:center; max-width:700px; margin:auto">Every 0.5m² you dedicate becomes a permanent part of this masjid, 
+    <p style="text-align:center; max-width:700px; margin:auto">Every 0.5m² you dedicate becomes a permanent part of this masjid,
       recorded in this world and the hereafter.</p>
     <div class="slider">
-        <div class="slider-track">
-        <div class="wakaf-card"><h3>0.5m²</h3><p>¥25,000</p><small>or Rp2,500,000</small></div>
-        <div class="wakaf-card"><h3>1m²</h3><p>¥50,000</p><small>or Rp5,000,000</small></div>
+      <div class="slider-track">
+        <div class="wakaf-card"><h3>Area 0.5m²</h3><p>¥25,000</p><small>or Rp2,500,000</small></div>
+        <div class="wakaf-card"><h3>Area 1m²</h3><p>¥50,000</p><small>or Rp5,000,000</small></div>
+      </div>
     </div>
-  
   </section>
 
   <section id="infak" class="wakaf fade">
@@ -541,8 +537,9 @@
   <!-- ==================== FOOTER ==================== -->
   <footer>
     <div class="footer-inner">
-       <p>
-        <strong>Masjid UMMI</strong> · Suzuka, Mie Prefecture, Japan<br>"Whoever builds a masjid for Allah,<br>
+      <p>
+        <strong>Masjid UMMI</strong> · Suzuka, Mie Prefecture, Japan<br>
+        "Whoever builds a masjid for Allah,<br>
         Allah will build for him a house in Paradise."<br>
         <em style="color:rgba(255,255,255,0.4)">— Prophet Muhammad ﷺ</em>
       </p>
@@ -551,7 +548,7 @@
       </p>
     </div>
   </footer>
-  
+
 <div class="toast" id="toast"></div>
 
 </body>

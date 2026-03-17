@@ -39,19 +39,25 @@
 
     .lang-switch {
       display: inline-block;
-      margin-bottom: 1.2rem;
-      background: rgba(255, 255, 255, 0.12);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      margin-left: 1.5rem;
+      background: #EFF3FA;
+      color: #001E3C;
+      border: 1.5px solid #DDE4EF;
       border-radius: 999px;
       padding: 5px 14px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
     }
     .lang-switch:hover {
-      background: rgba(255, 255, 255, 0.22);
+      background: #FDF5DC;
+      border-color: #C9A84C;
+      color: #001E3C;
+    }
+    @media (max-width: 768px) {
+      .lang-switch { margin: 0.6rem 0; display: inline-block; }
     }
 
     /* ── FONT OVERRIDE ── */
@@ -254,20 +260,19 @@
     .floating-eid:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,40,80,0.4); }
 
     /* ── FOOTER ── */
-     footer {
+    footer {
       background: var(--navy);
       color: rgba(255, 255, 255, 0.65);
       text-align: center;
       padding: 2.5rem 1.5rem;
       font-size: 0.88rem;
       line-height: 1.9;
-      footer a { color: #F2D06B; text-decoration: none; }
     }
 
     footer strong {
       color: var(--soft-gold);
     }
- 
+
     .footer-inner { max-width: 600px; margin: 0 auto; }
     .footer-links {
       display: flex; justify-content: center;
@@ -279,10 +284,6 @@
     footer a { color: #F2D06B; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    footer strong {
-      color: var(--soft-gold);
-    }
-    
   </style>
 </head>
 
@@ -302,7 +303,7 @@
 <a href="#location">Lokasi</a>
 <a href="#follow">Ikuti Kami</a>
 <a href="contact.html">Hubungi Kami</a>
-<a href="eid-fitr/daftar_eid.html" class="nav-eid-link">Idul Fitri</a>
+<a href="index_en.html" class="lang-switch">🇬🇧 EN</a>
 </div>
 
 </div>
@@ -311,7 +312,6 @@
 <!-- ==================== HERO ==================== -->
   <section class="hero">
     <div class="fade">
-    <a href="index_en.html" class="lang-switch">🇬🇧 EN</a><br>
       <h1>Sebuah Masjid.<br>Sebuah Warisan.</h1>
       <p>Apa yang kita bangun hari ini akan terus memberi manfaat setelah kita tiada.</p>
       <div class="deadline">
@@ -371,7 +371,6 @@
     <h2 class="section-title fade">Langkah Menuju Terwujudnya Masjid</h2>
     <p class="timeline-desc fade">
       Pembangunan ini tidak terjadi dalam semalam. Ia tumbuh dengan niat baik, langkah demi langkah, dengan amanah, transparansi, dan dukungan dari Anda semua.
-
     </p>
     <div class="timeline-modern fade">
       <div class="timeline-line-modern"></div>
@@ -442,7 +441,7 @@
     <h2 class="section-title fade">Dukung Pembangunan Masjid</h2>
     <h3 class="section-subtitle">Wakaf Jariyah</h3>
     <p style="text-align:center; max-width:700px; margin:auto">Setiap 0.5m² yang Anda wakafkan
-      akan menjadi bagian permanen dari masjid ini,tercatat sebagai amal jariyah
+      akan menjadi bagian permanen dari masjid ini, tercatat sebagai amal jariyah
       di dunia dan di akhirat.</p>
     <div class="slider">
         <div class="slider-track">
@@ -451,10 +450,7 @@
     </div>
 </section>
 
-
-
 <!-- ==================== INFAK ==================== -->
-
 <section id="infak" class="wakaf fade">
     <h3 class="section-subtitle">Infak</h3>
     <p style="text-align:center;max-width:700px;margin:auto">Infak membantu memenuhi kebutuhan operasional dan kebutuhan mendesak masjid. Berikan sesuai kemampuan Anda, kapan saja, dengan niat yang tulus.</p>
@@ -470,13 +466,77 @@
     </div>
   </section>
 
+<!-- ==================== INFORMASI BANK ==================== -->
+  <section id="bank-info" class="wakaf fade">
+    <h2 class="section-title">Rekening Donasi</h2>
+    <p style="text-align:center; max-width:700px; margin:auto">Silakan transfer donasi Anda ke salah satu rekening resmi kami di bawah ini.</p>
+    <div class="slider">
+      <button class="slider-btn prev" aria-label="Sebelumnya">‹</button>
+      <div class="slider-track">
+        <div class="wakaf-card">
+          <h3>MUFG Bank</h3><small>Rekening Utama</small>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Cabang:</strong> 四日市支店 / 534</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>No. Rekening:</strong> 0587164</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Nama:</strong> シャ)ウマームスリムミエインドネシア</p>
+        </div>
+        <div class="wakaf-card">
+          <h3>Japan Post Bank</h3>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Cabang:</strong> ニニ八 / 228</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Nomor:</strong> 0791956</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Nama:</strong> ヨシダロシ ハルヤティ</p>
+        </div>
+        <div class="wakaf-card">
+          <h3>Bank Syariah Indonesia</h3>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>No. Rekening:</strong> 7305811933</p>
+          <p style="font-size:0.9rem;color:#333;font-weight:400;margin:0.3rem 0"><strong>Nama:</strong> LUKMANUL HAKIM</p>
+        </div>
+      </div>
+      <button class="slider-btn next" aria-label="Berikutnya">›</button>
+    </div>
+    <p class="bank-note">Setelah melakukan transfer, kirimkan bukti pembayaran Anda untuk konfirmasi.</p>
+  </section>
+
+
+  <!-- ==================== CARA BERDONASI ==================== -->
+  <section id="donation-instructions" class="donation-instructions fade">
+    <h2 class="section-title">Cara Berdonasi</h2>
+    <p class="donation-subtitle">
+      Proses yang transparan dan terpandu untuk mendukung masa depan Masjid UMMI.
+      <span class="donation-time">Estimasi waktu: 2 menit</span>
+    </p>
+    <div class="donation-steps-grid">
+      <div class="donation-step fade" style="transition-delay:0.1s">
+        <span class="step-number">01</span>
+        <h3>Pilih Jenis Donasi</h3>
+        <p>Pilih kategori wakaf atau infak yang sesuai dengan niat dan kemampuan Anda.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.2s">
+        <span class="step-number">02</span>
+        <h3>Transfer Donasi</h3>
+        <p>Kirimkan donasi Anda ke salah satu rekening bank resmi kami.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.3s">
+        <span class="step-number">03</span>
+        <h3>Kirim Bukti Transfer</h3>
+        <p>Konfirmasi donasi via WhatsApp beserta foto bukti transfer Anda.</p>
+      </div>
+      <div class="donation-step fade" style="transition-delay:0.4s">
+        <span class="step-number">04</span>
+        <h3>Konfirmasi</h3>
+        <p>Wakaf Anda akan diverifikasi dan dicatat dengan penuh amanah dan rasa syukur.</p>
+      </div>
+    </div>
+    <div class="donation-cta fade" style="margin-top:2rem;">
+      <a href="donasi.html" class="donation-btn">Lanjutkan ke Halaman Donasi</a>
+    </div>
+  </section>
 
 <!-- ==================== LOCATION ==================== -->
 <section id="location">
     <h2 class="section-title">Lokasi</h2>
     <div class="map">
         <iframe src="https://www.google.com/maps?q=3-ch%C5%8Dme-3-28%20Sanjo%2C%20Suzuka%2C%20Mie%20513-0806&output=embed"
-        loading="lazy"allowfullscreen></iframe>
+        loading="lazy" allowfullscreen></iframe>
     </div>
 </section>
 
@@ -492,15 +552,14 @@
 
 <!-- ==================== FLOATING BUTTONS ==================== -->
   <a href="eid-fitr/daftar_eid.html" class="floating-eid">Idul Fitri</a>
-  <a href="donate.html" class="floating-donate">Donasi</a>
-
+  <a href="donasi.html" class="floating-donate">Donasi</a>
 
 <!-- ==================== FOOTER ==================== -->
- <footer>
+  <footer>
     <div class="footer-inner">
-       <p>
-        <strong>Masjid UMMI</strong> · Suzuka, Prefektur Mie, Japan<br>"Barang siapa membangun masjid karena Allah,
-        maka Allah akan membangunkan baginya rumah di surga"<br>
+      <p>
+        <strong>Masjid UMMI</strong> · Suzuka, Prefektur Mie, Japan<br>
+        "Barang siapa membangun masjid karena Allah, maka Allah akan membangunkan baginya rumah di surga"<br>
         <em style="color:rgba(255,255,255,0.4)">— Prophet Muhammad ﷺ</em>
       </p>
       <p style="margin-top:1.5rem;font-size:0.82rem;color:rgba(255,255,255,0.35)">
@@ -508,9 +567,8 @@
       </p>
     </div>
   </footer>
-  
-<div class="toast" id="toast"></div>
 
+<div class="toast" id="toast"></div>
 
 </body>
 </html>
