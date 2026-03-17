@@ -601,10 +601,11 @@
         <div class="kbadge"><div class="kname">Kloter 1</div><div class="ktime">06.30</div></div>
         <div class="kbadge"><div class="kname">Kloter 2</div><div class="ktime">07.45</div></div>
         <div class="kbadge"><div class="kname">Kloter 3</div><div class="ktime">08.45</div></div>
+        <div class="kbadge"><div class="kname">Kloter 4</div><div class="ktime">09.45</div></div>
       </div>
       <hr class="divider">
       <ul class="rules-list">
-        <li>Sholat Idul Fitri dibagi menjadi 3 kloter, masing-masing ±150 jamaah (diatur panitia).</li>
+        <li>Sholat Idul Fitri dibagi menjadi 4 kloter, masing-masing ±150 jamaah (diatur panitia).</li>
         <li>Wajib registrasi terlebih dahulu melalui form di bawah ini.</li>
         <li>Satu kali registrasi dapat untuk beberapa orang — isi jumlah jamaah sesuai yang hadir.</li>
         <li>Waktu dapat berubah sesuai kondisi dan diatur sepenuhnya oleh panitia.</li>
@@ -846,6 +847,7 @@
       { id: 1, key: "Kloter 1 - 06.30" },
       { id: 2, key: "Kloter 2 - 07.45" },
       { id: 3, key: "Kloter 3 - 08.45" },
+      { id: 4, key: "Kloter 4 - 09.45" },
     ];
     const SB_URL = "https://szwjiylicvvixrqxxfqv.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6d2ppeWxpY3Z2aXhycXh4ZnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzYzNTAsImV4cCI6MjA4ODc1MjM1MH0.10mHqDRh6w9B7JJ70_dxZiSVBpnwaQEt0nGGulsrWV4";
@@ -970,7 +972,7 @@
       try {
         const rows = await sbFetch(`${TABLE}?select=kloter,ikhwan,akhwat`);
         let total = 0;
-        const byK = { 1: 0, 2: 0, 3: 0 };
+        const byK = { 1: 0, 2: 0, 3: 0, 4: 0 };
         rows.forEach(r => {
           const n = (parseInt(r.ikhwan) || 0) + (parseInt(r.akhwat) || 0);
           total += n;
